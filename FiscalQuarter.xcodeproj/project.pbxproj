@@ -1,0 +1,399 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B10000000000000000000001 /* FiscalQuarterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000001 /* FiscalQuarterApp.swift */; };
+		B10000000000000000000002 /* QuarterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000002 /* QuarterPanel.swift */; };
+		B10000000000000000000003 /* QuarterClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000003 /* QuarterClock.swift */; };
+		B10000000000000000000007 /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000008 /* LoginItem.swift */; };
+		B10000000000000000000008 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000009 /* AppIcon.icns */; };
+		B10000000000000000000009 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000A /* FiscalYearMap.swift */; };
+		B1000000000000000000000A /* YearPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000B /* YearPicture.swift */; };
+		B1000000000000000000000C /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000C /* AboutView.swift */; };
+		B1000000000000000000000D /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000D /* FiscalYearConfig.swift */; };
+		B1000000000000000000000E /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000E /* CalendarSettingsView.swift */; };
+		B1000000000000000000000F /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000D /* FiscalYearConfig.swift */; };
+		B1000000000000000000000B /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000A /* FiscalYearMap.swift */; };
+		B10000000000000000000004 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000004 /* FiscalCalendar.swift */; };
+		B10000000000000000000005 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000004 /* FiscalCalendar.swift */; };
+		B10000000000000000000006 /* FiscalCalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000005 /* FiscalCalendarTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F10000000000000000000001 /* FiscalQuarterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalQuarterApp.swift; sourceTree = "<group>"; };
+		F10000000000000000000002 /* QuarterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterPanel.swift; sourceTree = "<group>"; };
+		F10000000000000000000003 /* QuarterClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterClock.swift; sourceTree = "<group>"; };
+		F10000000000000000000008 /* LoginItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
+		F10000000000000000000009 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
+		F1000000000000000000000A /* FiscalYearMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalYearMap.swift; sourceTree = "<group>"; };
+		F1000000000000000000000B /* YearPicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearPicture.swift; sourceTree = "<group>"; };
+		F1000000000000000000000C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		F1000000000000000000000D /* FiscalYearConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalYearConfig.swift; sourceTree = "<group>"; };
+		F1000000000000000000000E /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
+		F10000000000000000000004 /* FiscalCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendar.swift; sourceTree = "<group>"; };
+		F10000000000000000000005 /* FiscalCalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendarTests.swift; sourceTree = "<group>"; };
+		F10000000000000000000006 /* FiscalQuarter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FiscalQuarter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F10000000000000000000007 /* FiscalQuarterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FiscalQuarterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E10000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E10000000000000000000002 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000002 /* FiscalQuarterApp */,
+				A10000000000000000000003 /* FiscalQuarterCore */,
+				A10000000000000000000004 /* FiscalQuarterTests */,
+				A10000000000000000000005 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A10000000000000000000002 /* FiscalQuarterApp */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000001 /* FiscalQuarterApp.swift */,
+				F10000000000000000000003 /* QuarterClock.swift */,
+				F10000000000000000000008 /* LoginItem.swift */,
+				F10000000000000000000002 /* QuarterPanel.swift */,
+				F1000000000000000000000B /* YearPicture.swift */,
+				F1000000000000000000000C /* AboutView.swift */,
+				F1000000000000000000000E /* CalendarSettingsView.swift */,
+				F10000000000000000000009 /* AppIcon.icns */,
+			);
+			path = FiscalQuarterApp;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000003 /* FiscalQuarterCore */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000004 /* FiscalCalendar.swift */,
+				F1000000000000000000000A /* FiscalYearMap.swift */,
+				F1000000000000000000000D /* FiscalYearConfig.swift */,
+			);
+			path = FiscalQuarterCore;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000004 /* FiscalQuarterTests */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000005 /* FiscalCalendarTests.swift */,
+			);
+			path = FiscalQuarterTests;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000005 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000006 /* FiscalQuarter.app */,
+				F10000000000000000000007 /* FiscalQuarterTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D10000000000000000000001 /* FiscalQuarter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C10000000000000000000003 /* Build configuration list for PBXNativeTarget "FiscalQuarter" */;
+			buildPhases = (
+				E10000000000000000000003 /* Sources */,
+				E10000000000000000000001 /* Frameworks */,
+				E10000000000000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FiscalQuarter;
+			productName = FiscalQuarter;
+			productReference = F10000000000000000000006 /* FiscalQuarter.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D10000000000000000000002 /* FiscalQuarterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C10000000000000000000004 /* Build configuration list for PBXNativeTarget "FiscalQuarterTests" */;
+			buildPhases = (
+				E10000000000000000000004 /* Sources */,
+				E10000000000000000000002 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FiscalQuarterTests;
+			productName = FiscalQuarterTests;
+			productReference = F10000000000000000000007 /* FiscalQuarterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E10000000000000000000005 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					D10000000000000000000001 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					D10000000000000000000002 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+				};
+			};
+			buildConfigurationList = C10000000000000000000001 /* Build configuration list for PBXProject "FiscalQuarter" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10000000000000000000001;
+			productRefGroup = A10000000000000000000005 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D10000000000000000000001 /* FiscalQuarter */,
+				D10000000000000000000002 /* FiscalQuarterTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E10000000000000000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B10000000000000000000008 /* AppIcon.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E10000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B10000000000000000000001 /* FiscalQuarterApp.swift in Sources */,
+				B10000000000000000000002 /* QuarterPanel.swift in Sources */,
+				B10000000000000000000003 /* QuarterClock.swift in Sources */,
+				B10000000000000000000007 /* LoginItem.swift in Sources */,
+				B1000000000000000000000A /* YearPicture.swift in Sources */,
+				B1000000000000000000000C /* AboutView.swift in Sources */,
+				B1000000000000000000000E /* CalendarSettingsView.swift in Sources */,
+				B10000000000000000000004 /* FiscalCalendar.swift in Sources */,
+				B10000000000000000000009 /* FiscalYearMap.swift in Sources */,
+				B1000000000000000000000D /* FiscalYearConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E10000000000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B10000000000000000000006 /* FiscalCalendarTests.swift in Sources */,
+				B10000000000000000000005 /* FiscalCalendar.swift in Sources */,
+				B1000000000000000000000B /* FiscalYearMap.swift in Sources */,
+				B1000000000000000000000F /* FiscalYearConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C10000000000000000000010 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C10000000000000000000011 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		C10000000000000000000020 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
+				INFOPLIST_FILE = FiscalQuarterApp/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		C10000000000000000000021 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
+				INFOPLIST_FILE = FiscalQuarterApp/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		C10000000000000000000030 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "";
+			};
+			name = Debug;
+		};
+		C10000000000000000000031 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TEST_HOST = "";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C10000000000000000000001 /* Build configuration list for PBXProject "FiscalQuarter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C10000000000000000000010 /* Debug */,
+				C10000000000000000000011 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C10000000000000000000003 /* Build configuration list for PBXNativeTarget "FiscalQuarter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C10000000000000000000020 /* Debug */,
+				C10000000000000000000021 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C10000000000000000000004 /* Build configuration list for PBXNativeTarget "FiscalQuarterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C10000000000000000000030 /* Debug */,
+				C10000000000000000000031 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E10000000000000000000005 /* Project object */;
+}
