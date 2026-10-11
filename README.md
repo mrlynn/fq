@@ -1,29 +1,29 @@
 # Fiscal Quarter
 
-A macOS menu bar app for a fiscal calendar. FY27 began 1 February 2026 and ends 31 December. The current quarter, Q4, is 1 October through 31 December. From January 2027 the year starts on 1 January.
+A macOS menu bar app for a fiscal calendar. The built-in fiscal year is the calendar year, numbered by that year: 2026 is FY26, with quarters starting on 1 January, 1 April, 1 July, and 1 October.
 
-On 2026-10-09 the quarter is **FY27-Q4**. The menu bar reads `FY27-Q4 · 84d`: day 9 of 92, week 2, 84 days left, counting today. Click it for the start and end, a progress bar, the next quarter, and copy. While the year is still FY27, the panel also says that FY28 starts on January 1 and follows the calendar year.
+On 2026-10-09 the quarter is **FY26-Q4**. The menu bar reads `FY26-Q4 · 84d`: day 9 of 92, week 2, 84 days left, counting today. Click it for the start and end, a progress bar, the next quarter, and copy.
 
-Copy quarter id puts `FY27-Q4` on the pasteboard. Copy status line puts `FY27-Q4 · Day 9 of 92 · week 2 · 84 days left`. In the last two weeks the days-remaining figure turns amber, and the last week and last day get a line of their own. Open at login, Calendar, About, and Quit are in the same panel. About links to mlynn.org, GitHub, and LinkedIn.
+Copy quarter id puts `FY26-Q4` on the pasteboard. Copy status line puts `FY26-Q4 · Day 9 of 92 · week 2 · 84 days left`. In the last two weeks the days-remaining figure turns amber, and the last week and last day get a line of their own. Open at login, Calendar, About, and Quit are in the same panel. About links to mlynn.org, GitHub, and LinkedIn.
 
-Calendar keeps the built-in year unless you choose a custom start. A custom year is four quarters of three months. The FY number is the calendar year that fiscal year ends in. A year that starts on 1 February 2025 ends on 31 January 2026, so it is FY26. A 1 January start ends in the same calendar year, so 2026 is FY26. The built-in calendar is the one with the short FY27. A custom February start does not repeat that exception. `fq` reads the same choice. The app has no Dock icon, no network access, and no account.
+Calendar keeps the built-in year unless you choose a custom start. A custom year is four quarters of three months. The FY number is the calendar year that fiscal year ends in. A year that starts on 1 February 2025 ends on 31 January 2026, so it is FY26. A 1 January start ends in the same calendar year, so 2026 is FY26, the same as the built-in calendar. `fq` reads the same choice. The app has no Dock icon, no network access, and no account.
 
-Line, Year, and Ring are three pictures of that year, in one slot. Line is the picture that opens. Each month is a bar as long as its days, and a wider gap separates the quarters, so FY27 Q3 is visibly the short one. A ring sits on today. Year turns those months into calendars, two quarters to a row: days already passed are filled, today is a hollow ring, and the current quarter is green. Ring draws the same year as a circle. In FY27 it starts at the top with February and runs clockwise, and the day of the month sits in the middle. The choice is remembered.
+Line, Year, and Ring are three pictures of that year, in one slot. Line is the picture that opens. Each month is a bar as long as its days, and a wider gap separates the quarters, so a short quarter is visibly short. A ring sits on today. Year turns those months into calendars, two quarters to a row: days already passed are filled, today is a hollow ring, and the current quarter is green. Ring draws the same year as a circle. It starts at the top with the first month of the year and runs clockwise, and the day of the month sits in the middle. The choice is remembered.
 
 `fq` prints the same facts for a shell or a script. The packaged app carries that binary at `Contents/MacOS/fq`.
 
 ## Countdowns
 
-The panel counts down to the end of the quarter, the half, and the fiscal year. When they end on the same day they share a line, so on 2026-10-11 the panel shows one line, `FY27-Q4 · H2 · FY27`, with 82 days. The menu next to Countdown switches between days, workdays, weeks, and weekends. Workdays are Monday through Friday. Holidays are not known, so they count as workdays. Weekends counts the one in progress.
+The panel counts down to the end of the quarter, the half, and the fiscal year. When they end on the same day they share a line, so on 2026-10-11 the panel shows one line, `FY26-Q4 · H2 · FY26`, with 82 days. The menu next to Countdown switches between days, workdays, weeks, and weekends. Workdays are Monday through Friday. Holidays are not known, so they count as workdays. Weekends counts the one in progress.
 
-Click a countdown line to put it in the menu bar. The menu bar keeps the unit you chose, so it can read `FY27 · 59wd` or `FY27-Q4 · 11w 5d`. The default is still `FY27-Q4 · 82d`.
+Click a countdown line to put it in the menu bar. The menu bar keeps the unit you chose, so it can read `FY26 · 59wd` or `FY26-Q4 · 11w 5d`. The default is `FY26-Q4 · 82d`.
 
 ```sh
 fq --countdown
 ```
 
 ```
-FY27-Q4 · H2 · FY27 ends 2026-12-31
+FY26-Q4 · H2 · FY26 ends 2026-12-31
   82 days · 59 workdays · 12 weekends
 ```
 
@@ -35,7 +35,7 @@ A half is the first two quarters or the last two. A calendar file with a year of
 
 The Mac app carries a Fiscal countdown widget for the desktop and Notification Center, in small and medium sizes. After the app has opened once, right-click the desktop, choose Edit Widgets, and find Fiscal Quarter. Small shows one countdown. Medium adds the quarter, the half, and the year side by side, each with its own bar, because they start on different days even when they end together.
 
-Each widget has its own settings under Edit Widget: what to count to, the unit, the calendar, and a label. The calendar starts as Yours, the one chosen in the app, and follows it when you change it. A saved calendar is picked from the list of other calendars, and its name becomes the label unless you type one. The built-in calendar and a start month and day are there too. So a widget set to SpaceX reads FY26 while one set to Yours reads FY27.
+Each widget has its own settings under Edit Widget: what to count to, the unit, the calendar, and a label. The calendar starts as Yours, the one chosen in the app, and follows it when you change it. A saved calendar is picked from the list of other calendars, and its name becomes the label unless you type one. The built-in calendar and a start month and day are there too. So one widget can follow your calendar while another follows a customer whose year starts in July.
 
 The app and its widgets share settings through an App Group: `YZ36Z8GSEN.local.fiscalquarter` on the Mac and `group.local.fiscalquarter` on iOS. The first time the new app opens, it copies the calendar settings across from where earlier versions kept them. `fq` reads the group's settings file directly, because a command-line tool cannot hold the App Group entitlement.
 
@@ -49,31 +49,20 @@ Its widget comes in the same small and medium sizes, plus three Lock Screen size
 
 To run it in the simulator, choose the `FiscalQuarteriOS` scheme and an iPhone simulator, then press Run. A device build registers the app, the widget, and the App Group with the signing team the first time, which Xcode does when you choose your iPhone and press Run.
 
-The web prototype stores `CURRENT_QUARTER` as the string `FY27-Q3` and does not follow the wall clock. This app reads the local calendar date instead. Opened in October 2026, it shows Q4.
-
 ## Calendar
 
-Quarters are not equal length. FY27 is an 11-month transition year that ends in December 2026.
+The built-in fiscal year is the calendar year. The FY number is the year, so 2026 is FY26 and 2027 is FY27.
 
 | Id | Start | End |
 | --- | --- | --- |
-| FY27-Q1 | 2026-02-01 | 2026-04-30 |
-| FY27-Q2 | 2026-05-01 | 2026-07-31 |
-| FY27-Q3 | 2026-08-01 | 2026-09-30 |
-| FY27-Q4 | 2026-10-01 | 2026-12-31 |
+| FY26-Q1 | 2026-01-01 | 2026-03-31 |
+| FY26-Q2 | 2026-04-01 | 2026-06-30 |
+| FY26-Q3 | 2026-07-01 | 2026-09-30 |
+| FY26-Q4 | 2026-10-01 | 2026-12-31 |
 
-FY26-Q4 is 2025-11-01 through 2026-01-31. FY26-Q1 through FY26-Q3 fill February through October 2025, using the same February, May, August, and November starts:
+Every year follows the same pattern, so FY27-Q1 starts on 2027-01-01. If your fiscal year starts on another date, choose a custom start in Calendar.
 
-| Id | Start | End |
-| --- | --- | --- |
-| FY26-Q1 | 2025-02-01 | 2025-04-30 |
-| FY26-Q2 | 2025-05-01 | 2025-07-31 |
-| FY26-Q3 | 2025-08-01 | 2025-10-31 |
-| FY26-Q4 | 2025-11-01 | 2026-01-31 |
-
-Years before FY26 use that February start as well. February of calendar year Y is FY(Y - 1999). January still belongs to Q4 of the fiscal year that started the previous February.
-
-From 2027-01-01, fiscal years follow the calendar year. 2027 is FY28, split into Jan-Mar, Apr-Jun, Jul-Sep, and Oct-Dec. That part is inferred from the transition year ending in December. If a later calendar is published, change `FiscalCalendarDefinition.builtIn` in `FiscalQuarterCore/FiscalCalendarDefinition.swift` and `calendars/built-in.json` together. A test fails if they disagree.
+Earlier versions built in a February year with an 11-month FY27, February through December 2026. That calendar is now `calendars/february-transition.json`, for anyone whose year really did work that way. Import it under Calendar, Others, or pass it to `fq --calendar`.
 
 Days remaining counts today through the last day of the quarter. On the last day the value is 1.
 
@@ -85,18 +74,18 @@ The pure function is `FiscalCalendar.quarter(containing:)`.
 
 ```swift
 let quarter = FiscalCalendar.quarter(containing: CalendarDate(year: 2026, month: 10, day: 5))
-quarter.id // "FY27-Q4"
+quarter.id // "FY26-Q4"
 ```
 
 `FiscalCalendar.quarter(on:calendar:)` reads a `Date` in a chosen calendar. The app passes `Calendar.current`, so the machine's local time zone decides the civil day.
 
 ## Calendar files
 
-A calendar is data: a list of eras. Each era starts on its `from` date and runs until the next one starts. An era either repeats a `months` rule (four three-month quarters from `startMonth`/`startDay`) or lists its quarters outright with `explicit`, which is how FY27 is written. The first era has no `from`, and the first and last eras must use `months`, so every date has a quarter.
+A calendar is data: a list of eras. Each era starts on its `from` date and runs until the next one starts. An era either repeats a `months` rule (four three-month quarters from `startMonth`/`startDay`) or lists its quarters outright with `explicit`, which is how the short FY27 in `calendars/february-transition.json` is written. The first era has no `from`, and the first and last eras must use `months`, so every date has a quarter.
 
-`yearOffset` shifts the FY number. The built-in calendar needs it because 2027 is FY28, not FY27.
+`yearOffset` shifts the FY number. The February example needs it, because after its short FY27 the calendar year 2027 is FY28.
 
-`calendars/built-in.json` is the built-in calendar. `calendars/calendar-year.json` is a plain January start, where 2026-10-11 is FY26-Q4. `fq` reads either one:
+`calendars/built-in.json` is the built-in calendar, and a test fails if it and `FiscalCalendarDefinition.builtIn` disagree. `calendars/calendar-year.json` is the same plain January start under another name. `calendars/february-transition.json` is the old February calendar with the short FY27. `fq` reads any of them:
 
 ```sh
 fq --calendar calendars/calendar-year.json
@@ -116,7 +105,7 @@ fq --all
 ```
 
 ```
-Yours   FY27-Q4 · Day 11 of 92 · week 2 · 82 days left
+Yours   FY26-Q4 · Day 11 of 92 · week 2 · 82 days left
 SpaceX  FY26-Q4 · Day 11 of 92 · week 2 · 82 days left
 ```
 
@@ -173,7 +162,7 @@ fq --copy
 fq --date 2026-10-05
 ```
 
-`--id` prints `FY27-Q4`. `--status` prints the one line the panel copies. `--json` prints one object. `--copy` copies the id. `--date` takes `YYYY-MM-DD` and is for checking a boundary without changing the clock.
+`--id` prints `FY26-Q4`. `--status` prints the one line the panel copies. `--json` prints one object. `--copy` copies the id. `--date` takes `YYYY-MM-DD` and is for checking a boundary without changing the clock.
 
 Open at login uses the macOS login-item API. It applies after the app is in Applications. If macOS is waiting on approval, the panel says so.
 

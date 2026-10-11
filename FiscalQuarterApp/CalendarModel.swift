@@ -11,6 +11,9 @@ final class CalendarModel: ObservableObject {
         SharedSettings.migrateIfNeeded()
         config = FiscalYearConfig.load(from: FiscalYearConfig.store)
         others = SavedCalendars.load(from: FiscalYearConfig.store)
+        // Widgets keep the timeline they built before an update. Rebuilding on launch means a new
+        // version's calendar rules reach them as soon as the app opens.
+        WidgetCenter.shared.reloadAllTimelines()
     }
 
     func set(_ config: FiscalYearConfig) {

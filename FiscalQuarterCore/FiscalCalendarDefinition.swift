@@ -7,10 +7,11 @@ import Foundation
 /// rule. An era in between may list its quarters outright, which is how a short transition
 /// year is written down.
 ///
-/// The JSON form, with the built-in calendar as the example:
+/// The JSON form, with a February calendar that has a short FY27 as the example
+/// (`calendars/february-transition.json`):
 ///
 ///     {
-///       "name": "Built-in",
+///       "name": "February start, short FY27",
 ///       "eras": [
 ///         { "rule": "months", "startMonth": 2, "startDay": 1 },
 ///         { "from": "2026-02-01", "rule": "explicit", "fiscalYear": 27,
@@ -120,28 +121,9 @@ public struct FiscalCalendarDefinition: Equatable, Codable {
 }
 
 extension FiscalCalendarDefinition {
-    /// The February calendar with the 11-month FY27, then calendar years from 2027 as FY28 onward.
-    public static let builtIn: FiscalCalendarDefinition = {
-        func date(_ iso: String) -> CalendarDate {
-            CalendarDate(iso: iso) ?? CalendarDate(year: 1970, month: 1, day: 1)
-        }
-        let eras = [
-            Era(start: nil, rule: .months(MonthRule(startMonth: 2, startDay: 1))),
-            Era(
-                start: date("2026-02-01"),
-                rule: .explicit(ExplicitYear(fiscalYear: 27, quarters: [
-                    QuarterSpan(start: date("2026-02-01"), end: date("2026-04-30")),
-                    QuarterSpan(start: date("2026-05-01"), end: date("2026-07-31")),
-                    QuarterSpan(start: date("2026-08-01"), end: date("2026-09-30")),
-                    QuarterSpan(start: date("2026-10-01"), end: date("2026-12-31")),
-                ])),
-                note: "FY27 ends December 31. FY28 follows the calendar year."
-            ),
-            Era(start: date("2027-01-01"), rule: .months(MonthRule(startMonth: 1, startDay: 1, yearOffset: 1))),
-        ]
-        // The literal above is checked by the tests, so a failure here is a programming error.
-        return try! FiscalCalendarDefinition(name: "Built-in", eras: eras)
-    }()
+    /// The calendar year: quarters start in January, April, July, and October, and the FY number is
+    /// the year itself, so 2026 is FY26.
+    public static let builtIn = FiscalCalendarDefinition.months(startMonth: 1, startDay: 1, name: "Built-in")
 
     /// Four three-month quarters every year from `startMonth`/`startDay`, with no exceptions.
     public static func months(startMonth: Int, startDay: Int, name: String? = nil) -> FiscalCalendarDefinition {

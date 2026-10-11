@@ -176,7 +176,7 @@ func printUsage() {
         fq prints the fiscal quarter.
 
           fq                  today's quarter
-          fq --id             FY27-Q4
+          fq --id             FY26-Q4
           fq --status         one line, for Slack or a doc
           fq --json           one JSON object
           fq --copy           copy the quarter id
