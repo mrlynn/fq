@@ -133,26 +133,10 @@ struct AppearanceEditor: View {
             appearance: look,
             backgroundImage: calendar.backgroundImage
         )
-        return VStack(spacing: 12) {
-            WidgetPreview(entry: entry, medium: true)
-                .scaleEffect(previewScale)
-                .frame(width: 338 * previewScale, height: 158 * previewScale)
-            WidgetPreview(entry: entry, medium: false)
-                .scaleEffect(previewScale)
-                .frame(width: 158 * previewScale, height: 158 * previewScale)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 4)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Widget preview")
-    }
-
-    private var previewScale: CGFloat {
-        #if os(macOS)
-        0.78
-        #else
-        1
-        #endif
+        return AppearancePreview(entry: entry)
+            .padding(.vertical, 4)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Widget preview")
     }
 
     // MARK: Background
