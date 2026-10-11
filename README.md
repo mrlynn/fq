@@ -41,6 +41,17 @@ The app and its widgets share settings through an App Group: `YZ36Z8GSEN.local.f
 
 The countdown turns amber in the last two weeks, as in the panel.
 
+## Appearance
+
+Appearance, in the Mac panel and in the iOS app, changes how the app and every widget look. One look is shared through the App Group, so a change reaches the widgets at once. The screen opens with a live preview of both widget sizes.
+
+- **Background**: the system's own, a solid color, a gradient, or a photo or image file. Gradients come in six presets, with your own start and end colors and four directions. A photo is copied into the app's shared container and scaled so its longer side is 1000 pixels, because widgets cannot read the photo library and refuse large images. Darken lays black over a photo so text stays readable.
+- **Text**: ten typefaces: System, Rounded, Serif, and Monospaced, plus Avenir Next, Futura, Georgia, Gill Sans, Didot, and American Typewriter, which exist on both macOS and iOS. The weight of the big number, an overall size, and light, dark, or automatic text, which follows the background's brightness.
+- **Accent**: the color of bars, today's ring, and the current quarter. Without one, the standard green is used, unless it would be hard to see on the background, and then the text color is used.
+- **Show**: progress bars, the end date, the quarter under a label, the half and year rows in medium widgets, and a centered number.
+
+On the Mac the background sits behind the whole panel, and the typeface's design applies to the panel's text. A named typeface such as Futura applies to the quarter id and the widgets. On iOS the top card takes the look. Reset to the standard look puts everything back.
+
 ## iPhone and iPad
 
 `FiscalQuarteriOS` is the same calendar on a phone: the quarter, the three pictures, the countdowns, the other calendars, and your calendar setting. Tap a calendar to copy its status line, or share the status line from the toolbar.
@@ -221,6 +232,8 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `calendars/` holds example calendar files
 - `FiscalQuarterCore/Countdown.swift` counts down to the end of the quarter, half, and year
 - `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures. The iOS app shares `CalendarModel.swift`, `QuarterClock.swift`, and `YearPicture.swift`
+- `FiscalQuarterCore/Appearance.swift` is the shared look: background, type, colors, and what is shown
+- `FiscalQuarterUI/` is SwiftUI shared by both apps and both widgets: the theme, the background pictures, and the countdown views
 - `FiscalQuarterWidget/` is the countdown widget, built once for the Mac and once for iOS
 - `FiscalQuarteriOS/` is the iPhone and iPad app
 - `project.yml` generates `FiscalQuarter.xcodeproj`

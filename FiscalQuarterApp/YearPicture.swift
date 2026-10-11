@@ -89,6 +89,8 @@ struct YearPicture: View {
 // MARK: - Line
 
 private struct YearLine: View {
+    @Environment(\.fiscalAccent) private var accent
+    @Environment(\.fiscalRingFill) private var ringFill
     let chart: FiscalYearMap
     let today: CalendarDate
 
@@ -104,7 +106,7 @@ private struct YearLine: View {
                     if index < layout.quarterSpans.count {
                         Text("Q\(quarter.quarter)")
                             .font(.system(size: 10, weight: quarter.quarter == currentQuarter ? .semibold : .medium))
-                            .foregroundStyle(quarter.quarter == currentQuarter ? MarkColor.green : Color.secondary)
+                            .foregroundStyle(quarter.quarter == currentQuarter ? accent : Color.secondary)
                             .position(x: layout.quarterSpans[index].midX, y: 8)
                     }
                 }
@@ -123,9 +125,9 @@ private struct YearLine: View {
                 }
 
                 Circle()
-                    .fill(MarkColor.background)
+                    .fill(ringFill ?? MarkColor.background)
                     .frame(width: 11, height: 11)
-                    .overlay(Circle().stroke(MarkColor.green, lineWidth: 2))
+                    .overlay(Circle().stroke(accent, lineWidth: 2))
                     .position(x: layout.todayX, y: 26)
             }
         }
@@ -136,11 +138,11 @@ private struct YearLine: View {
         let here = month.quarter == currentQuarter
         let fill = month.fill(on: today)
         return Capsule()
-            .fill(here ? MarkColor.green.opacity(0.16) : Color.primary.opacity(0.08))
+            .fill(here ? accent.opacity(0.16) : Color.primary.opacity(0.08))
             .frame(width: span.width, height: 7)
             .overlay(alignment: .leading) {
                 Capsule()
-                    .fill(here ? MarkColor.green : Color.primary.opacity(0.45))
+                    .fill(here ? accent : Color.primary.opacity(0.45))
                     .frame(width: span.width * fill)
             }
             .clipShape(Capsule())
@@ -212,6 +214,7 @@ private struct LineLayout {
 // MARK: - Year
 
 private struct YearCalendar: View {
+    @Environment(\.fiscalAccent) private var accent
     let chart: FiscalYearMap
     let today: CalendarDate
 
@@ -241,7 +244,7 @@ private struct YearCalendar: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text("Q\(quarter.quarter)")
                     .font(.system(size: 10, weight: .semibold))
-                    .foregroundStyle(quarter.quarter == currentQuarter ? MarkColor.green : Color.secondary)
+                    .foregroundStyle(quarter.quarter == currentQuarter ? accent : Color.secondary)
                 HStack(alignment: .top, spacing: 6) {
                     ForEach(chart.months(in: quarter)) { month in
                         MonthDots(month: month, today: today, currentQuarter: currentQuarter)
@@ -255,6 +258,7 @@ private struct YearCalendar: View {
 }
 
 private struct MonthDots: View {
+    @Environment(\.fiscalAccent) private var accent
     let month: FiscalMonth
     let today: CalendarDate
     let currentQuarter: Int
@@ -283,7 +287,7 @@ private struct MonthDots: View {
         if let date {
             if date == today {
                 Circle()
-                    .strokeBorder(MarkColor.green, lineWidth: 1.25)
+                    .strokeBorder(accent, lineWidth: 1.25)
                     .frame(width: cell, height: cell)
             } else {
                 Circle()
@@ -299,7 +303,7 @@ private struct MonthDots: View {
     private func ink(for date: CalendarDate) -> Color {
         let past = date < today
         if month.quarter == currentQuarter {
-            return MarkColor.green.opacity(past ? 0.95 : 0.24)
+            return accent.opacity(past ? 0.95 : 0.24)
         }
         return Color.primary.opacity(past ? 0.5 : 0.14)
     }
@@ -308,6 +312,8 @@ private struct MonthDots: View {
 // MARK: - Ring
 
 private struct YearRing: View {
+    @Environment(\.fiscalAccent) private var accent
+    @Environment(\.fiscalRingFill) private var ringFill
     let chart: FiscalYearMap
     let today: CalendarDate
 
@@ -324,13 +330,13 @@ private struct YearRing: View {
                 ForEach(chart.quarters, id: \.id) { quarter in
                     Text("Q\(quarter.quarter)")
                         .font(.system(size: 10, weight: quarter.quarter == geometry.current ? .semibold : .medium))
-                        .foregroundStyle(quarter.quarter == geometry.current ? MarkColor.green : Color.secondary)
+                        .foregroundStyle(quarter.quarter == geometry.current ? accent : Color.secondary)
                         .position(geometry.labelPoint(for: quarter))
                 }
                 Circle()
-                    .fill(MarkColor.background)
+                    .fill(ringFill ?? MarkColor.background)
                     .frame(width: 12, height: 12)
-                    .overlay(Circle().stroke(MarkColor.green, lineWidth: 2.5))
+                    .overlay(Circle().stroke(accent, lineWidth: 2.5))
                     .position(geometry.point(for: today, radius: radius))
                 VStack(spacing: -1) {
                     Text(FiscalMonth.symbol(for: today.month).uppercased())
@@ -354,7 +360,7 @@ private struct YearRing: View {
             let past = quarter.end < today
             let track: Color
             if here {
-                track = MarkColor.green.opacity(0.2)
+                track = accent.opacity(0.2)
             } else if past {
                 track = Color.primary.opacity(0.4)
             } else {
@@ -362,7 +368,7 @@ private struct YearRing: View {
             }
             stroke(context, geometry.arc(for: quarter), color: track, width: 9)
             if here {
-                stroke(context, geometry.elapsedArc(on: today), color: MarkColor.green, width: 9, cap: .butt)
+                stroke(context, geometry.elapsedArc(on: today), color: accent, width: 9, cap: .butt)
             }
         }
     }

@@ -7,13 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		020EF113ED016C99DBD79FD5 /* CountdownViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA5E9085F82A900D7D4538 /* CountdownViews.swift */; };
 		059F9875BC6D8DD1EE09922A /* YearPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313D2D8DC5D7D544335610F4 /* YearPicture.swift */; };
 		05BB2FDFD09C271ED033B864 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 139F56F3BAF1D647E378E75F /* Assets.xcassets */; };
 		066CDA7ACC09884590A2C0BD /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
 		07205DA4203911C9DA92AF31 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
+		09328D58B4396286F9B3D284 /* BackgroundImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9EDF92FE6AE37B86135479 /* BackgroundImageStore.swift */; };
 		0CC88C20C4F4ED3A1FD41097 /* QuarterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48A9C8A817102CF7D2A6A60 /* QuarterPanel.swift */; };
+		0D0F2F9BF660FDE227FD1A6A /* CountdownViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA5E9085F82A900D7D4538 /* CountdownViews.swift */; };
 		0E93301163A9C6AE13771B94 /* FiscalQuarterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5F94180FB0D966E273E744 /* FiscalQuarterApp.swift */; };
+		18D85A4F4849300CC7E29683 /* CountdownViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA5E9085F82A900D7D4538 /* CountdownViews.swift */; };
+		1C69A5A259198E25B0830B6A /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16711FAF784C47D4E62BFFBA /* Appearance.swift */; };
 		1FB3EB9F14A0B9AD28366158 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
+		2000121D16496999110E5B14 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16711FAF784C47D4E62BFFBA /* Appearance.swift */; };
+		20BCBAACE37D81A584D28363 /* AppearanceEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E53BCD93F69F742EB96AA7A /* AppearanceEditor.swift */; };
 		2380590FFB99049EFD105CCA /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		24187AE57854E83FCBE871C8 /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BBA7584365281E7D460BEA /* LoginItem.swift */; };
 		2427E42D447927DF21696E27 /* QuarterClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E719833196DAD26D15ED15E /* QuarterClock.swift */; };
@@ -21,13 +28,18 @@
 		25A9B779172A58674876097B /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
 		260FD82CE8ECAA5CA00B7637 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
 		27C6BCA26B97C85B90E11154 /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
+		2F7446E19C4004559CA82BA1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F957F175961CB4E27232827 /* Theme.swift */; };
+		3105261555B3A994241D1C1B /* CountdownViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA5E9085F82A900D7D4538 /* CountdownViews.swift */; };
 		3576E8F8E0227F3E213433C3 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */; };
 		38CFC565B8402F0DB7E560B3 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		4276444391FA556794B6CB9C /* QuarterClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E719833196DAD26D15ED15E /* QuarterClock.swift */; };
 		43B3960804084483DAC14569 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
+		45294D466BC2A64B61DFFC04 /* BackgroundImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9EDF92FE6AE37B86135479 /* BackgroundImageStore.swift */; };
 		45BF96C1468B04AB349C822D /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD87F30AE3313E355BC76B /* SharedSettings.swift */; };
+		4B010DB29DA6B557117C201B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F957F175961CB4E27232827 /* Theme.swift */; };
 		511BC65CFF3EFFE407B44979 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		589898691F615E769BE73FA9 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062EA10466FBD75CAAC906C2 /* AboutView.swift */; };
+		5909A460B030634A16A5682B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F957F175961CB4E27232827 /* Theme.swift */; };
 		5AB68A67CA8B9089925F633A /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
 		63A73F4F0EC88D979BC2DA33 /* FiscalQuarteriOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7134DF3C3FF965F74F5FC /* FiscalQuarteriOSApp.swift */; };
 		7310588A4A8B60A26268D5DF /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD87F30AE3313E355BC76B /* SharedSettings.swift */; };
@@ -35,16 +47,20 @@
 		79852E20385A5B70D8AAA4D5 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
 		84A4E3AA3B4A5CE9FFC2E6C0 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		8FAE651CD44C6F8941B2486B /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
+		92CF8AB65439CFBD71DA044C /* BackgroundImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9EDF92FE6AE37B86135479 /* BackgroundImageStore.swift */; };
 		95E93413102381FBD03B9883 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
 		97DA0550F25DB5027DBE9715 /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD87F30AE3313E355BC76B /* SharedSettings.swift */; };
 		97E663F46728F0520179BA9C /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
+		A1EBDF575C2495C8ECE966DB /* AppearanceEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E53BCD93F69F742EB96AA7A /* AppearanceEditor.swift */; };
 		A349D2513A8D1AD6ED002BE4 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
 		A602877DBE753000B278DB69 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
 		A76BCAF99A176E34927F0766 /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226B93D86E805DB0598BA76D /* CalendarSettingsView.swift */; };
+		A9599C27802DBEDB1A72EC61 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16711FAF784C47D4E62BFFBA /* Appearance.swift */; };
 		AB5AC0B12F026C376B6E54CE /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
 		AF71E1AF3A004BC366B533F6 /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
 		B237375D38F09AD6C5F2F295 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
 		B2879A41801F3536AAB73010 /* FiscalCalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F050D7B7A52183357D3B2A /* FiscalCalendarTests.swift */; };
+		B4DBD09F0E9DADD760D9D698 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16711FAF784C47D4E62BFFBA /* Appearance.swift */; };
 		C5E64D0794608974A037AAEA /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
 		C785985C6DB889D4C68F8213 /* YearPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313D2D8DC5D7D544335610F4 /* YearPicture.swift */; };
 		C79F1245ACAC40C9427DE4B3 /* FiscalQuarterWidgetMac.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B77DC372A6B46E6EA1DAF260 /* FiscalQuarterWidgetMac.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -52,12 +68,15 @@
 		CFD5AEB9F1C56FF5443C2247 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7CAF87DB1ED2D3A8800E90B0 /* AppIcon.icns */; };
 		D63C4928E051695E79B11A3F /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
 		DA1E4F79E08B20AD0849D79B /* CountdownWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE9343791A7D7EC53C6553E /* CountdownWidget.swift */; };
+		DB2C5DCCF6130A54D2921186 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F957F175961CB4E27232827 /* Theme.swift */; };
 		DCD133604F9FBB375714D5EF /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
 		DE68BD5D3F49D353F81B9551 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
+		E0D6D2DF9F421524FCD264F4 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16711FAF784C47D4E62BFFBA /* Appearance.swift */; };
 		EBBD95FC45121A3F7EA10D92 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
 		F65F3D11CCD3B8D701F6F07A /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
 		F8796632C9334746C3337906 /* CountdownWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE9343791A7D7EC53C6553E /* CountdownWidget.swift */; };
 		F8E91297D789302B1EE40A73 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
+		FD826A0DD692F1B936C9C758 /* BackgroundImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9EDF92FE6AE37B86135479 /* BackgroundImageStore.swift */; };
 		FE07278297579D7C33BF6A66 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */; };
 		FE13DC1DF0B8B8E5313E3807 /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD87F30AE3313E355BC76B /* SharedSettings.swift */; };
 		FF6AD6FF65822775A230BBEF /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
@@ -106,11 +125,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		03DA5E9085F82A900D7D4538 /* CountdownViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownViews.swift; sourceTree = "<group>"; };
 		062EA10466FBD75CAAC906C2 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		08A183D69957BB3CF3D38BC2 /* FiscalQuarter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FiscalQuarter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		139F56F3BAF1D647E378E75F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		16711FAF784C47D4E62BFFBA /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		16A52A85F3EE4CF9B64F137E /* FiscalQuarterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FiscalQuarterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalYearConfig.swift; sourceTree = "<group>"; };
+		1F957F175961CB4E27232827 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		1F9EDF92FE6AE37B86135479 /* BackgroundImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundImageStore.swift; sourceTree = "<group>"; };
 		20F050D7B7A52183357D3B2A /* FiscalCalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendarTests.swift; sourceTree = "<group>"; };
 		226B93D86E805DB0598BA76D /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
 		2C83AC51F4B171233B027CFD /* SavedCalendars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCalendars.swift; sourceTree = "<group>"; };
@@ -124,6 +147,7 @@
 		86BBA7584365281E7D460BEA /* LoginItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
 		87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModel.swift; sourceTree = "<group>"; };
 		8BE9343791A7D7EC53C6553E /* CountdownWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownWidget.swift; sourceTree = "<group>"; };
+		8E53BCD93F69F742EB96AA7A /* AppearanceEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceEditor.swift; sourceTree = "<group>"; };
 		9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendarDefinition.swift; sourceTree = "<group>"; };
 		9F6D4456647EBCA7AB90908F /* FiscalQuarteriOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FiscalQuarteriOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendar.swift; sourceTree = "<group>"; };
@@ -153,6 +177,7 @@
 		1ABEFB80E7EA4960F15D4BAC /* FiscalQuarterCore */ = {
 			isa = PBXGroup;
 			children = (
+				16711FAF784C47D4E62BFFBA /* Appearance.swift */,
 				54FEEEE78A96AF4BFD31523E /* Countdown.swift */,
 				A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */,
 				9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */,
@@ -164,10 +189,21 @@
 			path = FiscalQuarterCore;
 			sourceTree = "<group>";
 		};
+		57F124BCE05E4DB44D903FF8 /* FiscalQuarterUI */ = {
+			isa = PBXGroup;
+			children = (
+				1F9EDF92FE6AE37B86135479 /* BackgroundImageStore.swift */,
+				03DA5E9085F82A900D7D4538 /* CountdownViews.swift */,
+				1F957F175961CB4E27232827 /* Theme.swift */,
+			);
+			path = FiscalQuarterUI;
+			sourceTree = "<group>";
+		};
 		8178400E22B8102656223230 /* FiscalQuarterApp */ = {
 			isa = PBXGroup;
 			children = (
 				062EA10466FBD75CAAC906C2 /* AboutView.swift */,
+				8E53BCD93F69F742EB96AA7A /* AppearanceEditor.swift */,
 				7CAF87DB1ED2D3A8800E90B0 /* AppIcon.icns */,
 				87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */,
 				226B93D86E805DB0598BA76D /* CalendarSettingsView.swift */,
@@ -187,6 +223,7 @@
 				1ABEFB80E7EA4960F15D4BAC /* FiscalQuarterCore */,
 				A7808E7784D2C7FDFECE2FD7 /* FiscalQuarteriOS */,
 				1ABED29DAE01106C4CF459BC /* FiscalQuarterTests */,
+				57F124BCE05E4DB44D903FF8 /* FiscalQuarterUI */,
 				0E652C2E482CA8D991F4D355 /* FiscalQuarterWidget */,
 				B501B3807D09387A11B20232 /* Products */,
 			);
@@ -384,7 +421,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C69A5A259198E25B0830B6A /* Appearance.swift in Sources */,
+				92CF8AB65439CFBD71DA044C /* BackgroundImageStore.swift in Sources */,
 				97E663F46728F0520179BA9C /* Countdown.swift in Sources */,
+				3105261555B3A994241D1C1B /* CountdownViews.swift in Sources */,
 				DA1E4F79E08B20AD0849D79B /* CountdownWidget.swift in Sources */,
 				789AEB403CFF654BC65F100F /* FiscalCalendar.swift in Sources */,
 				066CDA7ACC09884590A2C0BD /* FiscalCalendarDefinition.swift in Sources */,
@@ -392,6 +432,7 @@
 				260FD82CE8ECAA5CA00B7637 /* FiscalYearMap.swift in Sources */,
 				F65F3D11CCD3B8D701F6F07A /* SavedCalendars.swift in Sources */,
 				45BF96C1468B04AB349C822D /* SharedSettings.swift in Sources */,
+				2F7446E19C4004559CA82BA1 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,9 +441,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				589898691F615E769BE73FA9 /* AboutView.swift in Sources */,
+				B4DBD09F0E9DADD760D9D698 /* Appearance.swift in Sources */,
+				A1EBDF575C2495C8ECE966DB /* AppearanceEditor.swift in Sources */,
+				45294D466BC2A64B61DFFC04 /* BackgroundImageStore.swift in Sources */,
 				FE07278297579D7C33BF6A66 /* CalendarModel.swift in Sources */,
 				A76BCAF99A176E34927F0766 /* CalendarSettingsView.swift in Sources */,
 				5AB68A67CA8B9089925F633A /* Countdown.swift in Sources */,
+				0D0F2F9BF660FDE227FD1A6A /* CountdownViews.swift in Sources */,
 				A349D2513A8D1AD6ED002BE4 /* FiscalCalendar.swift in Sources */,
 				07205DA4203911C9DA92AF31 /* FiscalCalendarDefinition.swift in Sources */,
 				0E93301163A9C6AE13771B94 /* FiscalQuarterApp.swift in Sources */,
@@ -413,6 +458,7 @@
 				0CC88C20C4F4ED3A1FD41097 /* QuarterPanel.swift in Sources */,
 				43B3960804084483DAC14569 /* SavedCalendars.swift in Sources */,
 				258403D532DA0A4F370BCF24 /* SharedSettings.swift in Sources */,
+				5909A460B030634A16A5682B /* Theme.swift in Sources */,
 				C785985C6DB889D4C68F8213 /* YearPicture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,6 +467,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0D6D2DF9F421524FCD264F4 /* Appearance.swift in Sources */,
 				25A9B779172A58674876097B /* Countdown.swift in Sources */,
 				1FB3EB9F14A0B9AD28366158 /* FiscalCalendar.swift in Sources */,
 				F8E91297D789302B1EE40A73 /* FiscalCalendarDefinition.swift in Sources */,
@@ -436,7 +483,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9599C27802DBEDB1A72EC61 /* Appearance.swift in Sources */,
+				FD826A0DD692F1B936C9C758 /* BackgroundImageStore.swift in Sources */,
 				AF71E1AF3A004BC366B533F6 /* Countdown.swift in Sources */,
+				020EF113ED016C99DBD79FD5 /* CountdownViews.swift in Sources */,
 				F8796632C9334746C3337906 /* CountdownWidget.swift in Sources */,
 				C5E64D0794608974A037AAEA /* FiscalCalendar.swift in Sources */,
 				A602877DBE753000B278DB69 /* FiscalCalendarDefinition.swift in Sources */,
@@ -444,6 +494,7 @@
 				B237375D38F09AD6C5F2F295 /* FiscalYearMap.swift in Sources */,
 				FF6AD6FF65822775A230BBEF /* SavedCalendars.swift in Sources */,
 				7310588A4A8B60A26268D5DF /* SharedSettings.swift in Sources */,
+				4B010DB29DA6B557117C201B /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,8 +502,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2000121D16496999110E5B14 /* Appearance.swift in Sources */,
+				20BCBAACE37D81A584D28363 /* AppearanceEditor.swift in Sources */,
+				09328D58B4396286F9B3D284 /* BackgroundImageStore.swift in Sources */,
 				3576E8F8E0227F3E213433C3 /* CalendarModel.swift in Sources */,
 				27C6BCA26B97C85B90E11154 /* Countdown.swift in Sources */,
+				18D85A4F4849300CC7E29683 /* CountdownViews.swift in Sources */,
 				AB5AC0B12F026C376B6E54CE /* FiscalCalendar.swift in Sources */,
 				EBBD95FC45121A3F7EA10D92 /* FiscalCalendarDefinition.swift in Sources */,
 				63A73F4F0EC88D979BC2DA33 /* FiscalQuarteriOSApp.swift in Sources */,
@@ -461,6 +516,7 @@
 				4276444391FA556794B6CB9C /* QuarterClock.swift in Sources */,
 				DE68BD5D3F49D353F81B9551 /* SavedCalendars.swift in Sources */,
 				FE13DC1DF0B8B8E5313E3807 /* SharedSettings.swift in Sources */,
+				DB2C5DCCF6130A54D2921186 /* Theme.swift in Sources */,
 				059F9875BC6D8DD1EE09922A /* YearPicture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

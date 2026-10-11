@@ -39,7 +39,7 @@ struct QuarterScreen: View {
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                             Text(snapshot.quarter.id)
-                                .font(.system(size: 34, weight: .bold))
+                                .font(Theme(appearance: calendar.appearance).numberFont(34))
                         }
                         YearPicture(
                             snapshot: snapshot,
@@ -60,6 +60,9 @@ struct QuarterScreen: View {
                         }
                     }
                     .padding(.vertical, 6)
+                    .themed(calendar.appearance)
+                    .fontDesign(Theme(appearance: calendar.appearance).fontDesign)
+                    .listRowBackground(heroBackground)
                 }
 
                 Section {
@@ -137,6 +140,10 @@ struct QuarterScreen: View {
                     NavigationLink("Your calendar") {
                         YourCalendarScreen(calendar: calendar, today: snapshot.today)
                     }
+                    NavigationLink("Appearance") {
+                        AppearanceEditor(calendar: calendar, today: snapshot.today)
+                            .navigationTitle("Appearance")
+                    }
                 }
             }
             .navigationTitle("Fiscal Quarter")
@@ -159,6 +166,16 @@ struct QuarterScreen: View {
         }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { clock.refresh() }
+        }
+    }
+
+    /// The top card wears the chosen background. The system look keeps the normal cell color.
+    @ViewBuilder
+    private var heroBackground: some View {
+        if calendar.appearance.background == .system {
+            Color(uiColor: .secondarySystemGroupedBackground)
+        } else {
+            ThemeBackground(appearance: calendar.appearance, image: calendar.backgroundImage)
         }
     }
 
