@@ -36,7 +36,7 @@ FY26-Q4 is 2025-11-01 through 2026-01-31. FY26-Q1 through FY26-Q3 fill February 
 
 Years before FY26 use that February start as well. February of calendar year Y is FY(Y - 1999). January still belongs to Q4 of the fiscal year that started the previous February.
 
-From 2027-01-01, fiscal years follow the calendar year. 2027 is FY28, split into Jan-Mar, Apr-Jun, Jul-Sep, and Oct-Dec. That part is inferred from the transition year ending in December. If a later calendar is published, change `calendarYearQuarter` in `FiscalQuarterCore/FiscalCalendar.swift`.
+From 2027-01-01, fiscal years follow the calendar year. 2027 is FY28, split into Jan-Mar, Apr-Jun, Jul-Sep, and Oct-Dec. That part is inferred from the transition year ending in December. If a later calendar is published, change `FiscalCalendarDefinition.builtIn` in `FiscalQuarterCore/FiscalCalendarDefinition.swift` and `calendars/built-in.json` together. A test fails if they disagree.
 
 Days remaining counts today through the last day of the quarter. On the last day the value is 1.
 
@@ -52,6 +52,20 @@ quarter.id // "FY27-Q4"
 ```
 
 `FiscalCalendar.quarter(on:calendar:)` reads a `Date` in a chosen calendar. The app passes `Calendar.current`, so the machine's local time zone decides the civil day.
+
+## Calendar files
+
+A calendar is data: a list of eras. Each era starts on its `from` date and runs until the next one starts. An era either repeats a `months` rule (four three-month quarters from `startMonth`/`startDay`) or lists its quarters outright with `explicit`, which is how FY27 is written. The first era has no `from`, and the first and last eras must use `months`, so every date has a quarter.
+
+`yearOffset` shifts the FY number. The built-in calendar needs it because 2027 is FY28, not FY27.
+
+`calendars/built-in.json` is the built-in calendar. `calendars/calendar-year.json` is a plain January start, where 2026-10-11 is FY26-Q4. `fq` reads either one:
+
+```sh
+fq --calendar calendars/calendar-year.json
+```
+
+A file with a gap, an overlap, or an open-ended explicit era is rejected with the reason. The app still uses its own setting. It does not read calendar files yet.
 
 ## Requirements
 
@@ -127,10 +141,8 @@ To show it after every login, add Fiscal Quarter in System Settings, General, Lo
 ## Command line, without packaging
 
 ```sh
-swift run fq -- --date 2026-10-09
+swift run fq --date 2026-10-09
 ```
-
-The `--` belongs to Swift Package Manager. The installed `fq` does not need it.
 
 ## Tests
 
@@ -149,6 +161,8 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 ## Project layout
 
 - `FiscalQuarterCore/FiscalCalendar.swift` maps a date to a quarter and builds the snapshot the panel and `fq` share
+- `FiscalQuarterCore/FiscalCalendarDefinition.swift` describes a calendar as eras, including the built-in one
+- `calendars/` holds example calendar files
 - `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures
 - `FiscalQuarterCLI/fq.swift` is the `fq` command
 - `FiscalQuarterTests/` is the XCTest suite

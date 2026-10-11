@@ -27,10 +27,10 @@ xcodebuild \
 echo "Building fq"
 swiftc -O -sdk "$SDK" -target arm64-apple-macos13.0 \
   -o "$DIST/fq-arm64" \
-  FiscalQuarterCLI/fq.swift FiscalQuarterCore/FiscalCalendar.swift FiscalQuarterCore/FiscalYearConfig.swift
+  FiscalQuarterCLI/fq.swift FiscalQuarterCore/FiscalCalendar.swift FiscalQuarterCore/FiscalCalendarDefinition.swift FiscalQuarterCore/FiscalYearConfig.swift FiscalQuarterCore/FiscalYearMap.swift
 swiftc -O -sdk "$SDK" -target x86_64-apple-macos13.0 \
   -o "$DIST/fq-x86_64" \
-  FiscalQuarterCLI/fq.swift FiscalQuarterCore/FiscalCalendar.swift FiscalQuarterCore/FiscalYearConfig.swift
+  FiscalQuarterCLI/fq.swift FiscalQuarterCore/FiscalCalendar.swift FiscalQuarterCore/FiscalCalendarDefinition.swift FiscalQuarterCore/FiscalYearConfig.swift FiscalQuarterCore/FiscalYearMap.swift
 
 cp -R "build/Build/Products/Release/FiscalQuarter.app" "$APP"
 lipo -create -output "$APP/Contents/MacOS/fq" "$DIST/fq-arm64" "$DIST/fq-x86_64"

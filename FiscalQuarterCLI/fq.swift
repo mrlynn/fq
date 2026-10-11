@@ -17,6 +17,7 @@ struct FQCommand {
     static func run(_ arguments: [String]) throws {
         var mode = Mode.human
         var date = CalendarDate(Date(), calendar: .current)
+        var definition = FiscalYearConfig.load(from: FiscalYearConfig.store).definition
         var index = 0
 
         while index < arguments.count {
@@ -35,11 +36,18 @@ struct FQCommand {
                 mode = .copy
             case "--date":
                 index += 1
-                guard index < arguments.count, let parsed = parseDate(arguments[index]) else {
+                guard index < arguments.count, let parsed = CalendarDate(iso: arguments[index]) else {
                     fputs("fq: --date needs YYYY-MM-DD\n", stderr)
                     exit(2)
                 }
                 date = parsed
+            case "--calendar":
+                index += 1
+                guard index < arguments.count else {
+                    fputs("fq: --calendar needs a path to a calendar JSON file\n", stderr)
+                    exit(2)
+                }
+                definition = try loadCalendar(arguments[index])
             default:
                 fputs("fq: unknown option \(argument)\n", stderr)
                 printUsage()
@@ -48,7 +56,7 @@ struct FQCommand {
             index += 1
         }
 
-        let snapshot = QuarterSnapshot(on: date, config: FiscalYearConfig.load(from: FiscalYearConfig.store))
+        let snapshot = QuarterSnapshot(on: date, calendar: definition)
         switch mode {
         case .human:
             print(snapshot.quarter.id)
@@ -86,29 +94,26 @@ enum Mode {
     case copy
 }
 
-func parseDate(_ raw: String) -> CalendarDate? {
-    let parts = raw.split(separator: "-", omittingEmptySubsequences: false)
-    guard parts.count == 3, parts[0].count == 4, parts[1].count == 2, parts[2].count == 2 else {
-        return nil
+func loadCalendar(_ path: String) throws -> FiscalCalendarDefinition {
+    let url = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
+    do {
+        return try FiscalCalendarDefinition(json: Data(contentsOf: url))
+    } catch let error as DefinitionError {
+        throw CalendarFileError(path: path, reason: error.description)
+    } catch DecodingError.dataCorrupted(let context) {
+        throw CalendarFileError(path: path, reason: context.debugDescription)
+    } catch DecodingError.keyNotFound(let key, _) {
+        throw CalendarFileError(path: path, reason: "missing \"\(key.stringValue)\"")
+    } catch DecodingError.typeMismatch(_, let context) {
+        throw CalendarFileError(path: path, reason: context.debugDescription)
     }
-    guard
-        let year = Int(parts[0]),
-        let month = Int(parts[1]),
-        let day = Int(parts[2])
-    else {
-        return nil
-    }
-    var calendar = Calendar(identifier: .gregorian)
-    calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
-    calendar.locale = Locale(identifier: "en_US_POSIX")
-    guard let resolved = calendar.date(from: DateComponents(year: year, month: month, day: day)) else {
-        return nil
-    }
-    let back = calendar.dateComponents([.year, .month, .day], from: resolved)
-    guard back.year == year, back.month == month, back.day == day else {
-        return nil
-    }
-    return CalendarDate(year: year, month: month, day: day)
+}
+
+struct CalendarFileError: Error, CustomStringConvertible {
+    let path: String
+    let reason: String
+
+    var description: String { "\(path): \(reason)" }
 }
 
 func copyToPasteboard(_ text: String) throws {
@@ -136,6 +141,7 @@ func printUsage() {
           fq --json           one JSON object
           fq --copy           copy the quarter id
           fq --date YYYY-MM-DD
+          fq --calendar FILE  use a calendar JSON file instead of the saved setting
         """
     )
 }

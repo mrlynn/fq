@@ -67,7 +67,7 @@ public struct MonthCell: Equatable {
 /// The fiscal year that contains a date, as quarters and months in order.
 public struct FiscalYearMap: Equatable {
     public let fiscalYear: Int
-    public let config: FiscalYearConfig
+    public let calendar: FiscalCalendarDefinition
     public let quarters: [FiscalQuarter]
     public let months: [FiscalMonth]
 
@@ -79,12 +79,16 @@ public struct FiscalYearMap: Equatable {
     }
 
     public static func containing(_ date: CalendarDate, config: FiscalYearConfig = .builtIn) -> FiscalYearMap {
-        let anchor = FiscalCalendar.quarter(containing: date, config: config)
+        containing(date, calendar: config.definition)
+    }
+
+    public static func containing(_ date: CalendarDate, calendar: FiscalCalendarDefinition) -> FiscalYearMap {
+        let anchor = FiscalCalendar.quarter(containing: date, in: calendar)
         var quarters = [anchor]
 
         var earlier = anchor
         for _ in 0..<6 {
-            let previous = FiscalCalendar.quarter(before: earlier, config: config)
+            let previous = FiscalCalendar.quarter(before: earlier, in: calendar)
             if previous == earlier || previous.fiscalYear != anchor.fiscalYear { break }
             quarters.insert(previous, at: 0)
             earlier = previous
@@ -92,7 +96,7 @@ public struct FiscalYearMap: Equatable {
 
         var later = anchor
         for _ in 0..<6 {
-            let next = FiscalCalendar.quarter(after: later, config: config)
+            let next = FiscalCalendar.quarter(after: later, in: calendar)
             if next == later || next.fiscalYear != anchor.fiscalYear { break }
             quarters.append(next)
             later = next
@@ -100,9 +104,9 @@ public struct FiscalYearMap: Equatable {
 
         return FiscalYearMap(
             fiscalYear: anchor.fiscalYear,
-            config: config,
+            calendar: calendar,
             quarters: quarters,
-            months: months(from: quarters[0].start, through: quarters[quarters.count - 1].end, config: config)
+            months: months(from: quarters[0].start, through: quarters[quarters.count - 1].end, calendar: calendar)
         )
     }
 
@@ -115,7 +119,7 @@ public struct FiscalYearMap: Equatable {
     }
 
     public func summary(on date: CalendarDate) -> String {
-        let quarter = FiscalCalendar.quarter(containing: date, config: config)
+        let quarter = FiscalCalendar.quarter(containing: date, in: calendar)
         let opening = months.first?.symbol ?? start.iso
         let closing = months.last?.symbol ?? end.iso
         return "FY\(fiscalYear), \(opening) through \(closing). \(FiscalMonth.symbol(for: date.month)) \(date.day) is in Q\(quarter.quarter)."
@@ -124,14 +128,14 @@ public struct FiscalYearMap: Equatable {
     private static func months(
         from start: CalendarDate,
         through end: CalendarDate,
-        config: FiscalYearConfig
+        calendar: FiscalCalendarDefinition
     ) -> [FiscalMonth] {
         var months: [FiscalMonth] = []
         var cursor = start
         for _ in 0..<24 {
             if cursor > end { break }
             guard let monthEnd = FiscalCalendar.endOfMonth(cursor) else { break }
-            let quarter = FiscalCalendar.quarter(containing: cursor, config: config)
+            let quarter = FiscalCalendar.quarter(containing: cursor, in: calendar)
             let clipped = [monthEnd, quarter.end, end].min() ?? end
             months.append(FiscalMonth(start: cursor, end: clipped, quarter: quarter.quarter))
             guard let next = FiscalCalendar.day(after: clipped), next > cursor else { break }

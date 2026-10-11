@@ -20,6 +20,16 @@ public struct FiscalYearConfig: Equatable, Codable {
 
     public static let builtIn = FiscalYearConfig(kind: .builtIn, startMonth: 2, startDay: 1)
 
+    /// The calendar this setting describes.
+    public var definition: FiscalCalendarDefinition {
+        switch kind {
+        case .builtIn:
+            return .builtIn
+        case .custom:
+            return .months(startMonth: startMonth, startDay: startDay)
+        }
+    }
+
     public static let suiteName = "local.fiscalquarter"
 
     public static var store: UserDefaults {

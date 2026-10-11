@@ -1,7 +1,7 @@
 import Foundation
 
-/// A calendar day with no time of day.
-public struct CalendarDate: Comparable, Hashable {
+/// A calendar day with no time of day. Encodes as `YYYY-MM-DD`.
+public struct CalendarDate: Comparable, Hashable, Codable {
     public let year: Int
     public let month: Int
     public let day: Int
@@ -17,6 +17,39 @@ public struct CalendarDate: Comparable, Hashable {
     public init(_ date: Date, calendar: Calendar) {
         let parts = calendar.dateComponents([.year, .month, .day], from: date)
         self.init(year: parts.year ?? 1970, month: parts.month ?? 1, day: parts.day ?? 1)
+    }
+
+    /// Parses `YYYY-MM-DD`. Returns nil for any other shape or for a day that does not exist.
+    public init?(iso raw: String) {
+        let parts = raw.split(separator: "-", omittingEmptySubsequences: false)
+        guard
+            parts.count == 3, parts[0].count == 4, parts[1].count == 2, parts[2].count == 2,
+            let year = Int(parts[0]), let month = Int(parts[1]), let day = Int(parts[2])
+        else {
+            return nil
+        }
+        let candidate = CalendarDate(year: year, month: month, day: day)
+        guard
+            let resolved = FiscalCalendar.gregorianDate(candidate),
+            CalendarDate(resolved, calendar: FiscalCalendar.dayCountCalendar) == candidate
+        else {
+            return nil
+        }
+        self = candidate
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let raw = try container.decode(String.self)
+        guard let date = CalendarDate(iso: raw) else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Expected YYYY-MM-DD, got \"\(raw)\".")
+        }
+        self = date
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(iso)
     }
 
     public var iso: String {
@@ -56,19 +89,23 @@ public struct QuarterSnapshot: Equatable, Encodable {
     public let daysRemaining: Int
     public let week: Int
     public let next: FiscalQuarter
-    public let config: FiscalYearConfig
+    public let calendar: FiscalCalendarDefinition
 
     public init(on date: CalendarDate, config: FiscalYearConfig = .builtIn) {
-        let quarter = FiscalCalendar.quarter(containing: date, config: config)
+        self.init(on: date, calendar: config.definition)
+    }
+
+    public init(on date: CalendarDate, calendar: FiscalCalendarDefinition) {
+        let quarter = FiscalCalendar.quarter(containing: date, in: calendar)
         let length = FiscalCalendar.inclusiveDays(from: quarter.start, to: quarter.end)
         self.quarter = quarter
         self.today = date
-        self.config = config
+        self.calendar = calendar
         self.length = length
         self.dayIndex = FiscalCalendar.inclusiveDays(from: quarter.start, to: date)
         self.daysRemaining = quarter.daysRemaining(on: date)
         self.week = max(1, (dayIndex + 6) / 7)
-        self.next = FiscalCalendar.quarter(after: quarter, config: config)
+        self.next = FiscalCalendar.quarter(after: quarter, in: calendar)
     }
 
     /// Share of the quarter through today, counting today. The last day is 1.
@@ -108,10 +145,9 @@ public struct QuarterSnapshot: Equatable, Encodable {
         }
     }
 
-    /// FY27 is the 11-month transition on the built-in calendar. A custom start does not use it.
+    /// The note on today's era, such as the FY27 transition on the built-in calendar.
     public var transitionNote: String? {
-        guard config.kind == .builtIn, quarter.fiscalYear == 27 else { return nil }
-        return "FY27 ends December 31. FY28 follows the calendar year."
+        calendar.era(containing: today).note
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -136,30 +172,13 @@ public struct QuarterSnapshot: Equatable, Encodable {
     }
 }
 
-/// Fiscal quarter for a civil date.
+/// Fiscal quarter for a civil date, read from a `FiscalCalendarDefinition`.
 ///
-/// FY27 is an 11-month transition year, 2026-02-01 through 2026-12-31.
-/// Q3 is August and September only. Q4 is 2026-10-01 through 2026-12-31.
-///
-/// Earlier years start on February 1. Quarters start in February, May, August,
-/// and November. January belongs to Q4 of the fiscal year that started the
-/// previous February. FY26-Q4 is 2025-11-01 through 2026-01-31.
-///
-/// From 2027-01-01, fiscal years follow the calendar year. 2027 is FY28.
-/// That continuation is inferred from the transition year ending in December.
+/// The built-in calendar is `FiscalCalendarDefinition.builtIn`: February years, then FY27 as an
+/// 11-month transition from 2026-02-01 through 2026-12-31, then calendar years from 2027 as FY28.
 public enum FiscalCalendar {
-    /// First day of the FY27 transition year.
-    private static let fy27Start = CalendarDate(year: 2026, month: 2, day: 1)
-    /// First day of FY28, the calendar year after the transition.
-    private static let fy28Start = CalendarDate(year: 2027, month: 1, day: 1)
-
     public static func quarter(containing date: CalendarDate, config: FiscalYearConfig = .builtIn) -> FiscalQuarter {
-        switch config.kind {
-        case .builtIn:
-            return builtInQuarter(date)
-        case .custom:
-            return customQuarter(date, startMonth: config.startMonth, startDay: config.startDay)
-        }
+        quarter(containing: date, in: config.definition)
     }
 
     public static func quarter(on date: Date, calendar: Calendar, config: FiscalYearConfig = .builtIn) -> FiscalQuarter {
@@ -168,39 +187,66 @@ public enum FiscalCalendar {
 
     /// The quarter that begins the day after `quarter` ends.
     public static func quarter(after quarter: FiscalQuarter, config: FiscalYearConfig = .builtIn) -> FiscalQuarter {
-        guard let next = day(after: quarter.end) else { return quarter }
-        return self.quarter(containing: next, config: config)
+        self.quarter(after: quarter, in: config.definition)
     }
 
     /// The quarter that ends the day before `quarter` starts.
     public static func quarter(before quarter: FiscalQuarter, config: FiscalYearConfig = .builtIn) -> FiscalQuarter {
+        self.quarter(before: quarter, in: config.definition)
+    }
+
+    /// The quarter containing `date`, clipped to the era it falls in.
+    public static func quarter(containing date: CalendarDate, in definition: FiscalCalendarDefinition) -> FiscalQuarter {
+        let index = definition.eraIndex(containing: date)
+        let era = definition.eras[index]
+        let quarter: FiscalQuarter
+        switch era.rule {
+        case .months(let rule):
+            quarter = monthQuarter(date, rule: rule)
+        case .explicit(let year):
+            // Validation guarantees the spans cover the era, so the fallback is never reached.
+            let number = year.quarters.firstIndex { date >= $0.start && date <= $0.end } ?? 0
+            let span = year.quarters[number]
+            quarter = FiscalQuarter(fiscalYear: year.fiscalYear, quarter: number + 1, start: span.start, end: span.end)
+        }
+        return clip(quarter, from: era.start, before: definition.start(afterEra: index))
+    }
+
+    public static func quarter(after quarter: FiscalQuarter, in definition: FiscalCalendarDefinition) -> FiscalQuarter {
+        guard let next = day(after: quarter.end) else { return quarter }
+        return self.quarter(containing: next, in: definition)
+    }
+
+    public static func quarter(before quarter: FiscalQuarter, in definition: FiscalCalendarDefinition) -> FiscalQuarter {
         guard let previous = day(before: quarter.start) else { return quarter }
-        return self.quarter(containing: previous, config: config)
+        return self.quarter(containing: previous, in: definition)
     }
 
-    /// The built-in February calendar, including the short FY27.
-    private static func builtInQuarter(_ date: CalendarDate) -> FiscalQuarter {
-        if date >= fy27Start && date < fy28Start {
-            return transitionQuarter(date)
+    /// A rule-based quarter can spill past its era when an era starts mid-year. Trim it to the era.
+    private static func clip(_ quarter: FiscalQuarter, from eraStart: CalendarDate?, before nextStart: CalendarDate?) -> FiscalQuarter {
+        var start = quarter.start
+        var end = quarter.end
+        if let eraStart, start < eraStart {
+            start = eraStart
         }
-        if date >= fy28Start {
-            return calendarYearQuarter(date)
+        if let nextStart, let lastDay = day(before: nextStart), end > lastDay {
+            end = lastDay
         }
-        return februaryYearQuarter(date)
+        return FiscalQuarter(fiscalYear: quarter.fiscalYear, quarter: quarter.quarter, start: start, end: end)
     }
 
-    /// Four quarters of three months. The FY number is the calendar year the fiscal year ends in, minus 2000.
-    /// A year that starts on 1 Feb 2025 ends on 31 Jan 2026, so it is FY26.
-    private static func customQuarter(_ date: CalendarDate, startMonth: Int, startDay: Int) -> FiscalQuarter {
-        let month = min(12, max(1, startMonth))
-        let day = min(31, max(1, startDay))
+    /// Four quarters of three months. The FY number is the calendar year the fiscal year ends in, minus 2000,
+    /// plus the rule's offset. A year that starts on 1 Feb 2025 ends on 31 Jan 2026, so it is FY26.
+    private static func monthQuarter(_ date: CalendarDate, rule: MonthRule) -> FiscalQuarter {
+        let month = min(12, max(1, rule.startMonth))
+        let day = min(31, max(1, rule.startDay))
         let anniversary = anchored(year: date.year, month: month, day: day)
         let yearStart = date >= anniversary
             ? anniversary
             : anchored(year: date.year - 1, month: month, day: day)
         let nextStart = anchored(year: yearStart.year + 1, month: month, day: day)
         let yearEnd = self.day(before: nextStart) ?? yearStart
-        let fiscalYear = yearEnd.year - 2000
+        let fiscalYear = yearEnd.year - 2000 + rule.yearOffset
         let boundaries = [
             yearStart,
             shiftedAnchor(3, from: yearStart, day: day),
@@ -293,87 +339,14 @@ public enum FiscalCalendar {
         return span + 1
     }
 
-    fileprivate static let dayCountCalendar: Calendar = {
+    static let dayCountCalendar: Calendar = {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
         calendar.locale = Locale(identifier: "en_US_POSIX")
         return calendar
     }()
 
-    fileprivate static func gregorianDate(_ date: CalendarDate) -> Date? {
+    static func gregorianDate(_ date: CalendarDate) -> Date? {
         dayCountCalendar.date(from: DateComponents(year: date.year, month: date.month, day: date.day))
-    }
-
-    /// FY27: February 2026 through December 2026. Q3 is two months.
-    private static func transitionQuarter(_ date: CalendarDate) -> FiscalQuarter {
-        switch date.month {
-        case 2, 3, 4:
-            return make(27, 1, 2026, 2, 1, 2026, 4, 30)
-        case 5, 6, 7:
-            return make(27, 2, 2026, 5, 1, 2026, 7, 31)
-        case 8, 9:
-            return make(27, 3, 2026, 8, 1, 2026, 9, 30)
-        case 10, 11, 12:
-            return make(27, 4, 2026, 10, 1, 2026, 12, 31)
-        default:
-            return februaryYearQuarter(date)
-        }
-    }
-
-    /// Calendar-year fiscal quarters. FY number is `year - 1999` (2027 is FY28).
-    private static func calendarYearQuarter(_ date: CalendarDate) -> FiscalQuarter {
-        let year = date.year
-        let fiscalYear = year - 1999
-        switch date.month {
-        case 1, 2, 3:
-            return make(fiscalYear, 1, year, 1, 1, year, 3, 31)
-        case 4, 5, 6:
-            return make(fiscalYear, 2, year, 4, 1, year, 6, 30)
-        case 7, 8, 9:
-            return make(fiscalYear, 3, year, 7, 1, year, 9, 30)
-        case 10, 11, 12:
-            return make(fiscalYear, 4, year, 10, 1, year, 12, 31)
-        default:
-            return make(fiscalYear, 1, year, 1, 1, year, 3, 31)
-        }
-    }
-
-    /// February-start fiscal year.
-    /// February of calendar year Y is FY(Y - 1999): February 2025 is FY26.
-    /// January stays in the previous fiscal year: January 2026 is FY26-Q4.
-    private static func februaryYearQuarter(_ date: CalendarDate) -> FiscalQuarter {
-        let year = date.year
-        switch date.month {
-        case 1:
-            return make(year - 2000, 4, year - 1, 11, 1, year, 1, 31)
-        case 2, 3, 4:
-            return make(year - 1999, 1, year, 2, 1, year, 4, 30)
-        case 5, 6, 7:
-            return make(year - 1999, 2, year, 5, 1, year, 7, 31)
-        case 8, 9, 10:
-            return make(year - 1999, 3, year, 8, 1, year, 10, 31)
-        case 11, 12:
-            return make(year - 1999, 4, year, 11, 1, year + 1, 1, 31)
-        default:
-            return make(year - 1999, 1, year, 2, 1, year, 4, 30)
-        }
-    }
-
-    private static func make(
-        _ fiscalYear: Int,
-        _ quarter: Int,
-        _ startYear: Int,
-        _ startMonth: Int,
-        _ startDay: Int,
-        _ endYear: Int,
-        _ endMonth: Int,
-        _ endDay: Int
-    ) -> FiscalQuarter {
-        FiscalQuarter(
-            fiscalYear: fiscalYear,
-            quarter: quarter,
-            start: CalendarDate(year: startYear, month: startMonth, day: startDay),
-            end: CalendarDate(year: endYear, month: endMonth, day: endDay)
-        )
     }
 }

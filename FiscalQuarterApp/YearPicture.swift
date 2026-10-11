@@ -31,7 +31,7 @@ struct YearPicture: View {
     let select: (PictureKind) -> Void
 
     private var chart: FiscalYearMap {
-        FiscalYearMap.containing(snapshot.today, config: snapshot.config)
+        FiscalYearMap.containing(snapshot.today, calendar: snapshot.calendar)
     }
 
     var body: some View {
