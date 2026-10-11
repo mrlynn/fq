@@ -145,7 +145,15 @@ That runs the tests, builds a universal app, and writes two files:
 - `dist/FiscalQuarter-1.3.zip`
 - `dist/FiscalQuarter-1.3.dmg`
 
-The disk image has the app, a shortcut to Applications, and `How to install.txt`. Drag the app to Applications and open it. The first open may need a Control-click, then Open, then Open again. The script signs with the Developer ID certificate in your keychain. It does not notarize, which is why the first open needs that extra step. Set `SIGN_IDENTITY` to sign with another certificate.
+The disk image has the app, a shortcut to Applications, and `How to install.txt`. Drag the app to Applications and open it. The script signs the app, the widget, `fq`, and the disk image with the Developer ID certificate in your keychain, with the hardened runtime and a secure timestamp. Set `SIGN_IDENTITY` to use another certificate.
+
+It also notarizes the app and the disk image and staples the tickets, so they open like any other app, even offline. That needs a notarytool profile in your keychain, made once:
+
+```sh
+xcrun notarytool store-credentials fiscalquarter --apple-id YOU@EXAMPLE.COM --team-id YZ36Z8GSEN
+```
+
+It asks for an app-specific password, which you make at account.apple.com under Sign-In and Security. Without the profile the script warns and builds an unnotarized copy, and the first open needs a Control-click, then Open, then Open again. `NOTARIZE=1` stops instead of warning, `NOTARIZE=0` skips notarizing, and `NOTARY_PROFILE` names another profile.
 
 `fq` is inside the app. After it is in Applications:
 
