@@ -169,6 +169,12 @@ public struct Appearance: Equatable, Codable {
         return RGBAColor.contrast(Self.standardAccent.luminance, background) < 2.5
     }
 
+    /// Whether text drawn straight onto this background needs a shadow to stand off it.
+    /// Only a photo is busy enough to need one.
+    public var wantsTextShadow: Bool {
+        imageFile != nil
+    }
+
     /// The image file this appearance uses, if any.
     public var imageFile: String? {
         if case .image(let name) = background { return name }

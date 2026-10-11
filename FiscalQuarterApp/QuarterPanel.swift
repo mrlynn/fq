@@ -21,14 +21,18 @@ struct QuarterPanel: View {
             switch page {
             case .quarter:
                 quarterPage
+                    .photoLegibility(calendar.appearance)
             case .about:
                 AboutView(dismiss: { page = .quarter })
+                    .photoLegibility(calendar.appearance)
             case .calendar:
                 CalendarSettingsView(
                     calendar: calendar,
                     today: snapshot.today,
                     dismiss: { page = .quarter }
                 )
+                .photoLegibility(calendar.appearance)
+            // No shadow here: the form draws its own cards, and shadowed text on them looks wrong.
             case .appearance:
                 VStack(alignment: .leading, spacing: 12) {
                     backButton
