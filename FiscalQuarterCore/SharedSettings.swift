@@ -29,10 +29,13 @@ public enum SharedSettings {
         UserDefaults(suiteName: appGroup) ?? .standard
     }
 
-    /// The settings from before the App Group. Asking for a suite named after the app's own bundle
-    /// identifier returns nil, and then `.standard` is that same domain.
+    /// The settings from before the App Group. In the Mac app, and in the `fq` inside it, the bundle
+    /// identifier is that suite's name, so `.standard` already is it. Asking for the suite there logs a warning.
     public static var legacyStore: UserDefaults {
-        UserDefaults(suiteName: legacySuite) ?? .standard
+        if Bundle.main.bundleIdentifier == legacySuite {
+            return .standard
+        }
+        return UserDefaults(suiteName: legacySuite) ?? .standard
     }
 
     /// Copies the calendar settings from the legacy suite into the group once.
