@@ -2,6 +2,8 @@
 
 A macOS menu bar app for a fiscal calendar. The built-in fiscal year is the calendar year, numbered by that year: 2026 is FY26, with quarters starting on 1 January, 1 April, 1 July, and 1 October.
 
+Screenshots, features, and the download are at [fq.mlynn.dev](https://fq.mlynn.dev).
+
 On 2026-10-09 the quarter is **FY26-Q4**. The menu bar reads `FY26-Q4 · 84d`: day 9 of 92, week 2, 84 days left, counting today. Click it for the start and end, a progress bar, the next quarter, and copy.
 
 Copy quarter id puts `FY26-Q4` on the pasteboard. Copy status line puts `FY26-Q4 · Day 9 of 92 · week 2 · 84 days left`. In the last two weeks the days-remaining figure turns amber, and the last week and last day get a line of their own. Open at login, Calendar, About, and Quit are in the same panel. About links to mlynn.org, GitHub, and LinkedIn.
