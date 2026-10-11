@@ -464,6 +464,44 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertNil(CalendarDate(iso: "October"))
     }
 
+    // MARK: Saved calendars
+
+    func testSavedCalendarsRoundTripThroughDefaults() throws {
+        let name = "local.fiscalquarter.tests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: name))
+        defer { defaults.removePersistentDomain(forName: name) }
+        XCTAssertEqual(SavedCalendars.load(from: defaults), [])
+
+        let saved = [
+            SavedCalendar(definition: .months(startMonth: 1, startDay: 1, name: "SpaceX")),
+            SavedCalendar(definition: FiscalCalendarDefinition.builtIn.renamed("Ours, again")),
+        ]
+        SavedCalendars.save(saved, to: defaults)
+        XCTAssertEqual(SavedCalendars.load(from: defaults), saved)
+    }
+
+    func testSavedCalendarsSkipAnEntryThatNoLongerDecodes() throws {
+        let name = "local.fiscalquarter.tests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: name))
+        defer { defaults.removePersistentDomain(forName: name) }
+        let good = SavedCalendar(definition: .months(startMonth: 7, startDay: 1, name: "Acme"))
+        defaults.set([Data("not json".utf8), try JSONEncoder().encode(good)], forKey: "otherCalendars")
+        XCTAssertEqual(SavedCalendars.load(from: defaults), [good])
+    }
+
+    func testSavedCalendarNamesAreUniqueIgnoringCase() {
+        let saved = [SavedCalendar(definition: .months(startMonth: 1, startDay: 1, name: "SpaceX"))]
+        XCTAssertEqual(SavedCalendars.named("  spacex ", in: saved)?.name, "SpaceX")
+        XCTAssertNotNil(SavedCalendars.problem(withName: "SPACEX", in: saved))
+        XCTAssertNotNil(SavedCalendars.problem(withName: "   ", in: saved))
+        XCTAssertNil(SavedCalendars.problem(withName: "Acme", in: saved))
+    }
+
+    func testDefinitionSummary() {
+        XCTAssertEqual(FiscalCalendarDefinition.months(startMonth: 7, startDay: 1).summary, "Starts Jul 1 every year")
+        XCTAssertEqual(FiscalCalendarDefinition.builtIn.summary, "3 eras, from a file")
+    }
+
     private func calendarFile(_ name: String) -> URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

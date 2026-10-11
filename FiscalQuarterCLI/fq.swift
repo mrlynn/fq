@@ -18,6 +18,7 @@ struct FQCommand {
         var mode = Mode.human
         var date = CalendarDate(Date(), calendar: .current)
         var definition = FiscalYearConfig.load(from: FiscalYearConfig.store).definition
+        var all = false
         var index = 0
 
         while index < arguments.count {
@@ -44,16 +45,23 @@ struct FQCommand {
             case "--calendar":
                 index += 1
                 guard index < arguments.count else {
-                    fputs("fq: --calendar needs a path to a calendar JSON file\n", stderr)
+                    fputs("fq: --calendar needs a saved calendar name or a calendar JSON file\n", stderr)
                     exit(2)
                 }
                 definition = try loadCalendar(arguments[index])
+            case "--all":
+                all = true
             default:
                 fputs("fq: unknown option \(argument)\n", stderr)
                 printUsage()
                 exit(2)
             }
             index += 1
+        }
+
+        if all {
+            printAll(on: date, mode: mode)
+            return
         }
 
         let snapshot = QuarterSnapshot(on: date, calendar: definition)
@@ -94,7 +102,27 @@ enum Mode {
     case copy
 }
 
-func loadCalendar(_ path: String) throws -> FiscalCalendarDefinition {
+/// Your calendar, then each saved calendar, one line each.
+func printAll(on date: CalendarDate, mode: Mode) {
+    let yours = FiscalYearConfig.load(from: FiscalYearConfig.store).definition
+    let rows = [("Yours", yours)] + SavedCalendars.load(from: FiscalYearConfig.store).map { ($0.name, $0.definition) }
+    let width = rows.map(\.0.count).max() ?? 0
+    for (name, definition) in rows {
+        let snapshot = QuarterSnapshot(on: date, calendar: definition)
+        let value = mode == .id ? snapshot.quarter.id : snapshot.statusLine
+        print(name.padding(toLength: width, withPad: " ", startingAt: 0) + "  " + value)
+    }
+}
+
+/// A saved calendar's name, or else a path to a calendar JSON file.
+func loadCalendar(_ nameOrPath: String) throws -> FiscalCalendarDefinition {
+    if let saved = SavedCalendars.named(nameOrPath, in: SavedCalendars.load(from: FiscalYearConfig.store)) {
+        return saved.definition
+    }
+    let path = nameOrPath
+    guard FileManager.default.fileExists(atPath: (path as NSString).expandingTildeInPath) else {
+        throw CalendarFileError(path: path, reason: "no saved calendar has that name, and no file is there")
+    }
     let url = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
     do {
         return try FiscalCalendarDefinition(json: Data(contentsOf: url))
@@ -141,7 +169,8 @@ func printUsage() {
           fq --json           one JSON object
           fq --copy           copy the quarter id
           fq --date YYYY-MM-DD
-          fq --calendar FILE  use a calendar JSON file instead of the saved setting
+          fq --calendar NAME  use a saved calendar, or a calendar JSON file, instead of yours
+          fq --all            your calendar and every saved one, one line each
         """
     )
 }

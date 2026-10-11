@@ -91,6 +91,11 @@ struct QuarterPanel: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
+            if !calendar.others.isEmpty {
+                Divider()
+                otherCalendars(on: snapshot.today)
+            }
+
             Divider()
 
             actionButton("Copy quarter id", shortcut: "⌘C") {
@@ -125,6 +130,38 @@ struct QuarterPanel: View {
 
             actionButton("Quit", shortcut: "⌘Q", action: quit)
                 .keyboardShortcut("q")
+        }
+    }
+
+    /// One line per saved calendar. Clicking a line copies that calendar's status line, prefixed with its name.
+    private func otherCalendars(on today: CalendarDate) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Other calendars")
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+            ForEach(calendar.others) { other in
+                let theirs = QuarterSnapshot(on: today, calendar: other.definition)
+                Button(action: { copy("\(other.name): \(theirs.statusLine)") }) {
+                    HStack(alignment: .firstTextBaseline) {
+                        Text(other.name)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                        Spacer(minLength: 16)
+                        Text(theirs.quarter.id)
+                            .monospacedDigit()
+                        Text("\(theirs.daysRemaining)d")
+                            .monospacedDigit()
+                            .foregroundStyle(theirs.paceNote != nil ? MarkColor.warning : Color.secondary)
+                            .frame(minWidth: 34, alignment: .trailing)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .font(.system(size: 13))
+                .help("Copy \(other.name)'s status line")
+                .accessibilityLabel("\(other.name), \(theirs.quarter.id), \(theirs.daysRemaining) days remaining")
+                .accessibilityHint("Copies the status line")
+            }
         }
     }
 

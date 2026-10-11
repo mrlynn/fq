@@ -23,6 +23,8 @@
 		B10000000000000000000005 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000004 /* FiscalCalendar.swift */; };
 		B10000000000000000000010 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000F /* FiscalCalendarDefinition.swift */; };
 		B10000000000000000000011 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000F /* FiscalCalendarDefinition.swift */; };
+		B10000000000000000000012 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000010 /* SavedCalendars.swift */; };
+		B10000000000000000000013 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000010 /* SavedCalendars.swift */; };
 		B10000000000000000000006 /* FiscalCalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000005 /* FiscalCalendarTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +41,7 @@
 		F1000000000000000000000E /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
 		F10000000000000000000004 /* FiscalCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendar.swift; sourceTree = "<group>"; };
 		F1000000000000000000000F /* FiscalCalendarDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendarDefinition.swift; sourceTree = "<group>"; };
+		F10000000000000000000010 /* SavedCalendars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCalendars.swift; sourceTree = "<group>"; };
 		F10000000000000000000005 /* FiscalCalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendarTests.swift; sourceTree = "<group>"; };
 		F10000000000000000000006 /* FiscalQuarter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FiscalQuarter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F10000000000000000000007 /* FiscalQuarterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FiscalQuarterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +97,7 @@
 				F1000000000000000000000F /* FiscalCalendarDefinition.swift */,
 				F1000000000000000000000A /* FiscalYearMap.swift */,
 				F1000000000000000000000D /* FiscalYearConfig.swift */,
+				F10000000000000000000010 /* SavedCalendars.swift */,
 			);
 			path = FiscalQuarterCore;
 			sourceTree = "<group>";
@@ -213,6 +217,7 @@
 				B1000000000000000000000E /* CalendarSettingsView.swift in Sources */,
 				B10000000000000000000004 /* FiscalCalendar.swift in Sources */,
 				B10000000000000000000010 /* FiscalCalendarDefinition.swift in Sources */,
+				B10000000000000000000012 /* SavedCalendars.swift in Sources */,
 				B10000000000000000000009 /* FiscalYearMap.swift in Sources */,
 				B1000000000000000000000D /* FiscalYearConfig.swift in Sources */,
 			);
@@ -225,6 +230,7 @@
 				B10000000000000000000006 /* FiscalCalendarTests.swift in Sources */,
 				B10000000000000000000005 /* FiscalCalendar.swift in Sources */,
 				B10000000000000000000011 /* FiscalCalendarDefinition.swift in Sources */,
+				B10000000000000000000013 /* SavedCalendars.swift in Sources */,
 				B1000000000000000000000B /* FiscalYearMap.swift in Sources */,
 				B1000000000000000000000F /* FiscalYearConfig.swift in Sources */,
 			);

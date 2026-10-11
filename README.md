@@ -65,7 +65,25 @@ A calendar is data: a list of eras. Each era starts on its `from` date and runs 
 fq --calendar calendars/calendar-year.json
 ```
 
-A file with a gap, an overlap, or an open-ended explicit era is rejected with the reason. The app still uses its own setting. It does not read calendar files yet.
+A file with a gap, an overlap, or an open-ended explicit era is rejected with the reason.
+
+## Other calendars
+
+Your calendar drives the menu bar. Other calendars sit beside it, for a customer or a partner whose year is not yours. Add one in Calendar, under Others: give it a name and a start month and day, or import a calendar file. The panel lists each one with its quarter and days left, amber in its last two weeks. Click a line to copy its status line with the name in front.
+
+`fq` reads the same list. `--calendar` takes a saved name as well as a file, and `--all` prints every calendar:
+
+```sh
+fq --calendar SpaceX
+fq --all
+```
+
+```
+Yours   FY27-Q4 · Day 11 of 92 · week 2 · 82 days left
+SpaceX  FY26-Q4 · Day 11 of 92 · week 2 · 82 days left
+```
+
+Names are unique, ignoring case, so a name always finds one calendar.
 
 ## Requirements
 
@@ -162,6 +180,7 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 
 - `FiscalQuarterCore/FiscalCalendar.swift` maps a date to a quarter and builds the snapshot the panel and `fq` share
 - `FiscalQuarterCore/FiscalCalendarDefinition.swift` describes a calendar as eras, including the built-in one
+- `FiscalQuarterCore/SavedCalendars.swift` stores the other calendars
 - `calendars/` holds example calendar files
 - `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures
 - `FiscalQuarterCLI/fq.swift` is the `fq` command
