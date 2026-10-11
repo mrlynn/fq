@@ -6,6 +6,8 @@ struct QuarterPanel: View {
     @ObservedObject var calendar: CalendarModel
     @StateObject private var login = LoginItemController()
     @AppStorage("yearPicture") private var pictureKind = PictureKind.line.rawValue
+    @AppStorage(MenuBarCountdown.targetKey) private var menuBarTarget = CountdownTarget.quarter.rawValue
+    @AppStorage(MenuBarCountdown.unitKey) private var countdownUnit = CountdownUnit.days.rawValue
     @State private var notice: String?
     @State private var copyGeneration = 0
     @State private var page = PanelPage.quarter
@@ -92,6 +94,14 @@ struct QuarterPanel: View {
             }
 
             Divider()
+            countdowns(snapshot)
+
+            if !calendar.others.isEmpty {
+                Divider()
+                otherCalendars(on: snapshot.today)
+            }
+
+            Divider()
 
             actionButton("Copy quarter id", shortcut: "⌘C") {
                 copy(snapshot.quarter.id)
@@ -125,6 +135,85 @@ struct QuarterPanel: View {
 
             actionButton("Quit", shortcut: "⌘Q", action: quit)
                 .keyboardShortcut("q")
+        }
+    }
+
+    /// The end of the quarter, half, and year, merged when they fall on the same day.
+    /// Clicking a line puts that countdown in the menu bar.
+    private func countdowns(_ snapshot: QuarterSnapshot) -> some View {
+        let unit = CountdownUnit(rawValue: countdownUnit) ?? .days
+        let selected = CountdownTarget(rawValue: menuBarTarget) ?? .quarter
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text("Countdown")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Picker("Count in", selection: $countdownUnit) {
+                    ForEach(CountdownUnit.allCases) { unit in
+                        Text(unit.title).tag(unit.rawValue)
+                    }
+                }
+                .pickerStyle(.menu)
+                .labelsHidden()
+                .fixedSize()
+                .font(.system(size: 12))
+            }
+            ForEach(snapshot.countdownGroups) { group in
+                let inMenuBar = group.countdowns.contains { $0.target == selected }
+                Button(action: { menuBarTarget = group.first.target.rawValue }) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text(group.label)
+                            .lineLimit(1)
+                        Image(systemName: "menubar.rectangle")
+                            .font(.system(size: 10))
+                            .foregroundStyle(.secondary)
+                            .opacity(inMenuBar ? 1 : 0)
+                        Spacer(minLength: 12)
+                        Text(group.first.phrase(in: unit))
+                            .monospacedDigit()
+                            .foregroundStyle(group.first.days <= 14 ? MarkColor.warning : Color.primary)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .font(.system(size: 13))
+                .help(inMenuBar ? "Shown in the menu bar" : "Show in the menu bar")
+                .accessibilityLabel("\(group.label) ends \(group.end.iso), \(group.first.phrase(in: unit))")
+                .accessibilityAddTraits(inMenuBar ? .isSelected : [])
+            }
+        }
+    }
+
+    /// One line per saved calendar. Clicking a line copies that calendar's status line, prefixed with its name.
+    private func otherCalendars(on today: CalendarDate) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Other calendars")
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+            ForEach(calendar.others) { other in
+                let theirs = QuarterSnapshot(on: today, calendar: other.definition)
+                Button(action: { copy("\(other.name): \(theirs.statusLine)") }) {
+                    HStack(alignment: .firstTextBaseline) {
+                        Text(other.name)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                        Spacer(minLength: 16)
+                        Text(theirs.quarter.id)
+                            .monospacedDigit()
+                        Text("\(theirs.daysRemaining)d")
+                            .monospacedDigit()
+                            .foregroundStyle(theirs.paceNote != nil ? MarkColor.warning : Color.secondary)
+                            .frame(minWidth: 34, alignment: .trailing)
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .font(.system(size: 13))
+                .help("Copy \(other.name)'s status line")
+                .accessibilityLabel("\(other.name), \(theirs.quarter.id), \(theirs.daysRemaining) days remaining")
+                .accessibilityHint("Copies the status line")
+            }
         }
     }
 
@@ -182,4 +271,10 @@ private enum PanelPage: Equatable {
     case quarter
     case about
     case calendar
+}
+
+/// Which countdown the menu bar shows, and in what unit. The default reads `FY27-Q4 · 82d`.
+enum MenuBarCountdown {
+    static let targetKey = "menuBarCountdown"
+    static let unitKey = "countdownUnit"
 }

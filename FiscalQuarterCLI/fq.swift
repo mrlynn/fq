@@ -17,6 +17,8 @@ struct FQCommand {
     static func run(_ arguments: [String]) throws {
         var mode = Mode.human
         var date = CalendarDate(Date(), calendar: .current)
+        var definition = FiscalYearConfig.load(from: FiscalYearConfig.store).definition
+        var all = false
         var index = 0
 
         while index < arguments.count {
@@ -33,13 +35,24 @@ struct FQCommand {
                 mode = .json
             case "--copy":
                 mode = .copy
+            case "--countdown":
+                mode = .countdown
             case "--date":
                 index += 1
-                guard index < arguments.count, let parsed = parseDate(arguments[index]) else {
+                guard index < arguments.count, let parsed = CalendarDate(iso: arguments[index]) else {
                     fputs("fq: --date needs YYYY-MM-DD\n", stderr)
                     exit(2)
                 }
                 date = parsed
+            case "--calendar":
+                index += 1
+                guard index < arguments.count else {
+                    fputs("fq: --calendar needs a saved calendar name or a calendar JSON file\n", stderr)
+                    exit(2)
+                }
+                definition = try loadCalendar(arguments[index])
+            case "--all":
+                all = true
             default:
                 fputs("fq: unknown option \(argument)\n", stderr)
                 printUsage()
@@ -48,7 +61,12 @@ struct FQCommand {
             index += 1
         }
 
-        let snapshot = QuarterSnapshot(on: date, config: FiscalYearConfig.load(from: FiscalYearConfig.store))
+        if all {
+            printAll(on: date, mode: mode)
+            return
+        }
+
+        let snapshot = QuarterSnapshot(on: date, calendar: definition)
         switch mode {
         case .human:
             print(snapshot.quarter.id)
@@ -74,6 +92,12 @@ struct FQCommand {
         case .copy:
             try copyToPasteboard(snapshot.quarter.id)
             print(snapshot.quarter.id)
+        case .countdown:
+            for group in snapshot.countdownGroups {
+                let countdown = group.first
+                print("\(group.label) ends \(group.end.iso)")
+                print("  \(countdown.phrase(in: .days)) · \(countdown.phrase(in: .workdays)) · \(countdown.phrase(in: .weekends))")
+            }
         }
     }
 }
@@ -84,31 +108,49 @@ enum Mode {
     case status
     case json
     case copy
+    case countdown
 }
 
-func parseDate(_ raw: String) -> CalendarDate? {
-    let parts = raw.split(separator: "-", omittingEmptySubsequences: false)
-    guard parts.count == 3, parts[0].count == 4, parts[1].count == 2, parts[2].count == 2 else {
-        return nil
+/// Your calendar, then each saved calendar, one line each.
+func printAll(on date: CalendarDate, mode: Mode) {
+    let yours = FiscalYearConfig.load(from: FiscalYearConfig.store).definition
+    let rows = [("Yours", yours)] + SavedCalendars.load(from: FiscalYearConfig.store).map { ($0.name, $0.definition) }
+    let width = rows.map(\.0.count).max() ?? 0
+    for (name, definition) in rows {
+        let snapshot = QuarterSnapshot(on: date, calendar: definition)
+        let value = mode == .id ? snapshot.quarter.id : snapshot.statusLine
+        print(name.padding(toLength: width, withPad: " ", startingAt: 0) + "  " + value)
     }
-    guard
-        let year = Int(parts[0]),
-        let month = Int(parts[1]),
-        let day = Int(parts[2])
-    else {
-        return nil
+}
+
+/// A saved calendar's name, or else a path to a calendar JSON file.
+func loadCalendar(_ nameOrPath: String) throws -> FiscalCalendarDefinition {
+    if let saved = SavedCalendars.named(nameOrPath, in: SavedCalendars.load(from: FiscalYearConfig.store)) {
+        return saved.definition
     }
-    var calendar = Calendar(identifier: .gregorian)
-    calendar.timeZone = TimeZone(secondsFromGMT: 0) ?? .gmt
-    calendar.locale = Locale(identifier: "en_US_POSIX")
-    guard let resolved = calendar.date(from: DateComponents(year: year, month: month, day: day)) else {
-        return nil
+    let path = nameOrPath
+    guard FileManager.default.fileExists(atPath: (path as NSString).expandingTildeInPath) else {
+        throw CalendarFileError(path: path, reason: "no saved calendar has that name, and no file is there")
     }
-    let back = calendar.dateComponents([.year, .month, .day], from: resolved)
-    guard back.year == year, back.month == month, back.day == day else {
-        return nil
+    let url = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
+    do {
+        return try FiscalCalendarDefinition(json: Data(contentsOf: url))
+    } catch let error as DefinitionError {
+        throw CalendarFileError(path: path, reason: error.description)
+    } catch DecodingError.dataCorrupted(let context) {
+        throw CalendarFileError(path: path, reason: context.debugDescription)
+    } catch DecodingError.keyNotFound(let key, _) {
+        throw CalendarFileError(path: path, reason: "missing \"\(key.stringValue)\"")
+    } catch DecodingError.typeMismatch(_, let context) {
+        throw CalendarFileError(path: path, reason: context.debugDescription)
     }
-    return CalendarDate(year: year, month: month, day: day)
+}
+
+struct CalendarFileError: Error, CustomStringConvertible {
+    let path: String
+    let reason: String
+
+    var description: String { "\(path): \(reason)" }
 }
 
 func copyToPasteboard(_ text: String) throws {
@@ -135,7 +177,10 @@ func printUsage() {
           fq --status         one line, for Slack or a doc
           fq --json           one JSON object
           fq --copy           copy the quarter id
+          fq --countdown      days, workdays, and weekends to the end of the quarter, half, and year
           fq --date YYYY-MM-DD
+          fq --calendar NAME  use a saved calendar, or a calendar JSON file, instead of yours
+          fq --all            your calendar and every saved one, one line each
         """
     )
 }

@@ -3,110 +3,205 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B10000000000000000000001 /* FiscalQuarterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000001 /* FiscalQuarterApp.swift */; };
-		B10000000000000000000002 /* QuarterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000002 /* QuarterPanel.swift */; };
-		B10000000000000000000003 /* QuarterClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000003 /* QuarterClock.swift */; };
-		B10000000000000000000007 /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000008 /* LoginItem.swift */; };
-		B10000000000000000000008 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000009 /* AppIcon.icns */; };
-		B10000000000000000000009 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000A /* FiscalYearMap.swift */; };
-		B1000000000000000000000A /* YearPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000B /* YearPicture.swift */; };
-		B1000000000000000000000C /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000C /* AboutView.swift */; };
-		B1000000000000000000000D /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000D /* FiscalYearConfig.swift */; };
-		B1000000000000000000000E /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000E /* CalendarSettingsView.swift */; };
-		B1000000000000000000000F /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000D /* FiscalYearConfig.swift */; };
-		B1000000000000000000000B /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000A /* FiscalYearMap.swift */; };
-		B10000000000000000000004 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000004 /* FiscalCalendar.swift */; };
-		B10000000000000000000005 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000004 /* FiscalCalendar.swift */; };
-		B10000000000000000000006 /* FiscalCalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000005 /* FiscalCalendarTests.swift */; };
+		059F9875BC6D8DD1EE09922A /* YearPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313D2D8DC5D7D544335610F4 /* YearPicture.swift */; };
+		05BB2FDFD09C271ED033B864 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 139F56F3BAF1D647E378E75F /* Assets.xcassets */; };
+		066CDA7ACC09884590A2C0BD /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
+		07205DA4203911C9DA92AF31 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
+		0CC88C20C4F4ED3A1FD41097 /* QuarterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48A9C8A817102CF7D2A6A60 /* QuarterPanel.swift */; };
+		0E93301163A9C6AE13771B94 /* FiscalQuarterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5F94180FB0D966E273E744 /* FiscalQuarterApp.swift */; };
+		1FB3EB9F14A0B9AD28366158 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
+		2380590FFB99049EFD105CCA /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
+		24187AE57854E83FCBE871C8 /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BBA7584365281E7D460BEA /* LoginItem.swift */; };
+		2427E42D447927DF21696E27 /* QuarterClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E719833196DAD26D15ED15E /* QuarterClock.swift */; };
+		25A9B779172A58674876097B /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
+		260FD82CE8ECAA5CA00B7637 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
+		27C6BCA26B97C85B90E11154 /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
+		3576E8F8E0227F3E213433C3 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */; };
+		38CFC565B8402F0DB7E560B3 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
+		4276444391FA556794B6CB9C /* QuarterClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E719833196DAD26D15ED15E /* QuarterClock.swift */; };
+		43B3960804084483DAC14569 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
+		511BC65CFF3EFFE407B44979 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
+		589898691F615E769BE73FA9 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062EA10466FBD75CAAC906C2 /* AboutView.swift */; };
+		5AB68A67CA8B9089925F633A /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
+		63A73F4F0EC88D979BC2DA33 /* FiscalQuarteriOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7134DF3C3FF965F74F5FC /* FiscalQuarteriOSApp.swift */; };
+		789AEB403CFF654BC65F100F /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
+		79852E20385A5B70D8AAA4D5 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
+		84A4E3AA3B4A5CE9FFC2E6C0 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
+		8FAE651CD44C6F8941B2486B /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
+		95E93413102381FBD03B9883 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
+		97E663F46728F0520179BA9C /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
+		A349D2513A8D1AD6ED002BE4 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
+		A602877DBE753000B278DB69 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
+		A76BCAF99A176E34927F0766 /* CalendarSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226B93D86E805DB0598BA76D /* CalendarSettingsView.swift */; };
+		AB5AC0B12F026C376B6E54CE /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
+		AF71E1AF3A004BC366B533F6 /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
+		B237375D38F09AD6C5F2F295 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
+		B2879A41801F3536AAB73010 /* FiscalCalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F050D7B7A52183357D3B2A /* FiscalCalendarTests.swift */; };
+		C5E64D0794608974A037AAEA /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
+		C785985C6DB889D4C68F8213 /* YearPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313D2D8DC5D7D544335610F4 /* YearPicture.swift */; };
+		C79F1245ACAC40C9427DE4B3 /* FiscalQuarterWidgetMac.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B77DC372A6B46E6EA1DAF260 /* FiscalQuarterWidgetMac.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CA2FC79D425858EDD887C1FA /* FiscalQuarterWidgetiOS.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 60AE710AF0987612A22B3489 /* FiscalQuarterWidgetiOS.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CFD5AEB9F1C56FF5443C2247 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7CAF87DB1ED2D3A8800E90B0 /* AppIcon.icns */; };
+		D63C4928E051695E79B11A3F /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
+		DA1E4F79E08B20AD0849D79B /* CountdownWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE9343791A7D7EC53C6553E /* CountdownWidget.swift */; };
+		DCD133604F9FBB375714D5EF /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
+		DE68BD5D3F49D353F81B9551 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
+		EBBD95FC45121A3F7EA10D92 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
+		F65F3D11CCD3B8D701F6F07A /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
+		F8796632C9334746C3337906 /* CountdownWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE9343791A7D7EC53C6553E /* CountdownWidget.swift */; };
+		F8E91297D789302B1EE40A73 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
+		FE07278297579D7C33BF6A66 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */; };
+		FF6AD6FF65822775A230BBEF /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B8FB89F9BBB99BDC1744B774 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 134380C02C548C6FBEC2F955 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB52BAB964EE4BC6EAC96B1D;
+			remoteInfo = FiscalQuarterWidgetiOS;
+		};
+		B9B9D5751065DD948C210F64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 134380C02C548C6FBEC2F955 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2488CB7DAFD0851508975E0F;
+			remoteInfo = FiscalQuarterWidgetMac;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		413C40DFE50E9943761788B1 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C79F1245ACAC40C9427DE4B3 /* FiscalQuarterWidgetMac.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52E591283772417468967EC2 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CA2FC79D425858EDD887C1FA /* FiscalQuarterWidgetiOS.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		F10000000000000000000001 /* FiscalQuarterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalQuarterApp.swift; sourceTree = "<group>"; };
-		F10000000000000000000002 /* QuarterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterPanel.swift; sourceTree = "<group>"; };
-		F10000000000000000000003 /* QuarterClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterClock.swift; sourceTree = "<group>"; };
-		F10000000000000000000008 /* LoginItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
-		F10000000000000000000009 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
-		F1000000000000000000000A /* FiscalYearMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalYearMap.swift; sourceTree = "<group>"; };
-		F1000000000000000000000B /* YearPicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearPicture.swift; sourceTree = "<group>"; };
-		F1000000000000000000000C /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		F1000000000000000000000D /* FiscalYearConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalYearConfig.swift; sourceTree = "<group>"; };
-		F1000000000000000000000E /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
-		F10000000000000000000004 /* FiscalCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendar.swift; sourceTree = "<group>"; };
-		F10000000000000000000005 /* FiscalCalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendarTests.swift; sourceTree = "<group>"; };
-		F10000000000000000000006 /* FiscalQuarter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FiscalQuarter.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F10000000000000000000007 /* FiscalQuarterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FiscalQuarterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		062EA10466FBD75CAAC906C2 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		08A183D69957BB3CF3D38BC2 /* FiscalQuarter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FiscalQuarter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		139F56F3BAF1D647E378E75F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		16A52A85F3EE4CF9B64F137E /* FiscalQuarterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FiscalQuarterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalYearConfig.swift; sourceTree = "<group>"; };
+		20F050D7B7A52183357D3B2A /* FiscalCalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendarTests.swift; sourceTree = "<group>"; };
+		226B93D86E805DB0598BA76D /* CalendarSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsView.swift; sourceTree = "<group>"; };
+		2C83AC51F4B171233B027CFD /* SavedCalendars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCalendars.swift; sourceTree = "<group>"; };
+		2FD7134DF3C3FF965F74F5FC /* FiscalQuarteriOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalQuarteriOSApp.swift; sourceTree = "<group>"; };
+		313D2D8DC5D7D544335610F4 /* YearPicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearPicture.swift; sourceTree = "<group>"; };
+		3E719833196DAD26D15ED15E /* QuarterClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterClock.swift; sourceTree = "<group>"; };
+		54FEEEE78A96AF4BFD31523E /* Countdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Countdown.swift; sourceTree = "<group>"; };
+		60AE710AF0987612A22B3489 /* FiscalQuarterWidgetiOS.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FiscalQuarterWidgetiOS.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CAF87DB1ED2D3A8800E90B0 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
+		86BBA7584365281E7D460BEA /* LoginItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
+		87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModel.swift; sourceTree = "<group>"; };
+		8BE9343791A7D7EC53C6553E /* CountdownWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownWidget.swift; sourceTree = "<group>"; };
+		9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendarDefinition.swift; sourceTree = "<group>"; };
+		9F6D4456647EBCA7AB90908F /* FiscalQuarteriOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FiscalQuarteriOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendar.swift; sourceTree = "<group>"; };
+		B48A9C8A817102CF7D2A6A60 /* QuarterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterPanel.swift; sourceTree = "<group>"; };
+		B77DC372A6B46E6EA1DAF260 /* FiscalQuarterWidgetMac.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FiscalQuarterWidgetMac.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalYearMap.swift; sourceTree = "<group>"; };
+		ED5F94180FB0D966E273E744 /* FiscalQuarterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalQuarterApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFrameworksBuildPhase section */
-		E10000000000000000000001 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E10000000000000000000002 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
 /* Begin PBXGroup section */
-		A10000000000000000000001 = {
+		0E652C2E482CA8D991F4D355 /* FiscalQuarterWidget */ = {
 			isa = PBXGroup;
 			children = (
-				A10000000000000000000002 /* FiscalQuarterApp */,
-				A10000000000000000000003 /* FiscalQuarterCore */,
-				A10000000000000000000004 /* FiscalQuarterTests */,
-				A10000000000000000000005 /* Products */,
+				8BE9343791A7D7EC53C6553E /* CountdownWidget.swift */,
 			);
+			path = FiscalQuarterWidget;
 			sourceTree = "<group>";
 		};
-		A10000000000000000000002 /* FiscalQuarterApp */ = {
+		1ABED29DAE01106C4CF459BC /* FiscalQuarterTests */ = {
 			isa = PBXGroup;
 			children = (
-				F10000000000000000000001 /* FiscalQuarterApp.swift */,
-				F10000000000000000000003 /* QuarterClock.swift */,
-				F10000000000000000000008 /* LoginItem.swift */,
-				F10000000000000000000002 /* QuarterPanel.swift */,
-				F1000000000000000000000B /* YearPicture.swift */,
-				F1000000000000000000000C /* AboutView.swift */,
-				F1000000000000000000000E /* CalendarSettingsView.swift */,
-				F10000000000000000000009 /* AppIcon.icns */,
-			);
-			path = FiscalQuarterApp;
-			sourceTree = "<group>";
-		};
-		A10000000000000000000003 /* FiscalQuarterCore */ = {
-			isa = PBXGroup;
-			children = (
-				F10000000000000000000004 /* FiscalCalendar.swift */,
-				F1000000000000000000000A /* FiscalYearMap.swift */,
-				F1000000000000000000000D /* FiscalYearConfig.swift */,
-			);
-			path = FiscalQuarterCore;
-			sourceTree = "<group>";
-		};
-		A10000000000000000000004 /* FiscalQuarterTests */ = {
-			isa = PBXGroup;
-			children = (
-				F10000000000000000000005 /* FiscalCalendarTests.swift */,
+				20F050D7B7A52183357D3B2A /* FiscalCalendarTests.swift */,
 			);
 			path = FiscalQuarterTests;
 			sourceTree = "<group>";
 		};
-		A10000000000000000000005 /* Products */ = {
+		1ABEFB80E7EA4960F15D4BAC /* FiscalQuarterCore */ = {
 			isa = PBXGroup;
 			children = (
-				F10000000000000000000006 /* FiscalQuarter.app */,
-				F10000000000000000000007 /* FiscalQuarterTests.xctest */,
+				54FEEEE78A96AF4BFD31523E /* Countdown.swift */,
+				A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */,
+				9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */,
+				194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */,
+				CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */,
+				2C83AC51F4B171233B027CFD /* SavedCalendars.swift */,
+			);
+			path = FiscalQuarterCore;
+			sourceTree = "<group>";
+		};
+		8178400E22B8102656223230 /* FiscalQuarterApp */ = {
+			isa = PBXGroup;
+			children = (
+				062EA10466FBD75CAAC906C2 /* AboutView.swift */,
+				7CAF87DB1ED2D3A8800E90B0 /* AppIcon.icns */,
+				87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */,
+				226B93D86E805DB0598BA76D /* CalendarSettingsView.swift */,
+				ED5F94180FB0D966E273E744 /* FiscalQuarterApp.swift */,
+				86BBA7584365281E7D460BEA /* LoginItem.swift */,
+				3E719833196DAD26D15ED15E /* QuarterClock.swift */,
+				B48A9C8A817102CF7D2A6A60 /* QuarterPanel.swift */,
+				313D2D8DC5D7D544335610F4 /* YearPicture.swift */,
+			);
+			path = FiscalQuarterApp;
+			sourceTree = "<group>";
+		};
+		944CF829DDDFB6D114C86AEF = {
+			isa = PBXGroup;
+			children = (
+				8178400E22B8102656223230 /* FiscalQuarterApp */,
+				1ABEFB80E7EA4960F15D4BAC /* FiscalQuarterCore */,
+				A7808E7784D2C7FDFECE2FD7 /* FiscalQuarteriOS */,
+				1ABED29DAE01106C4CF459BC /* FiscalQuarterTests */,
+				0E652C2E482CA8D991F4D355 /* FiscalQuarterWidget */,
+				B501B3807D09387A11B20232 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A7808E7784D2C7FDFECE2FD7 /* FiscalQuarteriOS */ = {
+			isa = PBXGroup;
+			children = (
+				139F56F3BAF1D647E378E75F /* Assets.xcassets */,
+				2FD7134DF3C3FF965F74F5FC /* FiscalQuarteriOSApp.swift */,
+			);
+			path = FiscalQuarteriOS;
+			sourceTree = "<group>";
+		};
+		B501B3807D09387A11B20232 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				08A183D69957BB3CF3D38BC2 /* FiscalQuarter.app */,
+				9F6D4456647EBCA7AB90908F /* FiscalQuarteriOS.app */,
+				16A52A85F3EE4CF9B64F137E /* FiscalQuarterTests.xctest */,
+				60AE710AF0987612A22B3489 /* FiscalQuarterWidgetiOS.appex */,
+				B77DC372A6B46E6EA1DAF260 /* FiscalQuarterWidgetMac.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -114,152 +209,429 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D10000000000000000000001 /* FiscalQuarter */ = {
+		2488CB7DAFD0851508975E0F /* FiscalQuarterWidgetMac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C10000000000000000000003 /* Build configuration list for PBXNativeTarget "FiscalQuarter" */;
+			buildConfigurationList = 358345589A3580D6B380AE0D /* Build configuration list for PBXNativeTarget "FiscalQuarterWidgetMac" */;
 			buildPhases = (
-				E10000000000000000000003 /* Sources */,
-				E10000000000000000000001 /* Frameworks */,
-				E10000000000000000000006 /* Resources */,
+				61C8B0A175D71B8480AFF127 /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = FiscalQuarter;
-			productName = FiscalQuarter;
-			productReference = F10000000000000000000006 /* FiscalQuarter.app */;
+			name = FiscalQuarterWidgetMac;
+			packageProductDependencies = (
+			);
+			productName = FiscalQuarterWidgetMac;
+			productReference = B77DC372A6B46E6EA1DAF260 /* FiscalQuarterWidgetMac.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		62CA6F41D79653652E2CB20B /* FiscalQuarteriOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C099C61F8AA945C03783CDAC /* Build configuration list for PBXNativeTarget "FiscalQuarteriOS" */;
+			buildPhases = (
+				9113837170270C9D6339459C /* Sources */,
+				E13838CFE1ECD7C1F79AF9E3 /* Resources */,
+				52E591283772417468967EC2 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				04F07926190C6704DC0D6A62 /* PBXTargetDependency */,
+			);
+			name = FiscalQuarteriOS;
+			packageProductDependencies = (
+			);
+			productName = FiscalQuarteriOS;
+			productReference = 9F6D4456647EBCA7AB90908F /* FiscalQuarteriOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D10000000000000000000002 /* FiscalQuarterTests */ = {
+		6F63BA43E4B38C4572A1A3E6 /* FiscalQuarterTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C10000000000000000000004 /* Build configuration list for PBXNativeTarget "FiscalQuarterTests" */;
+			buildConfigurationList = 3FF611C4139F6E9E7C13B6BA /* Build configuration list for PBXNativeTarget "FiscalQuarterTests" */;
 			buildPhases = (
-				E10000000000000000000004 /* Sources */,
-				E10000000000000000000002 /* Frameworks */,
+				7FD0DA241897D74673C42858 /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = FiscalQuarterTests;
+			packageProductDependencies = (
+			);
 			productName = FiscalQuarterTests;
-			productReference = F10000000000000000000007 /* FiscalQuarterTests.xctest */;
+			productReference = 16A52A85F3EE4CF9B64F137E /* FiscalQuarterTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		EB52BAB964EE4BC6EAC96B1D /* FiscalQuarterWidgetiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F4EFA54ED7A047D7BE2F33A /* Build configuration list for PBXNativeTarget "FiscalQuarterWidgetiOS" */;
+			buildPhases = (
+				8C257DD087D1DD0EFC4F4EF4 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FiscalQuarterWidgetiOS;
+			packageProductDependencies = (
+			);
+			productName = FiscalQuarterWidgetiOS;
+			productReference = 60AE710AF0987612A22B3489 /* FiscalQuarterWidgetiOS.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		EC775C57C221B5636CA1EE49 /* FiscalQuarter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89391173FBF49355087FBE13 /* Build configuration list for PBXNativeTarget "FiscalQuarter" */;
+			buildPhases = (
+				6845FB7EA09B076F11EFE533 /* Sources */,
+				3E7C237D13D649B8FDCD3F07 /* Resources */,
+				413C40DFE50E9943761788B1 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CECF2051223FDA4DF492425F /* PBXTargetDependency */,
+			);
+			name = FiscalQuarter;
+			packageProductDependencies = (
+			);
+			productName = FiscalQuarter;
+			productReference = 08A183D69957BB3CF3D38BC2 /* FiscalQuarter.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		E10000000000000000000005 /* Project object */ = {
+		134380C02C548C6FBEC2F955 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1430;
+				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					D10000000000000000000001 = {
-						CreatedOnToolsVersion = 14.2;
+					2488CB7DAFD0851508975E0F = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
 					};
-					D10000000000000000000002 = {
-						CreatedOnToolsVersion = 14.2;
+					62CA6F41D79653652E2CB20B = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					6F63BA43E4B38C4572A1A3E6 = {
+						DevelopmentTeam = "";
+					};
+					EB52BAB964EE4BC6EAC96B1D = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					EC775C57C221B5636CA1EE49 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
-			buildConfigurationList = C10000000000000000000001 /* Build configuration list for PBXProject "FiscalQuarter" */;
-			compatibilityVersion = "Xcode 14.0";
+			buildConfigurationList = 4E6F45B0AD2CE8BC2DEEBCD1 /* Build configuration list for PBXProject "FiscalQuarter" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = A10000000000000000000001;
-			productRefGroup = A10000000000000000000005 /* Products */;
+			mainGroup = 944CF829DDDFB6D114C86AEF;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B501B3807D09387A11B20232 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D10000000000000000000001 /* FiscalQuarter */,
-				D10000000000000000000002 /* FiscalQuarterTests */,
+				EC775C57C221B5636CA1EE49 /* FiscalQuarter */,
+				2488CB7DAFD0851508975E0F /* FiscalQuarterWidgetMac */,
+				6F63BA43E4B38C4572A1A3E6 /* FiscalQuarterTests */,
+				62CA6F41D79653652E2CB20B /* FiscalQuarteriOS */,
+				EB52BAB964EE4BC6EAC96B1D /* FiscalQuarterWidgetiOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		E10000000000000000000006 /* Resources */ = {
+		3E7C237D13D649B8FDCD3F07 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B10000000000000000000008 /* AppIcon.icns in Resources */,
+				CFD5AEB9F1C56FF5443C2247 /* AppIcon.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E13838CFE1ECD7C1F79AF9E3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				05BB2FDFD09C271ED033B864 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E10000000000000000000003 /* Sources */ = {
+		61C8B0A175D71B8480AFF127 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B10000000000000000000001 /* FiscalQuarterApp.swift in Sources */,
-				B10000000000000000000002 /* QuarterPanel.swift in Sources */,
-				B10000000000000000000003 /* QuarterClock.swift in Sources */,
-				B10000000000000000000007 /* LoginItem.swift in Sources */,
-				B1000000000000000000000A /* YearPicture.swift in Sources */,
-				B1000000000000000000000C /* AboutView.swift in Sources */,
-				B1000000000000000000000E /* CalendarSettingsView.swift in Sources */,
-				B10000000000000000000004 /* FiscalCalendar.swift in Sources */,
-				B10000000000000000000009 /* FiscalYearMap.swift in Sources */,
-				B1000000000000000000000D /* FiscalYearConfig.swift in Sources */,
+				97E663F46728F0520179BA9C /* Countdown.swift in Sources */,
+				DA1E4F79E08B20AD0849D79B /* CountdownWidget.swift in Sources */,
+				789AEB403CFF654BC65F100F /* FiscalCalendar.swift in Sources */,
+				066CDA7ACC09884590A2C0BD /* FiscalCalendarDefinition.swift in Sources */,
+				2380590FFB99049EFD105CCA /* FiscalYearConfig.swift in Sources */,
+				260FD82CE8ECAA5CA00B7637 /* FiscalYearMap.swift in Sources */,
+				F65F3D11CCD3B8D701F6F07A /* SavedCalendars.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E10000000000000000000004 /* Sources */ = {
+		6845FB7EA09B076F11EFE533 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B10000000000000000000006 /* FiscalCalendarTests.swift in Sources */,
-				B10000000000000000000005 /* FiscalCalendar.swift in Sources */,
-				B1000000000000000000000B /* FiscalYearMap.swift in Sources */,
-				B1000000000000000000000F /* FiscalYearConfig.swift in Sources */,
+				589898691F615E769BE73FA9 /* AboutView.swift in Sources */,
+				FE07278297579D7C33BF6A66 /* CalendarModel.swift in Sources */,
+				A76BCAF99A176E34927F0766 /* CalendarSettingsView.swift in Sources */,
+				5AB68A67CA8B9089925F633A /* Countdown.swift in Sources */,
+				A349D2513A8D1AD6ED002BE4 /* FiscalCalendar.swift in Sources */,
+				07205DA4203911C9DA92AF31 /* FiscalCalendarDefinition.swift in Sources */,
+				0E93301163A9C6AE13771B94 /* FiscalQuarterApp.swift in Sources */,
+				84A4E3AA3B4A5CE9FFC2E6C0 /* FiscalYearConfig.swift in Sources */,
+				D63C4928E051695E79B11A3F /* FiscalYearMap.swift in Sources */,
+				24187AE57854E83FCBE871C8 /* LoginItem.swift in Sources */,
+				2427E42D447927DF21696E27 /* QuarterClock.swift in Sources */,
+				0CC88C20C4F4ED3A1FD41097 /* QuarterPanel.swift in Sources */,
+				43B3960804084483DAC14569 /* SavedCalendars.swift in Sources */,
+				C785985C6DB889D4C68F8213 /* YearPicture.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7FD0DA241897D74673C42858 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				25A9B779172A58674876097B /* Countdown.swift in Sources */,
+				1FB3EB9F14A0B9AD28366158 /* FiscalCalendar.swift in Sources */,
+				F8E91297D789302B1EE40A73 /* FiscalCalendarDefinition.swift in Sources */,
+				B2879A41801F3536AAB73010 /* FiscalCalendarTests.swift in Sources */,
+				511BC65CFF3EFFE407B44979 /* FiscalYearConfig.swift in Sources */,
+				95E93413102381FBD03B9883 /* FiscalYearMap.swift in Sources */,
+				79852E20385A5B70D8AAA4D5 /* SavedCalendars.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C257DD087D1DD0EFC4F4EF4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AF71E1AF3A004BC366B533F6 /* Countdown.swift in Sources */,
+				F8796632C9334746C3337906 /* CountdownWidget.swift in Sources */,
+				C5E64D0794608974A037AAEA /* FiscalCalendar.swift in Sources */,
+				A602877DBE753000B278DB69 /* FiscalCalendarDefinition.swift in Sources */,
+				38CFC565B8402F0DB7E560B3 /* FiscalYearConfig.swift in Sources */,
+				B237375D38F09AD6C5F2F295 /* FiscalYearMap.swift in Sources */,
+				FF6AD6FF65822775A230BBEF /* SavedCalendars.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9113837170270C9D6339459C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3576E8F8E0227F3E213433C3 /* CalendarModel.swift in Sources */,
+				27C6BCA26B97C85B90E11154 /* Countdown.swift in Sources */,
+				AB5AC0B12F026C376B6E54CE /* FiscalCalendar.swift in Sources */,
+				EBBD95FC45121A3F7EA10D92 /* FiscalCalendarDefinition.swift in Sources */,
+				63A73F4F0EC88D979BC2DA33 /* FiscalQuarteriOSApp.swift in Sources */,
+				8FAE651CD44C6F8941B2486B /* FiscalYearConfig.swift in Sources */,
+				DCD133604F9FBB375714D5EF /* FiscalYearMap.swift in Sources */,
+				4276444391FA556794B6CB9C /* QuarterClock.swift in Sources */,
+				DE68BD5D3F49D353F81B9551 /* SavedCalendars.swift in Sources */,
+				059F9875BC6D8DD1EE09922A /* YearPicture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		04F07926190C6704DC0D6A62 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB52BAB964EE4BC6EAC96B1D /* FiscalQuarterWidgetiOS */;
+			targetProxy = B8FB89F9BBB99BDC1744B774 /* PBXContainerItemProxy */;
+		};
+		CECF2051223FDA4DF492425F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2488CB7DAFD0851508975E0F /* FiscalQuarterWidgetMac */;
+			targetProxy = B9B9D5751065DD948C210F64 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		C10000000000000000000010 /* Debug */ = {
+		10232B209B8F9F7C8F7871F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ENABLE_MODULES = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = macosx;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_STRICT_CONCURRENCY = minimal;
-				SWIFT_VERSION = 5.0;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.ios;
+				PRODUCT_NAME = FiscalQuarter;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		C10000000000000000000011 /* Release */ = {
+		28EEBD7DAFD9535038FF8050 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.tests;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3387CF5B56E5D060C956AC82 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FiscalQuarterApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter;
+				PRODUCT_NAME = FiscalQuarter;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		3425D03D303334C3AB4982C0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = FiscalQuarterWidget/FiscalQuarterWidgetMac.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FiscalQuarterWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.widget;
+				PRODUCT_NAME = FiscalQuarterWidget;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4C98F44F35707DE03071BC83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.tests;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		7516F9B287C1AC90A6F8A169 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				SDKROOT = macosx;
-				SUPPORTED_PLATFORMS = macosx;
+				MARKETING_VERSION = 1.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = minimal;
@@ -267,133 +639,245 @@
 			};
 			name = Release;
 		};
-		C10000000000000000000020 /* Debug */ = {
+		909C05C887AC8D5AB77DD680 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 4;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
-				ENABLE_HARDENED_RUNTIME = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
-				INFOPLIST_FILE = FiscalQuarterApp/Info.plist;
-				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"@executable_path/../Frameworks",
+					"DEBUG=1",
 				);
-				MARKETING_VERSION = 1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		C10000000000000000000021 /* Release */ = {
+		A41DBE75FA3612E76F52C7FA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
-				CODE_SIGNING_ALLOWED = YES;
-				CODE_SIGNING_REQUIRED = NO;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
-				DEVELOPMENT_TEAM = "";
-				ENABLE_HARDENED_RUNTIME = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
-				INFOPLIST_FILE = FiscalQuarterApp/Info.plist;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.ios;
+				PRODUCT_NAME = FiscalQuarter;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		C10000000000000000000030 /* Debug */ = {
+		A9012DB3246672C6329EFC34 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "";
-				CODE_SIGNING_ALLOWED = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FiscalQuarterApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@loader_path/../Frameworks",
+					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.tests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter;
+				PRODUCT_NAME = FiscalQuarter;
 				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				TEST_HOST = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Debug;
 		};
-		C10000000000000000000031 /* Release */ = {
+		B689E01A36297600A947E6FE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "";
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FiscalQuarterWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@loader_path/../Frameworks",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.tests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.ios.widget;
+				PRODUCT_NAME = FiscalQuarterWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EB2FF275CC5C0AD0BCA3C614 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FiscalQuarterWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.ios.widget;
+				PRODUCT_NAME = FiscalQuarterWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F6B4C2C29B17EFBE279102F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = FiscalQuarterWidget/FiscalQuarterWidgetMac.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FiscalQuarterWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Fiscal Quarter";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = local.fiscalquarter.widget;
+				PRODUCT_NAME = FiscalQuarterWidget;
 				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				TEST_HOST = "";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C10000000000000000000001 /* Build configuration list for PBXProject "FiscalQuarter" */ = {
+		358345589A3580D6B380AE0D /* Build configuration list for PBXNativeTarget "FiscalQuarterWidgetMac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C10000000000000000000010 /* Debug */,
-				C10000000000000000000011 /* Release */,
+				3425D03D303334C3AB4982C0 /* Debug */,
+				F6B4C2C29B17EFBE279102F8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		C10000000000000000000003 /* Build configuration list for PBXNativeTarget "FiscalQuarter" */ = {
+		3FF611C4139F6E9E7C13B6BA /* Build configuration list for PBXNativeTarget "FiscalQuarterTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C10000000000000000000020 /* Debug */,
-				C10000000000000000000021 /* Release */,
+				4C98F44F35707DE03071BC83 /* Debug */,
+				28EEBD7DAFD9535038FF8050 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		C10000000000000000000004 /* Build configuration list for PBXNativeTarget "FiscalQuarterTests" */ = {
+		4E6F45B0AD2CE8BC2DEEBCD1 /* Build configuration list for PBXProject "FiscalQuarter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C10000000000000000000030 /* Debug */,
-				C10000000000000000000031 /* Release */,
+				909C05C887AC8D5AB77DD680 /* Debug */,
+				7516F9B287C1AC90A6F8A169 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
+		};
+		6F4EFA54ED7A047D7BE2F33A /* Build configuration list for PBXNativeTarget "FiscalQuarterWidgetiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB2FF275CC5C0AD0BCA3C614 /* Debug */,
+				B689E01A36297600A947E6FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		89391173FBF49355087FBE13 /* Build configuration list for PBXNativeTarget "FiscalQuarter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9012DB3246672C6329EFC34 /* Debug */,
+				3387CF5B56E5D060C956AC82 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C099C61F8AA945C03783CDAC /* Build configuration list for PBXNativeTarget "FiscalQuarteriOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				10232B209B8F9F7C8F7871F1 /* Debug */,
+				A41DBE75FA3612E76F52C7FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = E10000000000000000000005 /* Project object */;
+	rootObject = 134380C02C548C6FBEC2F955 /* Project object */;
 }

@@ -384,6 +384,186 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(quarter.daysRemaining(on: civil), 88)
     }
 
+    // MARK: Calendar definitions
+
+    func testBuiltInFileMatchesTheBuiltInDefinition() throws {
+        let definition = try FiscalCalendarDefinition(json: Data(contentsOf: calendarFile("built-in.json")))
+        XCTAssertEqual(definition, .builtIn)
+    }
+
+    func testDefinitionRoundTripsThroughJSON() throws {
+        let data = try JSONEncoder().encode(FiscalCalendarDefinition.builtIn)
+        XCTAssertEqual(try FiscalCalendarDefinition(json: data), .builtIn)
+    }
+
+    func testCalendarYearFileStaysInTheSameYear() throws {
+        let definition = try FiscalCalendarDefinition(json: Data(contentsOf: calendarFile("calendar-year.json")))
+        let today = CalendarDate(year: 2026, month: 10, day: 11)
+        let quarter = FiscalCalendar.quarter(containing: today, in: definition)
+        XCTAssertEqual(quarter.id, "FY26-Q4")
+        XCTAssertEqual(quarter.start, CalendarDate(year: 2026, month: 10, day: 1))
+        XCTAssertEqual(quarter.end, CalendarDate(year: 2026, month: 12, day: 31))
+        XCTAssertEqual(FiscalCalendar.quarter(containing: today).id, "FY27-Q4")
+    }
+
+    func testCustomConfigMatchesItsDefinition() throws {
+        let config = FiscalYearConfig(kind: .custom, startMonth: 7, startDay: 1)
+        var cursor = CalendarDate(year: 2024, month: 1, day: 1)
+        while cursor < CalendarDate(year: 2029, month: 1, day: 1) {
+            XCTAssertEqual(
+                FiscalCalendar.quarter(containing: cursor, config: config),
+                FiscalCalendar.quarter(containing: cursor, in: .months(startMonth: 7, startDay: 1)),
+                cursor.iso
+            )
+            cursor = try dayAfter(cursor, calendar: utcCalendar())
+        }
+    }
+
+    func testTransitionNoteComesFromTheEra() {
+        let fy27 = QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 11))
+        XCTAssertEqual(fy27.transitionNote, "FY27 ends December 31. FY28 follows the calendar year.")
+        XCTAssertNil(QuarterSnapshot(on: CalendarDate(year: 2026, month: 1, day: 31)).transitionNote)
+        XCTAssertNil(QuarterSnapshot(on: CalendarDate(year: 2027, month: 1, day: 1)).transitionNote)
+    }
+
+    func testMidYearEraClipsTheQuarterOnBothSides() throws {
+        let definition = try FiscalCalendarDefinition(name: "Switch", eras: [
+            Era(start: nil, rule: .months(MonthRule(startMonth: 1, startDay: 1))),
+            Era(start: CalendarDate(year: 2030, month: 2, day: 15), rule: .months(MonthRule(startMonth: 4, startDay: 1))),
+        ])
+        let before = FiscalCalendar.quarter(containing: CalendarDate(year: 2030, month: 2, day: 14), in: definition)
+        XCTAssertEqual(before.id, "FY30-Q1")
+        XCTAssertEqual(before.end, CalendarDate(year: 2030, month: 2, day: 14))
+        let after = FiscalCalendar.quarter(after: before, in: definition)
+        XCTAssertEqual(after.id, "FY30-Q4")
+        XCTAssertEqual(after.start, CalendarDate(year: 2030, month: 2, day: 15))
+        XCTAssertEqual(after.end, CalendarDate(year: 2030, month: 3, day: 31))
+    }
+
+    func testDefinitionRejectsBadShapes() {
+        let months = Era.Rule.months(MonthRule(startMonth: 1, startDay: 1))
+        let gap = Era.Rule.explicit(ExplicitYear(fiscalYear: 30, quarters: [
+            QuarterSpan(start: CalendarDate(year: 2030, month: 1, day: 1), end: CalendarDate(year: 2030, month: 6, day: 30)),
+            QuarterSpan(start: CalendarDate(year: 2030, month: 7, day: 2), end: CalendarDate(year: 2030, month: 12, day: 31)),
+        ]))
+        let jan2030 = CalendarDate(year: 2030, month: 1, day: 1)
+        let jan2031 = CalendarDate(year: 2031, month: 1, day: 1)
+
+        XCTAssertThrowsError(try FiscalCalendarDefinition(name: "Empty", eras: []))
+        XCTAssertThrowsError(try FiscalCalendarDefinition(name: "Dated first", eras: [Era(start: jan2030, rule: months)]))
+        XCTAssertThrowsError(try FiscalCalendarDefinition(name: "Open explicit", eras: [Era(start: nil, rule: months), Era(start: jan2030, rule: gap)]))
+        XCTAssertThrowsError(try FiscalCalendarDefinition(name: "Gap", eras: [Era(start: nil, rule: months), Era(start: jan2030, rule: gap), Era(start: jan2031, rule: months)]))
+        XCTAssertThrowsError(try FiscalCalendarDefinition(name: "Backwards", eras: [Era(start: nil, rule: months), Era(start: jan2031, rule: months), Era(start: jan2030, rule: months)]))
+        XCTAssertThrowsError(try FiscalCalendarDefinition(json: Data(#"{"eras":[{"rule":"weeks","startMonth":1}]}"#.utf8)))
+    }
+
+    func testISODateParsing() {
+        XCTAssertEqual(CalendarDate(iso: "2024-02-29"), CalendarDate(year: 2024, month: 2, day: 29))
+        XCTAssertNil(CalendarDate(iso: "2025-02-29"))
+        XCTAssertNil(CalendarDate(iso: "2026-10-1"))
+        XCTAssertNil(CalendarDate(iso: "October"))
+    }
+
+    // MARK: Saved calendars
+
+    func testSavedCalendarsRoundTripThroughDefaults() throws {
+        let name = "local.fiscalquarter.tests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: name))
+        defer { defaults.removePersistentDomain(forName: name) }
+        XCTAssertEqual(SavedCalendars.load(from: defaults), [])
+
+        let saved = [
+            SavedCalendar(definition: .months(startMonth: 1, startDay: 1, name: "SpaceX")),
+            SavedCalendar(definition: FiscalCalendarDefinition.builtIn.renamed("Ours, again")),
+        ]
+        SavedCalendars.save(saved, to: defaults)
+        XCTAssertEqual(SavedCalendars.load(from: defaults), saved)
+    }
+
+    func testSavedCalendarsSkipAnEntryThatNoLongerDecodes() throws {
+        let name = "local.fiscalquarter.tests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: name))
+        defer { defaults.removePersistentDomain(forName: name) }
+        let good = SavedCalendar(definition: .months(startMonth: 7, startDay: 1, name: "Acme"))
+        defaults.set([Data("not json".utf8), try JSONEncoder().encode(good)], forKey: "otherCalendars")
+        XCTAssertEqual(SavedCalendars.load(from: defaults), [good])
+    }
+
+    func testSavedCalendarNamesAreUniqueIgnoringCase() {
+        let saved = [SavedCalendar(definition: .months(startMonth: 1, startDay: 1, name: "SpaceX"))]
+        XCTAssertEqual(SavedCalendars.named("  spacex ", in: saved)?.name, "SpaceX")
+        XCTAssertNotNil(SavedCalendars.problem(withName: "SPACEX", in: saved))
+        XCTAssertNotNil(SavedCalendars.problem(withName: "   ", in: saved))
+        XCTAssertNil(SavedCalendars.problem(withName: "Acme", in: saved))
+    }
+
+    func testDefinitionSummary() {
+        XCTAssertEqual(FiscalCalendarDefinition.months(startMonth: 7, startDay: 1).summary, "Starts Jul 1 every year")
+        XCTAssertEqual(FiscalCalendarDefinition.builtIn.summary, "3 eras, from a file")
+    }
+
+    // MARK: Countdowns
+
+    func testOctober112026CountdownsAllEndOnDecember31() {
+        let snapshot = QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 11))
+        let half = snapshot.countdown(to: .half)
+        XCTAssertEqual(half.label, "FY27-H2")
+        XCTAssertEqual(half.start, CalendarDate(year: 2026, month: 8, day: 1))
+        let year = snapshot.countdown(to: .year)
+        XCTAssertEqual(year.label, "FY27")
+        XCTAssertEqual(year.start, CalendarDate(year: 2026, month: 2, day: 1))
+        XCTAssertEqual(year.days, 82)
+        XCTAssertEqual(snapshot.countdownGroups.map(\.label), ["FY27-Q4 · H2 · FY27"])
+    }
+
+    func testMidYearCountdownsSplitIntoTwoGroups() {
+        let snapshot = QuarterSnapshot(on: CalendarDate(year: 2027, month: 5, day: 15))
+        XCTAssertEqual(snapshot.countdownGroups.map(\.label), ["FY28-Q2 · H1", "FY28"])
+        XCTAssertEqual(snapshot.countdownGroups.map(\.end.iso), ["2027-06-30", "2027-12-31"])
+    }
+
+    func testCountdownPhrases() {
+        // Sunday 11 October 2026 through Thursday 31 December 2026.
+        let countdown = QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 11)).countdown(to: .quarter)
+        XCTAssertEqual(countdown.phrase(in: .days), "82 days")
+        XCTAssertEqual(countdown.phrase(in: .weeks), "11 weeks 5 days")
+        XCTAssertEqual(countdown.phrase(in: .workdays), "59 workdays")
+        XCTAssertEqual(countdown.phrase(in: .weekends), "12 weekends")
+        XCTAssertEqual(countdown.short(in: .weeks), "11w 5d")
+        let last = QuarterSnapshot(on: CalendarDate(year: 2026, month: 12, day: 31)).countdown(to: .quarter)
+        XCTAssertEqual(last.phrase(in: .days), "1 day")
+        XCTAssertEqual(last.phrase(in: .weekends), "0 weekends")
+        XCTAssertEqual(last.fractionComplete, 1)
+    }
+
+    func testWorkdaysAndWeekendsMatchADayByDayCount() throws {
+        let calendar = utcCalendar()
+        var today = CalendarDate(year: 2026, month: 9, day: 1)
+        for _ in 0..<60 {
+            let countdown = QuarterSnapshot(on: today).countdown(to: .quarter)
+            var workdays = 0
+            var weekends = 0
+            var cursor = today
+            while cursor <= countdown.end {
+                let weekday = FiscalCalendar.weekday(cursor)
+                if weekday != 1 && weekday != 7 { workdays += 1 }
+                if weekday == 7 || (weekday == 1 && cursor == today) { weekends += 1 }
+                cursor = try dayAfter(cursor, calendar: calendar)
+            }
+            XCTAssertEqual(countdown.workdays, workdays, today.iso)
+            XCTAssertEqual(countdown.weekends, weekends, today.iso)
+            today = try dayAfter(today, calendar: calendar)
+        }
+    }
+
+    private func calendarFile(_ name: String) -> URL {
+        URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("calendars")
+            .appendingPathComponent(name)
+    }
+
     private func assertQuarter(
         _ id: String,
         _ startYear: Int,

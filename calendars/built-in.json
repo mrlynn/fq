@@ -1,0 +1,19 @@
+{
+  "name": "Built-in",
+  "eras": [
+    { "rule": "months", "startMonth": 2, "startDay": 1 },
+    {
+      "from": "2026-02-01",
+      "rule": "explicit",
+      "fiscalYear": 27,
+      "note": "FY27 ends December 31. FY28 follows the calendar year.",
+      "quarters": [
+        { "start": "2026-02-01", "end": "2026-04-30" },
+        { "start": "2026-05-01", "end": "2026-07-31" },
+        { "start": "2026-08-01", "end": "2026-09-30" },
+        { "start": "2026-10-01", "end": "2026-12-31" }
+      ]
+    },
+    { "from": "2027-01-01", "rule": "months", "startMonth": 1, "startDay": 1, "yearOffset": 1 }
+  ]
+}

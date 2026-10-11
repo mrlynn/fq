@@ -1,22 +1,17 @@
+import AppKit
 import SwiftUI
-
-final class CalendarModel: ObservableObject {
-    @Published private(set) var config: FiscalYearConfig
-
-    init() {
-        config = FiscalYearConfig.load(from: FiscalYearConfig.store)
-    }
-
-    func set(_ config: FiscalYearConfig) {
-        self.config = config
-        config.save(to: FiscalYearConfig.store)
-    }
-}
+import UniformTypeIdentifiers
 
 struct CalendarSettingsView: View {
     @ObservedObject var calendar: CalendarModel
     let today: CalendarDate
     let dismiss: () -> Void
+
+    @State private var adding = false
+    @State private var newName = ""
+    @State private var newMonth = 1
+    @State private var newDay = 1
+    @State private var problem: String?
 
     private var preview: QuarterSnapshot {
         QuarterSnapshot(on: today, config: calendar.config)
@@ -39,6 +34,8 @@ struct CalendarSettingsView: View {
 
             Text("Calendar")
                 .font(.system(size: 18, weight: .semibold))
+
+            sectionTitle("Yours")
 
             option(
                 "Default",
@@ -89,7 +86,167 @@ struct CalendarSettingsView: View {
             Text("Today is \(preview.quarter.id), \(preview.quarter.start.iso) through \(preview.quarter.end.iso).")
                 .font(.system(size: 13))
                 .fixedSize(horizontal: false, vertical: true)
+
+            Divider()
+
+            otherSection
         }
+    }
+
+    /// Calendars kept alongside yours, such as a customer's. They show in the panel but never in the menu bar.
+    private var otherSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            sectionTitle("Others")
+
+            if calendar.others.isEmpty && !adding {
+                Text("Add a customer's or partner's calendar to see their quarter next to yours.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            ForEach(calendar.others) { other in
+                savedRow(other)
+            }
+
+            if adding {
+                addForm
+            } else {
+                HStack(spacing: 16) {
+                    Button("Add calendar…") {
+                        newName = ""
+                        newMonth = 1
+                        newDay = 1
+                        problem = nil
+                        adding = true
+                    }
+                    Button("Import file…", action: importFile)
+                }
+                .buttonStyle(.link)
+                .font(.system(size: 13))
+            }
+
+            if let problem, !adding {
+                problemText(problem)
+            }
+        }
+    }
+
+    private func savedRow(_ other: SavedCalendar) -> some View {
+        let quarter = FiscalCalendar.quarter(containing: today, in: other.definition)
+        return HStack(alignment: .top, spacing: 8) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(other.name)
+                Text("\(quarter.id) today · \(other.definition.summary)")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+            }
+            Spacer(minLength: 8)
+            Button(action: { calendar.remove(other) }) {
+                Image(systemName: "minus.circle")
+                    .foregroundStyle(.secondary)
+            }
+            .buttonStyle(.plain)
+            .help("Remove \(other.name)")
+            .accessibilityLabel("Remove \(other.name)")
+        }
+        .font(.system(size: 13))
+    }
+
+    private var addForm: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            TextField("Name, such as a customer", text: $newName)
+                .textFieldStyle(.roundedBorder)
+                .onSubmit(addCalendar)
+
+            HStack(spacing: 12) {
+                Picker("Starts", selection: $newMonth) {
+                    ForEach(1...12, id: \.self) { value in
+                        Text(monthName(value)).tag(value)
+                    }
+                }
+                .pickerStyle(.menu)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .onChange(of: newMonth) { value in
+                    newDay = min(newDay, FiscalYearConfig.lastDay(of: value))
+                }
+
+                Picker("Day", selection: $newDay) {
+                    ForEach(1...FiscalYearConfig.lastDay(of: newMonth), id: \.self) { value in
+                        Text("\(value)").tag(value)
+                    }
+                }
+                .pickerStyle(.menu)
+                .labelsHidden()
+                .frame(width: 64, alignment: .leading)
+            }
+
+            Text(newPreview)
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if let problem {
+                problemText(problem)
+            }
+
+            HStack {
+                Spacer()
+                Button("Cancel") {
+                    adding = false
+                    problem = nil
+                }
+                Button("Add", action: addCalendar)
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(newName.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+        }
+        .font(.system(size: 13))
+    }
+
+    /// What the new calendar says about today, so the start can be checked before it is saved.
+    private var newPreview: String {
+        let quarter = FiscalCalendar.quarter(containing: today, in: .months(startMonth: newMonth, startDay: newDay))
+        return "Today would be \(quarter.id), \(quarter.start.iso) through \(quarter.end.iso)."
+    }
+
+    private func addCalendar() {
+        problem = calendar.add(.months(startMonth: newMonth, startDay: newDay), named: newName)
+        if problem == nil {
+            adding = false
+        }
+    }
+
+    /// Reads a calendar JSON file, the same format `fq --calendar` takes. The name comes from the file.
+    private func importFile() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.json]
+        panel.allowsMultipleSelection = false
+        panel.message = "Choose a calendar file"
+        NSApp.activate(ignoringOtherApps: true)
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+        do {
+            let definition = try FiscalCalendarDefinition(json: Data(contentsOf: url))
+            let name = definition.name == "Custom" ? url.deletingPathExtension().lastPathComponent : definition.name
+            problem = calendar.add(definition, named: name)
+        } catch let error as DefinitionError {
+            problem = "\(url.lastPathComponent): \(error.description)"
+        } catch {
+            problem = "\(url.lastPathComponent) is not a calendar file."
+        }
+    }
+
+    private func sectionTitle(_ title: String) -> some View {
+        Text(title.uppercased())
+            .font(.system(size: 11, weight: .semibold))
+            .foregroundStyle(.secondary)
+    }
+
+    private func problemText(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 12))
+            .foregroundStyle(MarkColor.warning)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     private var month: Binding<Int> {

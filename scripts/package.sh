@@ -3,7 +3,7 @@
 set -eu
 cd "$(dirname "$0")/.."
 
-VERSION=1.2
+VERSION=1.3
 DIST="dist"
 STAGE="$DIST/stage"
 APP="$STAGE/FiscalQuarter.app"
@@ -27,10 +27,10 @@ xcodebuild \
 echo "Building fq"
 swiftc -O -sdk "$SDK" -target arm64-apple-macos13.0 \
   -o "$DIST/fq-arm64" \
-  FiscalQuarterCLI/fq.swift FiscalQuarterCore/FiscalCalendar.swift FiscalQuarterCore/FiscalYearConfig.swift
+  FiscalQuarterCLI/fq.swift FiscalQuarterCore/*.swift
 swiftc -O -sdk "$SDK" -target x86_64-apple-macos13.0 \
   -o "$DIST/fq-x86_64" \
-  FiscalQuarterCLI/fq.swift FiscalQuarterCore/FiscalCalendar.swift FiscalQuarterCore/FiscalYearConfig.swift
+  FiscalQuarterCLI/fq.swift FiscalQuarterCore/*.swift
 
 cp -R "build/Build/Products/Release/FiscalQuarter.app" "$APP"
 lipo -create -output "$APP/Contents/MacOS/fq" "$DIST/fq-arm64" "$DIST/fq-x86_64"
@@ -53,6 +53,8 @@ The menu bar shows the quarter and the days left, for example FY27-Q4 · 84d.
 Click that for the dates, how far through the quarter you are, and copy.
 
 If macOS says the app cannot be opened, Control-click it, choose Open, then Open again.
+After the first open, Fiscal countdown is in the widget gallery: right-click the desktop
+and choose Edit Widgets. Each widget picks its own calendar under Edit Widget.
 Open at login is in the panel. It works after the app is in Applications.
 
 The fq command is inside the app. In Terminal:

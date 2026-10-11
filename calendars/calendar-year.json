@@ -1,0 +1,6 @@
+{
+  "name": "Calendar year",
+  "eras": [
+    { "rule": "months", "startMonth": 1, "startDay": 1 }
+  ]
+}

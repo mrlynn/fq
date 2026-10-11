@@ -5,6 +5,8 @@ import SwiftUI
 struct FiscalQuarterApp: App {
     @StateObject private var clock: QuarterClock
     @StateObject private var calendar: CalendarModel
+    @AppStorage(MenuBarCountdown.targetKey) private var menuBarTarget = CountdownTarget.quarter.rawValue
+    @AppStorage(MenuBarCountdown.unitKey) private var countdownUnit = CountdownUnit.days.rawValue
 
     init() {
         _clock = StateObject(wrappedValue: QuarterClock())
@@ -20,8 +22,10 @@ struct FiscalQuarterApp: App {
         MenuBarExtra {
             QuarterPanel(clock: clock, calendar: calendar)
         } label: {
-            Text(snapshot.menuBarLabel)
-                .accessibilityLabel("\(snapshot.quarter.id), \(snapshot.daysRemaining) days remaining")
+            let countdown = snapshot.countdown(to: CountdownTarget(rawValue: menuBarTarget) ?? .quarter)
+            let unit = CountdownUnit(rawValue: countdownUnit) ?? .days
+            Text("\(countdown.label) · \(countdown.short(in: unit))")
+                .accessibilityLabel("\(countdown.label), \(countdown.phrase(in: unit)) remaining")
         }
         .menuBarExtraStyle(.window)
     }
