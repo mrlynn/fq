@@ -502,6 +502,57 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(FiscalCalendarDefinition.builtIn.summary, "3 eras, from a file")
     }
 
+    // MARK: Shared settings
+
+    func testMigrationCopiesCalendarSettingsOnce() throws {
+        let (legacy, legacyName) = try scratchDefaults()
+        let (group, groupName) = try scratchDefaults()
+        defer {
+            legacy.removePersistentDomain(forName: legacyName)
+            group.removePersistentDomain(forName: groupName)
+        }
+        FiscalYearConfig(kind: .custom, startMonth: 7, startDay: 1).save(to: legacy)
+        let saved = [SavedCalendar(definition: .months(startMonth: 1, startDay: 1, name: "SpaceX"))]
+        SavedCalendars.save(saved, to: legacy)
+        legacy.set("ring", forKey: "yearPicture")
+
+        SharedSettings.migrateIfNeeded(from: legacy, to: group)
+        XCTAssertEqual(FiscalYearConfig.load(from: group), FiscalYearConfig(kind: .custom, startMonth: 7, startDay: 1))
+        XCTAssertEqual(SavedCalendars.load(from: group), saved)
+        XCTAssertNil(group.object(forKey: "yearPicture"), "panel preferences stay with the app")
+
+        // A second run does not overwrite a change made in the group since.
+        FiscalYearConfig.builtIn.save(to: group)
+        SharedSettings.migrateIfNeeded(from: legacy, to: group)
+        XCTAssertEqual(FiscalYearConfig.load(from: group).kind, .builtIn)
+    }
+
+    func testReadOnlySourceReadsTheGroupFileThenFallsBack() throws {
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("fq-\(UUID().uuidString).plist")
+        defer { try? FileManager.default.removeItem(at: file) }
+        let (legacy, legacyName) = try scratchDefaults()
+        defer { legacy.removePersistentDomain(forName: legacyName) }
+        FiscalYearConfig(kind: .custom, startMonth: 4, startDay: 1).save(to: legacy)
+
+        let fromLegacy = SharedSettings.readOnlySource(file: file, fallback: legacy)
+        XCTAssertEqual(FiscalYearConfig.load(from: fromLegacy).startMonth, 4)
+
+        // A group file the app has not migrated into yet still defers to the legacy suite.
+        var values: [String: Any] = ["fiscalYearKind": "custom", "fiscalStartMonth": 10, "fiscalStartDay": 1]
+        try PropertyListSerialization.data(fromPropertyList: values, format: .binary, options: 0).write(to: file)
+        XCTAssertEqual(FiscalYearConfig.load(from: SharedSettings.readOnlySource(file: file, fallback: legacy)).startMonth, 4)
+
+        values["migratedFromLegacySuite"] = true
+        try PropertyListSerialization.data(fromPropertyList: values, format: .binary, options: 0).write(to: file)
+        let fromGroup = SharedSettings.readOnlySource(file: file, fallback: legacy)
+        XCTAssertEqual(FiscalYearConfig.load(from: fromGroup), FiscalYearConfig(kind: .custom, startMonth: 10, startDay: 1))
+    }
+
+    private func scratchDefaults() throws -> (UserDefaults, String) {
+        let name = "local.fiscalquarter.tests.\(UUID().uuidString)"
+        return (try XCTUnwrap(UserDefaults(suiteName: name)), name)
+    }
+
     // MARK: Countdowns
 
     func testOctober112026CountdownsAllEndOnDecember31() {

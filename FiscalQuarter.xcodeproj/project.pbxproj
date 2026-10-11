@@ -17,6 +17,7 @@
 		2380590FFB99049EFD105CCA /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		24187AE57854E83FCBE871C8 /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BBA7584365281E7D460BEA /* LoginItem.swift */; };
 		2427E42D447927DF21696E27 /* QuarterClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E719833196DAD26D15ED15E /* QuarterClock.swift */; };
+		258403D532DA0A4F370BCF24 /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD87F30AE3313E355BC76B /* SharedSettings.swift */; };
 		25A9B779172A58674876097B /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
 		260FD82CE8ECAA5CA00B7637 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
 		27C6BCA26B97C85B90E11154 /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
@@ -24,15 +25,18 @@
 		38CFC565B8402F0DB7E560B3 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		4276444391FA556794B6CB9C /* QuarterClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E719833196DAD26D15ED15E /* QuarterClock.swift */; };
 		43B3960804084483DAC14569 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
+		45BF96C1468B04AB349C822D /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD87F30AE3313E355BC76B /* SharedSettings.swift */; };
 		511BC65CFF3EFFE407B44979 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		589898691F615E769BE73FA9 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062EA10466FBD75CAAC906C2 /* AboutView.swift */; };
 		5AB68A67CA8B9089925F633A /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
 		63A73F4F0EC88D979BC2DA33 /* FiscalQuarteriOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD7134DF3C3FF965F74F5FC /* FiscalQuarteriOSApp.swift */; };
+		7310588A4A8B60A26268D5DF /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD87F30AE3313E355BC76B /* SharedSettings.swift */; };
 		789AEB403CFF654BC65F100F /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
 		79852E20385A5B70D8AAA4D5 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
 		84A4E3AA3B4A5CE9FFC2E6C0 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		8FAE651CD44C6F8941B2486B /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		95E93413102381FBD03B9883 /* FiscalYearMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */; };
+		97DA0550F25DB5027DBE9715 /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD87F30AE3313E355BC76B /* SharedSettings.swift */; };
 		97E663F46728F0520179BA9C /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
 		A349D2513A8D1AD6ED002BE4 /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
 		A602877DBE753000B278DB69 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
@@ -55,6 +59,7 @@
 		F8796632C9334746C3337906 /* CountdownWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE9343791A7D7EC53C6553E /* CountdownWidget.swift */; };
 		F8E91297D789302B1EE40A73 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
 		FE07278297579D7C33BF6A66 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */; };
+		FE13DC1DF0B8B8E5313E3807 /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFD87F30AE3313E355BC76B /* SharedSettings.swift */; };
 		FF6AD6FF65822775A230BBEF /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
 /* End PBXBuildFile section */
 
@@ -114,6 +119,7 @@
 		3E719833196DAD26D15ED15E /* QuarterClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterClock.swift; sourceTree = "<group>"; };
 		54FEEEE78A96AF4BFD31523E /* Countdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Countdown.swift; sourceTree = "<group>"; };
 		60AE710AF0987612A22B3489 /* FiscalQuarterWidgetiOS.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FiscalQuarterWidgetiOS.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BFD87F30AE3313E355BC76B /* SharedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedSettings.swift; sourceTree = "<group>"; };
 		7CAF87DB1ED2D3A8800E90B0 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		86BBA7584365281E7D460BEA /* LoginItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItem.swift; sourceTree = "<group>"; };
 		87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarModel.swift; sourceTree = "<group>"; };
@@ -153,6 +159,7 @@
 				194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */,
 				CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */,
 				2C83AC51F4B171233B027CFD /* SavedCalendars.swift */,
+				7BFD87F30AE3313E355BC76B /* SharedSettings.swift */,
 			);
 			path = FiscalQuarterCore;
 			sourceTree = "<group>";
@@ -310,22 +317,22 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					2488CB7DAFD0851508975E0F = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = YZ36Z8GSEN;
 						ProvisioningStyle = Manual;
 					};
 					62CA6F41D79653652E2CB20B = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = YZ36Z8GSEN;
 						ProvisioningStyle = Automatic;
 					};
 					6F63BA43E4B38C4572A1A3E6 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = YZ36Z8GSEN;
 					};
 					EB52BAB964EE4BC6EAC96B1D = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = YZ36Z8GSEN;
 						ProvisioningStyle = Automatic;
 					};
 					EC775C57C221B5636CA1EE49 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = YZ36Z8GSEN;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -384,6 +391,7 @@
 				2380590FFB99049EFD105CCA /* FiscalYearConfig.swift in Sources */,
 				260FD82CE8ECAA5CA00B7637 /* FiscalYearMap.swift in Sources */,
 				F65F3D11CCD3B8D701F6F07A /* SavedCalendars.swift in Sources */,
+				45BF96C1468B04AB349C822D /* SharedSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,6 +412,7 @@
 				2427E42D447927DF21696E27 /* QuarterClock.swift in Sources */,
 				0CC88C20C4F4ED3A1FD41097 /* QuarterPanel.swift in Sources */,
 				43B3960804084483DAC14569 /* SavedCalendars.swift in Sources */,
+				258403D532DA0A4F370BCF24 /* SharedSettings.swift in Sources */,
 				C785985C6DB889D4C68F8213 /* YearPicture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -419,6 +428,7 @@
 				511BC65CFF3EFFE407B44979 /* FiscalYearConfig.swift in Sources */,
 				95E93413102381FBD03B9883 /* FiscalYearMap.swift in Sources */,
 				79852E20385A5B70D8AAA4D5 /* SavedCalendars.swift in Sources */,
+				97DA0550F25DB5027DBE9715 /* SharedSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +443,7 @@
 				38CFC565B8402F0DB7E560B3 /* FiscalYearConfig.swift in Sources */,
 				B237375D38F09AD6C5F2F295 /* FiscalYearMap.swift in Sources */,
 				FF6AD6FF65822775A230BBEF /* SavedCalendars.swift in Sources */,
+				7310588A4A8B60A26268D5DF /* SharedSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,6 +460,7 @@
 				DCD133604F9FBB375714D5EF /* FiscalYearMap.swift in Sources */,
 				4276444391FA556794B6CB9C /* QuarterClock.swift in Sources */,
 				DE68BD5D3F49D353F81B9551 /* SavedCalendars.swift in Sources */,
+				FE13DC1DF0B8B8E5313E3807 /* SharedSettings.swift in Sources */,
 				059F9875BC6D8DD1EE09922A /* YearPicture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -473,6 +485,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FiscalQuarteriOS/FiscalQuarteriOS.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -514,8 +527,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_ENTITLEMENTS = FiscalQuarterApp/FiscalQuarter.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = NO;
@@ -539,9 +552,8 @@
 		3425D03D303334C3AB4982C0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_ENTITLEMENTS = FiscalQuarterWidget/FiscalQuarterWidgetMac.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = NO;
@@ -615,7 +627,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YZ36Z8GSEN;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -675,7 +687,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YZ36Z8GSEN;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -710,6 +722,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FiscalQuarteriOS/FiscalQuarteriOS.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -733,8 +746,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_ENTITLEMENTS = FiscalQuarterApp/FiscalQuarter.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = NO;
@@ -758,6 +771,7 @@
 		B689E01A36297600A947E6FE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FiscalQuarterWidget/FiscalQuarterWidgetiOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FiscalQuarterWidget/Info.plist;
@@ -778,6 +792,7 @@
 		EB2FF275CC5C0AD0BCA3C614 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = FiscalQuarterWidget/FiscalQuarterWidgetiOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FiscalQuarterWidget/Info.plist;
@@ -798,9 +813,8 @@
 		F6B4C2C29B17EFBE279102F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_ENTITLEMENTS = FiscalQuarterWidget/FiscalQuarterWidgetMac.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = NO;

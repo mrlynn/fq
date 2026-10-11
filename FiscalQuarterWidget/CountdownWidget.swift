@@ -11,8 +11,8 @@ struct FiscalQuarterWidgets: WidgetBundle {
 
 /// Days left in the quarter, half, or fiscal year, for the desktop, the Home Screen, and the Lock Screen.
 ///
-/// Each widget carries its own calendar choice, so two widgets can show two companies' calendars.
-/// The widget does not read the app's settings: that would need an App Group, which needs a signing team.
+/// Each widget picks a calendar: yours from the app, one of your saved calendars, the built-in one,
+/// or a start date. The app and the widget share settings through the App Group in `SharedSettings`.
 struct CountdownWidget: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: "Countdown", intent: CountdownIntent.self, provider: CountdownProvider()) { entry in
@@ -45,8 +45,11 @@ struct CountdownIntent: WidgetConfigurationIntent {
     @Parameter(title: "Count in", default: .days)
     var unit: CountdownUnit
 
-    @Parameter(title: "Calendar", default: .builtIn)
+    @Parameter(title: "Calendar", default: .yours)
     var calendar: CalendarChoice
+
+    @Parameter(title: "Saved calendar")
+    var saved: SavedCalendarEntity?
 
     @Parameter(title: "Year starts in", default: .january)
     var startMonth: StartMonth
@@ -58,41 +61,97 @@ struct CountdownIntent: WidgetConfigurationIntent {
     var label: String?
 
     static var parameterSummary: some ParameterSummary {
-        When(\.$calendar, .equalTo, .startDate) {
-            Summary("Count \(\.$unit) to the end of the \(\.$target)") {
-                \.$calendar
-                \.$startMonth
-                \.$startDay
-                \.$label
+        Switch(\.$calendar) {
+            Case(.startDate) {
+                Summary("Count \(\.$unit) to the end of the \(\.$target)") {
+                    \.$calendar
+                    \.$startMonth
+                    \.$startDay
+                    \.$label
+                }
             }
-        } otherwise: {
-            Summary("Count \(\.$unit) to the end of the \(\.$target)") {
-                \.$calendar
-                \.$label
+            Case(.saved) {
+                Summary("Count \(\.$unit) to the end of the \(\.$target)") {
+                    \.$calendar
+                    \.$saved
+                    \.$label
+                }
+            }
+            DefaultCase {
+                Summary("Count \(\.$unit) to the end of the \(\.$target)") {
+                    \.$calendar
+                    \.$label
+                }
             }
         }
     }
 
-    var definition: FiscalCalendarDefinition {
+    /// The calendar to count with, and the name to show when no label was typed.
+    /// A saved calendar that has since been removed falls back to yours.
+    func resolve(from settings: SettingsSource) -> (definition: FiscalCalendarDefinition, name: String?) {
         switch calendar {
+        case .yours:
+            return (FiscalYearConfig.load(from: settings).definition, nil)
+        case .saved:
+            let calendars = SavedCalendars.load(from: settings)
+            if let id = saved?.id, let match = calendars.first(where: { $0.id.uuidString == id }) {
+                return (match.definition, match.name)
+            }
+            return (FiscalYearConfig.load(from: settings).definition, nil)
         case .builtIn:
-            return .builtIn
+            return (.builtIn, nil)
         case .startDate:
             let month = startMonth.number
-            return .months(startMonth: month, startDay: min(startDay, FiscalYearConfig.lastDay(of: month)))
+            return (.months(startMonth: month, startDay: min(startDay, FiscalYearConfig.lastDay(of: month))), nil)
         }
     }
 }
 
 enum CalendarChoice: String, AppEnum {
+    case yours
+    case saved
     case builtIn
     case startDate
 
     static var typeDisplayRepresentation: TypeDisplayRepresentation = "Calendar"
     static var caseDisplayRepresentations: [CalendarChoice: DisplayRepresentation] = [
+        .yours: "Yours",
+        .saved: "A saved calendar",
         .builtIn: "Built-in",
         .startDate: "Starts on a date",
     ]
+}
+
+/// One of the other calendars saved in the app, offered as a choice in Edit Widget.
+struct SavedCalendarEntity: AppEntity {
+    let id: String
+    let name: String
+
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Saved calendar"
+    static var defaultQuery = SavedCalendarQuery()
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "\(name)")
+    }
+
+    init(_ calendar: SavedCalendar) {
+        id = calendar.id.uuidString
+        name = calendar.name
+    }
+}
+
+struct SavedCalendarQuery: EntityQuery {
+    func entities(for identifiers: [String]) async throws -> [SavedCalendarEntity] {
+        all().filter { identifiers.contains($0.id) }
+    }
+
+    func suggestedEntities() async throws -> [SavedCalendarEntity] {
+        all()
+    }
+
+    private func all() -> [SavedCalendarEntity] {
+        SavedCalendars.load(from: SharedSettings.store).map(SavedCalendarEntity.init)
+    }
 }
 
 enum StartMonth: String, AppEnum, CaseIterable {
@@ -163,13 +222,14 @@ struct CountdownProvider: AppIntentTimelineProvider {
     }
 
     private func entry(at date: Date, for configuration: CountdownIntent) -> CountdownEntry {
-        let label = configuration.label?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let resolved = configuration.resolve(from: SharedSettings.store)
+        let typed = configuration.label?.trimmingCharacters(in: .whitespacesAndNewlines)
         return CountdownEntry(
             date: date,
-            snapshot: QuarterSnapshot(on: CalendarDate(date, calendar: .current), calendar: configuration.definition),
+            snapshot: QuarterSnapshot(on: CalendarDate(date, calendar: .current), calendar: resolved.definition),
             target: configuration.target,
             unit: configuration.unit,
-            label: label?.isEmpty == false ? label : nil
+            label: typed?.isEmpty == false ? typed : resolved.name
         )
     }
 }

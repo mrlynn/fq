@@ -35,7 +35,9 @@ A half is the first two quarters or the last two. A calendar file with a year of
 
 The Mac app carries a Fiscal countdown widget for the desktop and Notification Center, in small and medium sizes. After the app has opened once, right-click the desktop, choose Edit Widgets, and find Fiscal Quarter. Small shows one countdown. Medium adds the quarter, the half, and the year side by side, each with its own bar, because they start on different days even when they end together.
 
-Each widget has its own settings under Edit Widget: what to count to, the unit, the calendar, and a label. The calendar is the built-in one or a start month and day, so a widget labelled SpaceX with a 1 January start reads FY26 while yours reads FY27. Widgets do not read the app's calendar setting or its other calendars. Sharing those needs an App Group, and an App Group needs a signing team.
+Each widget has its own settings under Edit Widget: what to count to, the unit, the calendar, and a label. The calendar starts as Yours, the one chosen in the app, and follows it when you change it. A saved calendar is picked from the list of other calendars, and its name becomes the label unless you type one. The built-in calendar and a start month and day are there too. So a widget set to SpaceX reads FY26 while one set to Yours reads FY27.
+
+The app and its widgets share settings through an App Group: `YZ36Z8GSEN.local.fiscalquarter` on the Mac and `group.local.fiscalquarter` on iOS. The first time the new app opens, it copies the calendar settings across from where earlier versions kept them. `fq` reads the group's settings file directly, because a command-line tool cannot hold the App Group entitlement.
 
 The countdown turns amber in the last two weeks, as in the panel.
 
@@ -45,7 +47,7 @@ The countdown turns amber in the last two weeks, as in the panel.
 
 Its widget comes in the same small and medium sizes, plus three Lock Screen sizes: a ring with the number, a line with a bar, and a single line of text.
 
-To run it in the simulator, choose the `FiscalQuarteriOS` scheme and an iPhone simulator, then press Run. A device needs a signing team: set `DEVELOPMENT_TEAM` in `project.yml`, run `xcodegen`, and choose your iPhone.
+To run it in the simulator, choose the `FiscalQuarteriOS` scheme and an iPhone simulator, then press Run. A device build registers the app, the widget, and the App Group with the signing team the first time, which Xcode does when you choose your iPhone and press Run.
 
 The web prototype stores `CURRENT_QUARTER` as the string `FY27-Q3` and does not follow the wall clock. This app reads the local calendar date instead. Opened in October 2026, it shows Q4.
 
@@ -143,7 +145,7 @@ That runs the tests, builds a universal app, and writes two files:
 - `dist/FiscalQuarter-1.3.zip`
 - `dist/FiscalQuarter-1.3.dmg`
 
-The disk image has the app, a shortcut to Applications, and `How to install.txt`. Drag the app to Applications and open it. The first open may need a Control-click, then Open, then Open again. The app is ad-hoc signed, so a paid Apple Developer account is not required.
+The disk image has the app, a shortcut to Applications, and `How to install.txt`. Drag the app to Applications and open it. The first open may need a Control-click, then Open, then Open again. The script signs with the Developer ID certificate in your keychain. It does not notarize, which is why the first open needs that extra step. Set `SIGN_IDENTITY` to sign with another certificate.
 
 `fq` is inside the app. After it is in Applications:
 
@@ -182,7 +184,7 @@ Or open the project and press Run:
 open FiscalQuarter.xcodeproj
 ```
 
-The project ad-hoc signs the app, so a paid Apple Developer account is not required. If macOS says the app cannot be opened, Control-click `FiscalQuarter.app`, choose Open, then choose Open again.
+The project signs with team `YZ36Z8GSEN`, which the App Group needs. To build under another team, change `DEVELOPMENT_TEAM` in `project.yml` and `SharedSettings.appGroup` in `FiscalQuarterCore/SharedSettings.swift`, then run `xcodegen`. iOS also needs a different `group.` ID, because App Group IDs are unique across all teams. If macOS says the app cannot be opened, Control-click `FiscalQuarter.app`, choose Open, then choose Open again.
 
 To keep it installed:
 
@@ -218,6 +220,7 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `FiscalQuarterCore/FiscalCalendar.swift` maps a date to a quarter and builds the snapshot the panel and `fq` share
 - `FiscalQuarterCore/FiscalCalendarDefinition.swift` describes a calendar as eras, including the built-in one
 - `FiscalQuarterCore/SavedCalendars.swift` stores the other calendars
+- `FiscalQuarterCore/SharedSettings.swift` is the App Group the apps, widgets, and `fq` share
 - `calendars/` holds example calendar files
 - `FiscalQuarterCore/Countdown.swift` counts down to the end of the quarter, half, and year
 - `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures. The iOS app shares `CalendarModel.swift`, `QuarterClock.swift`, and `YearPicture.swift`

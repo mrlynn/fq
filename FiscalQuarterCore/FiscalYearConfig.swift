@@ -30,14 +30,15 @@ public struct FiscalYearConfig: Equatable, Codable {
         }
     }
 
-    public static let suiteName = "local.fiscalquarter"
-
+    /// The shared settings. See `SharedSettings` for who can write them.
     public static var store: UserDefaults {
-        UserDefaults(suiteName: suiteName) ?? .standard
+        SharedSettings.store
     }
 
-    public static func load(from defaults: UserDefaults) -> FiscalYearConfig {
-        let kind = Kind(rawValue: defaults.string(forKey: Keys.kind) ?? "") ?? .builtIn
+    static let storedKeys = [Keys.kind, Keys.month, Keys.day]
+
+    public static func load(from defaults: SettingsSource) -> FiscalYearConfig {
+        let kind = Kind(rawValue: defaults.object(forKey: Keys.kind) as? String ?? "") ?? .builtIn
         let month = defaults.object(forKey: Keys.month) as? Int ?? 2
         let day = defaults.object(forKey: Keys.day) as? Int ?? 1
         return FiscalYearConfig(kind: kind, startMonth: month, startDay: day)

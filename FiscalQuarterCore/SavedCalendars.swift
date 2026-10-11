@@ -18,10 +18,11 @@ public struct SavedCalendar: Equatable, Codable, Identifiable {
 /// Each calendar is stored as its own JSON blob. One that no longer decodes is skipped
 /// rather than taking the rest of the list with it.
 public enum SavedCalendars {
-    private static let key = "otherCalendars"
+    static let storedKey = "otherCalendars"
+    private static var key: String { storedKey }
 
-    public static func load(from defaults: UserDefaults) -> [SavedCalendar] {
-        let blobs = defaults.array(forKey: key) as? [Data] ?? []
+    public static func load(from defaults: SettingsSource) -> [SavedCalendar] {
+        let blobs = defaults.object(forKey: key) as? [Data] ?? []
         return blobs.compactMap { try? JSONDecoder().decode(SavedCalendar.self, from: $0) }
     }
 
