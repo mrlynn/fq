@@ -60,6 +60,7 @@ struct QuarterScreen: View {
                         }
                     }
                     .padding(.vertical, 6)
+                    .photoLegibility(calendar.appearance)
                     .themed(calendar.appearance)
                     .fontDesign(Theme(appearance: calendar.appearance).fontDesign)
                     .listRowBackground(heroBackground)

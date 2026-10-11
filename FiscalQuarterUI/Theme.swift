@@ -149,6 +149,21 @@ extension EnvironmentValues {
 }
 
 extension View {
+    /// A soft shadow under text and bars that sit straight on a photo, so they stand off the
+    /// light and busy parts of the picture. Does nothing on other backgrounds. Apply it only to
+    /// content drawn on the background itself, not to cards that bring their own fill.
+    @ViewBuilder
+    func photoLegibility(_ appearance: Appearance) -> some View {
+        if appearance.wantsTextShadow {
+            // A tight dark edge keeps thin strokes crisp, and a wide soft halo darkens the
+            // picture just around the text.
+            shadow(color: .black.opacity(0.65), radius: 1, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.45), radius: 5, x: 0, y: 0)
+        } else {
+            self
+        }
+    }
+
     /// Applies an appearance's accent and text color to everything inside.
     @ViewBuilder
     func themed(_ appearance: Appearance) -> some View {

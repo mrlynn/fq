@@ -62,8 +62,10 @@ struct CountdownWidgetView: View {
         #endif
         case .systemMedium:
             MediumCountdown(entry: entry)
+                .photoLegibility(entry.appearance)
         default:
             SmallCountdown(entry: entry)
+                .photoLegibility(entry.appearance)
         }
     }
 }
@@ -281,6 +283,7 @@ struct WidgetPreview: View {
                 SmallCountdown(entry: entry)
             }
         }
+        .photoLegibility(entry.appearance)
         .themed(entry.appearance)
         .padding(16)
         .frame(width: medium ? Self.mediumWidth : Self.smallWidth, height: Self.height)

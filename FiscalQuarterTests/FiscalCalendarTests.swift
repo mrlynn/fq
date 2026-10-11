@@ -659,6 +659,13 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(RGBAColor.contrast(1, 0), 21, accuracy: 0.0001)
     }
 
+    func testOnlyPhotosAskForATextShadow() throws {
+        XCTAssertTrue(Appearance(background: .image("a.jpg")).wantsTextShadow)
+        XCTAssertFalse(Appearance.standard.wantsTextShadow)
+        XCTAssertFalse(Appearance(background: .color(try XCTUnwrap(RGBAColor(hex: "#1F3A5F")))).wantsTextShadow)
+        XCTAssertFalse(Appearance(background: .gradient(GradientSpec.presets[0].gradient)).wantsTextShadow)
+    }
+
     func testGradientAverageColor() throws {
         let gradient = GradientSpec(colors: [try XCTUnwrap(RGBAColor(hex: "#000000")), try XCTUnwrap(RGBAColor(hex: "#FFFFFF"))])
         XCTAssertEqual(gradient.averageColor.hex, "#808080")
