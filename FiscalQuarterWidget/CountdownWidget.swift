@@ -17,7 +17,9 @@ struct CountdownWidget: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: "Countdown", intent: CountdownIntent.self, provider: CountdownProvider()) { entry in
             CountdownWidgetView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .containerBackground(for: .widget) {
+                    CountdownBackground(entry: entry)
+                }
         }
         .configurationDisplayName("Fiscal countdown")
         .description("Time left in the quarter, half, or fiscal year.")
@@ -188,16 +190,6 @@ extension CountdownUnit: AppEnum {
 
 // MARK: Timeline
 
-struct CountdownEntry: TimelineEntry {
-    let date: Date
-    let snapshot: QuarterSnapshot
-    let target: CountdownTarget
-    let unit: CountdownUnit
-    let label: String?
-
-    var countdown: Countdown { snapshot.countdown(to: target) }
-}
-
 /// One entry now and one at each of the next seven local midnights, then a fresh timeline.
 struct CountdownProvider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> CountdownEntry {
@@ -218,10 +210,12 @@ struct CountdownProvider: AppIntentTimelineProvider {
             dates.append(next)
             midnight = next
         }
-        return Timeline(entries: dates.map { entry(at: $0, for: configuration) }, policy: .atEnd)
+        // Read the appearance and its picture once, not once per entry.
+        let look = Look.current()
+        return Timeline(entries: dates.map { entry(at: $0, for: configuration, look: look) }, policy: .atEnd)
     }
 
-    private func entry(at date: Date, for configuration: CountdownIntent) -> CountdownEntry {
+    private func entry(at date: Date, for configuration: CountdownIntent, look: Look = .current()) -> CountdownEntry {
         let resolved = configuration.resolve(from: SharedSettings.store)
         let typed = configuration.label?.trimmingCharacters(in: .whitespacesAndNewlines)
         return CountdownEntry(
@@ -229,184 +223,20 @@ struct CountdownProvider: AppIntentTimelineProvider {
             snapshot: QuarterSnapshot(on: CalendarDate(date, calendar: .current), calendar: resolved.definition),
             target: configuration.target,
             unit: configuration.unit,
-            label: typed?.isEmpty == false ? typed : resolved.name
+            label: typed?.isEmpty == false ? typed : resolved.name,
+            appearance: look.appearance,
+            backgroundImage: look.image
         )
     }
-}
 
-// MARK: Views
+    /// The shared appearance, with its background picture when it has one.
+    private struct Look {
+        let appearance: Appearance
+        let image: CGImage?
 
-enum WidgetColor {
-    static let green = Color(red: 16 / 255, green: 185 / 255, blue: 129 / 255)
-    static let warning = Color(red: 217 / 255, green: 119 / 255, blue: 6 / 255)
-
-    static func tint(for countdown: Countdown) -> Color {
-        countdown.days <= 14 ? warning : green
-    }
-}
-
-struct CountdownWidgetView: View {
-    @Environment(\.widgetFamily) private var family
-    let entry: CountdownEntry
-
-    var body: some View {
-        switch family {
-        #if os(iOS)
-        case .accessoryCircular:
-            CircularCountdown(entry: entry)
-        case .accessoryRectangular:
-            RectangularCountdown(entry: entry)
-        case .accessoryInline:
-            Text("\(entry.countdown.label) · \(entry.countdown.short(in: entry.unit))")
-        #endif
-        case .systemMedium:
-            MediumCountdown(entry: entry)
-        default:
-            SmallCountdown(entry: entry)
+        static func current() -> Look {
+            let appearance = Appearance.load(from: SharedSettings.store)
+            return Look(appearance: appearance, image: appearance.imageFile.flatMap(BackgroundImageStore.load))
         }
-    }
-}
-
-/// The big number, its unit, and how far through the period today is.
-struct SmallCountdown: View {
-    let entry: CountdownEntry
-
-    var body: some View {
-        let countdown = entry.countdown
-        VStack(alignment: .leading, spacing: 2) {
-            Text(entry.label ?? countdown.label)
-                .font(.system(size: 13, weight: .semibold))
-                .lineLimit(1)
-            if entry.label != nil {
-                Text(countdown.label)
-                    .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
-            }
-            Spacer(minLength: 0)
-            Text(BigNumber.text(countdown, entry.unit))
-                .font(.system(size: 44, weight: .bold, design: .rounded))
-                .monospacedDigit()
-                .minimumScaleFactor(0.5)
-                .lineLimit(1)
-                .foregroundStyle(countdown.days <= 14 ? WidgetColor.warning : Color.primary)
-            Text(BigNumber.caption(countdown, entry.unit))
-                .font(.system(size: 12))
-                .foregroundStyle(.secondary)
-            Spacer(minLength: 0)
-            ProgressBar(fraction: countdown.fractionComplete, tint: WidgetColor.tint(for: countdown))
-            Text("Ends \(ShortDate.text(countdown.end))")
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
-        }
-    }
-}
-
-/// The chosen countdown on the left. On the right, quarter, half, and year side by side,
-/// each with its own progress, because they start on different days even when they end together.
-struct MediumCountdown: View {
-    let entry: CountdownEntry
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 16) {
-            SmallCountdown(entry: entry)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            VStack(alignment: .leading, spacing: 10) {
-                ForEach(entry.snapshot.countdowns, id: \.target) { countdown in
-                    VStack(alignment: .leading, spacing: 3) {
-                        HStack(alignment: .firstTextBaseline) {
-                            Text(countdown.label)
-                                .font(.system(size: 12, weight: countdown.target == entry.target ? .semibold : .regular))
-                            Spacer(minLength: 4)
-                            Text(countdown.short(in: entry.unit))
-                                .font(.system(size: 12))
-                                .monospacedDigit()
-                                .foregroundStyle(.secondary)
-                        }
-                        ProgressBar(fraction: countdown.fractionComplete, tint: WidgetColor.tint(for: countdown))
-                    }
-                }
-                Spacer(minLength: 0)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-    }
-}
-
-#if os(iOS)
-struct CircularCountdown: View {
-    let entry: CountdownEntry
-
-    var body: some View {
-        let countdown = entry.countdown
-        Gauge(value: countdown.fractionComplete) {
-            Text(countdown.label)
-        } currentValueLabel: {
-            Text("\(countdown.value(in: entry.unit))")
-                .monospacedDigit()
-        }
-        .gaugeStyle(.accessoryCircularCapacity)
-        .widgetAccentable()
-    }
-}
-
-struct RectangularCountdown: View {
-    let entry: CountdownEntry
-
-    var body: some View {
-        let countdown = entry.countdown
-        VStack(alignment: .leading, spacing: 2) {
-            Text(entry.label.map { "\($0) · \(countdown.label)" } ?? countdown.label)
-                .font(.headline)
-                .widgetAccentable()
-                .lineLimit(1)
-            Text("\(countdown.phrase(in: entry.unit)) left")
-                .lineLimit(1)
-            ProgressBar(fraction: countdown.fractionComplete, tint: .primary)
-                .widgetAccentable()
-        }
-    }
-}
-#endif
-
-/// How much of the period is behind us. Drawn rather than a ProgressView so the tint always applies.
-struct ProgressBar: View {
-    let fraction: Double
-    let tint: Color
-
-    var body: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .leading) {
-                Capsule().fill(Color.primary.opacity(0.12))
-                Capsule()
-                    .fill(tint)
-                    .frame(width: max(4, proxy.size.width * min(1, max(0, fraction))))
-            }
-        }
-        .frame(height: 4)
-        .accessibilityElement()
-        .accessibilityLabel("\(Int((fraction * 100).rounded())) percent through")
-    }
-}
-
-enum BigNumber {
-    static func text(_ countdown: Countdown, _ unit: CountdownUnit) -> String {
-        unit == .weeks ? countdown.short(in: .weeks) : "\(countdown.value(in: unit))"
-    }
-
-    static func caption(_ countdown: Countdown, _ unit: CountdownUnit) -> String {
-        let value = countdown.value(in: unit)
-        switch unit {
-        case .days: return value == 1 ? "day left" : "days left"
-        case .workdays: return value == 1 ? "workday left" : "workdays left"
-        case .weeks: return "left"
-        case .weekends: return value == 1 ? "weekend left" : "weekends left"
-        }
-    }
-}
-
-enum ShortDate {
-    /// `Dec 31`.
-    static func text(_ date: CalendarDate) -> String {
-        "\(FiscalMonth.symbol(for: date.month)) \(date.day)"
     }
 }

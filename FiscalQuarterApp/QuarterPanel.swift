@@ -29,10 +29,22 @@ struct QuarterPanel: View {
                     today: snapshot.today,
                     dismiss: { page = .quarter }
                 )
+            case .appearance:
+                VStack(alignment: .leading, spacing: 12) {
+                    backButton
+                    Text("Appearance")
+                        .font(.system(size: 18, weight: .semibold))
+                    AppearanceEditor(calendar: calendar, today: snapshot.today)
+                        .frame(height: 560)
+                        .padding(.horizontal, -16)
+                }
             }
         }
         .padding(16)
         .frame(width: 328)
+        .themed(calendar.appearance)
+        .fontDesign(Theme(appearance: calendar.appearance).fontDesign)
+        .background(ThemeBackground(appearance: calendar.appearance, image: calendar.backgroundImage))
         .animation(.easeInOut(duration: 0.18), value: page)
         .onAppear { clock.refresh() }
     }
@@ -46,7 +58,7 @@ struct QuarterPanel: View {
                     .foregroundStyle(.secondary)
                 Button(action: { copy(snapshot.quarter.id) }) {
                     Text(snapshot.quarter.id)
-                        .font(.system(size: 22, weight: .semibold))
+                        .font(Theme(appearance: calendar.appearance).numberFont(22))
                         .foregroundStyle(.primary)
                 }
                 .buttonStyle(.plain)
@@ -130,6 +142,8 @@ struct QuarterPanel: View {
             Divider()
 
             actionButton("Calendar") { page = .calendar }
+
+            actionButton("Appearance") { page = .appearance }
 
             actionButton("About") { page = .about }
 
@@ -217,6 +231,21 @@ struct QuarterPanel: View {
         }
     }
 
+    private var backButton: some View {
+        Button(action: { page = .quarter }) {
+            HStack(spacing: 4) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 11, weight: .semibold))
+                Text("Quarter")
+            }
+            .foregroundStyle(.secondary)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .keyboardShortcut(.cancelAction)
+        .accessibilityLabel("Back to the quarter")
+    }
+
     private func row(_ title: String, _ value: String, warning: Bool = false) -> some View {
         HStack(alignment: .firstTextBaseline) {
             Text(title)
@@ -271,6 +300,7 @@ private enum PanelPage: Equatable {
     case quarter
     case about
     case calendar
+    case appearance
 }
 
 /// Which countdown the menu bar shows, and in what unit. The default reads `FY26-Q4 · 82d`.

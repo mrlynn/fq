@@ -599,6 +599,78 @@ final class FiscalCalendarTests: XCTestCase {
         return (try XCTUnwrap(UserDefaults(suiteName: name)), name)
     }
 
+    // MARK: Appearance
+
+    func testHexColorsRoundTrip() throws {
+        let navy = try XCTUnwrap(RGBAColor(hex: "#1F3A5F"))
+        XCTAssertEqual(navy.hex, "#1F3A5F")
+        XCTAssertEqual(RGBAColor(hex: "1f3a5f"), navy)
+        XCTAssertEqual(RGBAColor(hex: "#FF000080")?.hex, "#FF000080")
+        XCTAssertNil(RGBAColor(hex: "#12345"))
+        XCTAssertNil(RGBAColor(hex: "#GGGGGG"))
+        XCTAssertEqual(RGBAColor(hex: "#FFFFFF")?.luminance ?? 0, 1, accuracy: 0.0001)
+        XCTAssertEqual(RGBAColor(hex: "#000000")?.luminance ?? 1, 0, accuracy: 0.0001)
+    }
+
+    func testAutomaticTextFollowsTheBackground() throws {
+        XCTAssertNil(Appearance.standard.prefersLightText, "the system background follows the system")
+        XCTAssertEqual(Appearance(background: .color(try XCTUnwrap(RGBAColor(hex: "#1F3A5F")))).prefersLightText, true)
+        XCTAssertEqual(Appearance(background: .color(try XCTUnwrap(RGBAColor(hex: "#F5F0E6")))).prefersLightText, false)
+        let mint = try XCTUnwrap(GradientSpec.presets.first { $0.name == "Mint" }).gradient
+        XCTAssertEqual(Appearance(background: .gradient(mint)).prefersLightText, false)
+        let dusk = try XCTUnwrap(GradientSpec.presets.first { $0.name == "Dusk" }).gradient
+        XCTAssertEqual(Appearance(background: .gradient(dusk)).prefersLightText, true)
+        XCTAssertEqual(Appearance(background: .image("photo.jpg")).prefersLightText, true)
+        XCTAssertEqual(Appearance(background: .image("photo.jpg"), foreground: .dark).prefersLightText, false)
+        XCTAssertEqual(Appearance(foreground: .light).prefersLightText, true)
+    }
+
+    func testAppearanceRoundTripsThroughDefaults() throws {
+        let (defaults, name) = try scratchDefaults()
+        defer { defaults.removePersistentDomain(forName: name) }
+        XCTAssertEqual(Appearance.load(from: defaults), .standard)
+
+        var look = Appearance(background: .gradient(GradientSpec.presets[3].gradient), typeface: .futura, numberWeight: .black, textSize: .large)
+        look.accent = RGBAColor(hex: "#FF4E88")
+        look.display.progressBars = false
+        look.display.centered = true
+        look.save(to: defaults)
+        XCTAssertEqual(Appearance.load(from: defaults), look)
+
+        Appearance(background: .image("abc.jpg")).save(to: defaults)
+        XCTAssertEqual(Appearance.load(from: defaults).imageFile, "abc.jpg")
+
+        defaults.set(Data("not json".utf8), forKey: "appearance")
+        XCTAssertEqual(Appearance.load(from: defaults), .standard, "a look that no longer decodes falls back")
+    }
+
+    func testStandardGreenGivesWayOnlyWhereItWouldBeFaint() throws {
+        func gradient(_ name: String) throws -> Appearance {
+            Appearance(background: .gradient(try XCTUnwrap(GradientSpec.presets.first { $0.name == name }).gradient))
+        }
+        XCTAssertTrue(try gradient("Ocean").standardAccentIsFaint, "green on teal")
+        XCTAssertTrue(try gradient("Mint").standardAccentIsFaint, "green on pale green")
+        XCTAssertFalse(try gradient("Graphite").standardAccentIsFaint, "green on dark gray")
+        XCTAssertFalse(Appearance.standard.standardAccentIsFaint, "the system background keeps the green")
+        XCTAssertFalse(Appearance(background: .image("a.jpg")).standardAccentIsFaint, "a picture cannot be measured")
+        var chosen = try gradient("Ocean")
+        chosen.accent = RGBAColor(hex: "#FFFFFF")
+        XCTAssertFalse(chosen.standardAccentIsFaint, "a chosen accent is always used")
+        XCTAssertEqual(RGBAColor.contrast(1, 0), 21, accuracy: 0.0001)
+    }
+
+    func testGradientAverageColor() throws {
+        let gradient = GradientSpec(colors: [try XCTUnwrap(RGBAColor(hex: "#000000")), try XCTUnwrap(RGBAColor(hex: "#FFFFFF"))])
+        XCTAssertEqual(gradient.averageColor.hex, "#808080")
+    }
+
+    func testEveryNamedTypefaceHasAFamily() {
+        for face in Appearance.Typeface.allCases {
+            let isSystem = [.system, .rounded, .serif, .monospaced].contains(face)
+            XCTAssertEqual(face.familyName == nil, isSystem, face.title)
+        }
+    }
+
     // MARK: Countdowns
 
     func testOctober112026CountdownsAllEndOnDecember31() {

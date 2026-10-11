@@ -25,6 +25,7 @@ targets:
       - path: FiscalQuarterApp
         excludes: [Info.plist, "*.entitlements"]
       - FiscalQuarterCore
+      - FiscalQuarterUI
     dependencies:
       - target: FiscalQuarterWidgetMac
     settings:
@@ -54,6 +55,7 @@ targets:
       - path: FiscalQuarterWidget
         excludes: [Info.plist, "*.entitlements"]
       - FiscalQuarterCore
+      - FiscalQuarterUI
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: local.fiscalquarter.widget
@@ -87,6 +89,8 @@ targets:
       - path: FiscalQuarteriOS
         excludes: ["*.entitlements"]
       - FiscalQuarterCore
+      - FiscalQuarterUI
+      - FiscalQuarterApp/AppearanceEditor.swift
       - FiscalQuarterApp/CalendarModel.swift
       - FiscalQuarterApp/QuarterClock.swift
       - FiscalQuarterApp/YearPicture.swift
@@ -114,6 +118,7 @@ targets:
       - path: FiscalQuarterWidget
         excludes: [Info.plist, "*.entitlements"]
       - FiscalQuarterCore
+      - FiscalQuarterUI
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: local.fiscalquarter.ios.widget
