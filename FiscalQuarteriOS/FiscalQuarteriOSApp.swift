@@ -112,15 +112,17 @@ struct QuarterScreen: View {
                         Button {
                             copy("\(other.name): \(theirs.statusLine)")
                         } label: {
+                            // Concrete colors: inside a button, the .primary and .secondary
+                            // styles take the button's blue tint.
                             HStack {
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(other.name).foregroundStyle(.primary)
+                                    Text(other.name).foregroundStyle(Color.primary)
                                     Text(other.definition.summary)
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Color.secondary)
                                 }
                                 Spacer()
-                                Text(theirs.quarter.id).monospacedDigit().foregroundStyle(.primary)
+                                Text(theirs.quarter.id).monospacedDigit().foregroundStyle(Color.primary)
                                 Text("\(theirs.daysRemaining)d")
                                     .monospacedDigit()
                                     .foregroundStyle(theirs.paceNote != nil ? MarkColor.warning : Color.secondary)
@@ -318,7 +320,9 @@ struct MonthDayPicker: View {
     var body: some View {
         Picker("Month", selection: $month) {
             ForEach(1...12, id: \.self) { value in
-                Text(Calendar(identifier: .gregorian).monthSymbols[value - 1]).tag(value)
+                // Calendar.current carries the locale. A bare Gregorian calendar has none and
+                // names the months M01 through M12.
+                Text(Calendar.current.monthSymbols[value - 1]).tag(value)
             }
         }
         .onChange(of: month) { _, value in
