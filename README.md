@@ -12,6 +12,41 @@ Line, Year, and Ring are three pictures of that year, in one slot. Line is the p
 
 `fq` prints the same facts for a shell or a script. The packaged app carries that binary at `Contents/MacOS/fq`.
 
+## Countdowns
+
+The panel counts down to the end of the quarter, the half, and the fiscal year. When they end on the same day they share a line, so on 2026-10-11 the panel shows one line, `FY27-Q4 · H2 · FY27`, with 82 days. The menu next to Countdown switches between days, workdays, weeks, and weekends. Workdays are Monday through Friday. Holidays are not known, so they count as workdays. Weekends counts the one in progress.
+
+Click a countdown line to put it in the menu bar. The menu bar keeps the unit you chose, so it can read `FY27 · 59wd` or `FY27-Q4 · 11w 5d`. The default is still `FY27-Q4 · 82d`.
+
+```sh
+fq --countdown
+```
+
+```
+FY27-Q4 · H2 · FY27 ends 2026-12-31
+  82 days · 59 workdays · 12 weekends
+```
+
+`fq --json` carries the same figures under `countdowns`, one object each for the quarter, the half, and the year.
+
+A half is the first two quarters or the last two. A calendar file with a year of other than four quarters puts the extra quarter in the first half.
+
+## Widgets
+
+The Mac app carries a Fiscal countdown widget for the desktop and Notification Center, in small and medium sizes. After the app has opened once, right-click the desktop, choose Edit Widgets, and find Fiscal Quarter. Small shows one countdown. Medium adds the quarter, the half, and the year side by side, each with its own bar, because they start on different days even when they end together.
+
+Each widget has its own settings under Edit Widget: what to count to, the unit, the calendar, and a label. The calendar is the built-in one or a start month and day, so a widget labelled SpaceX with a 1 January start reads FY26 while yours reads FY27. Widgets do not read the app's calendar setting or its other calendars. Sharing those needs an App Group, and an App Group needs a signing team.
+
+The countdown turns amber in the last two weeks, as in the panel.
+
+## iPhone and iPad
+
+`FiscalQuarteriOS` is the same calendar on a phone: the quarter, the three pictures, the countdowns, the other calendars, and your calendar setting. Tap a calendar to copy its status line, or share the status line from the toolbar.
+
+Its widget comes in the same small and medium sizes, plus three Lock Screen sizes: a ring with the number, a line with a bar, and a single line of text.
+
+To run it in the simulator, choose the `FiscalQuarteriOS` scheme and an iPhone simulator, then press Run. A device needs a signing team: set `DEVELOPMENT_TEAM` in `project.yml`, run `xcodegen`, and choose your iPhone.
+
 The web prototype stores `CURRENT_QUARTER` as the string `FY27-Q3` and does not follow the wall clock. This app reads the local calendar date instead. Opened in October 2026, it shows Q4.
 
 ## Calendar
@@ -93,6 +128,8 @@ Names are unique, ignoring case, so a name always finds one calendar.
 
 Open `FiscalQuarter.xcodeproj` directly. Opening the folder can load the Swift package instead of the app target.
 
+`project.yml` describes the Xcode project, and [XcodeGen](https://github.com/yonaskolb/XcodeGen) writes `FiscalQuarter.xcodeproj` from it. The generated project is committed, so you only need XcodeGen to change targets or settings. Edit `project.yml`, then run `xcodegen` in this directory. New Swift files in an existing folder are picked up the next time it runs.
+
 ## Handing it to someone
 
 From this directory:
@@ -103,8 +140,8 @@ scripts/package.sh
 
 That runs the tests, builds a universal app, and writes two files:
 
-- `dist/FiscalQuarter-1.2.zip`
-- `dist/FiscalQuarter-1.2.dmg`
+- `dist/FiscalQuarter-1.3.zip`
+- `dist/FiscalQuarter-1.3.dmg`
 
 The disk image has the app, a shortcut to Applications, and `How to install.txt`. Drag the app to Applications and open it. The first open may need a Control-click, then Open, then Open again. The app is ad-hoc signed, so a paid Apple Developer account is not required.
 
@@ -182,9 +219,13 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `FiscalQuarterCore/FiscalCalendarDefinition.swift` describes a calendar as eras, including the built-in one
 - `FiscalQuarterCore/SavedCalendars.swift` stores the other calendars
 - `calendars/` holds example calendar files
-- `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures
+- `FiscalQuarterCore/Countdown.swift` counts down to the end of the quarter, half, and year
+- `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures. The iOS app shares `CalendarModel.swift`, `QuarterClock.swift`, and `YearPicture.swift`
+- `FiscalQuarterWidget/` is the countdown widget, built once for the Mac and once for iOS
+- `FiscalQuarteriOS/` is the iPhone and iPad app
+- `project.yml` generates `FiscalQuarter.xcodeproj`
 - `FiscalQuarterCLI/fq.swift` is the `fq` command
 - `FiscalQuarterTests/` is the XCTest suite
-- `FiscalQuarter.xcodeproj` builds the app
+- `FiscalQuarter.xcodeproj` builds the apps and widgets
 - `scripts/package.sh` writes the zip and the disk image
 - `Package.swift` runs the calendar tests with `swift test` and builds `fq`

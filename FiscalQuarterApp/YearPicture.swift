@@ -22,6 +22,13 @@ enum PictureKind: String, CaseIterable, Identifiable {
 enum MarkColor {
     static let green = Color(red: 16 / 255, green: 185 / 255, blue: 129 / 255)
     static let warning = Color(red: 217 / 255, green: 119 / 255, blue: 6 / 255)
+
+    /// Fills the hollow today ring so it reads as a hole in whatever the picture sits on.
+    #if os(macOS)
+    static let background = Color(nsColor: .windowBackgroundColor)
+    #else
+    static let background = Color(uiColor: .secondarySystemGroupedBackground)
+    #endif
 }
 
 /// One picture of the fiscal year. The panel keeps a single slot and swaps which picture is in it.
@@ -116,7 +123,7 @@ private struct YearLine: View {
                 }
 
                 Circle()
-                    .fill(Color(nsColor: .windowBackgroundColor))
+                    .fill(MarkColor.background)
                     .frame(width: 11, height: 11)
                     .overlay(Circle().stroke(MarkColor.green, lineWidth: 2))
                     .position(x: layout.todayX, y: 26)
@@ -321,7 +328,7 @@ private struct YearRing: View {
                         .position(geometry.labelPoint(for: quarter))
                 }
                 Circle()
-                    .fill(Color(nsColor: .windowBackgroundColor))
+                    .fill(MarkColor.background)
                     .frame(width: 12, height: 12)
                     .overlay(Circle().stroke(MarkColor.green, lineWidth: 2.5))
                     .position(geometry.point(for: today, radius: radius))

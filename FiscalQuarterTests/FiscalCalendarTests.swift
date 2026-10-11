@@ -502,6 +502,60 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(FiscalCalendarDefinition.builtIn.summary, "3 eras, from a file")
     }
 
+    // MARK: Countdowns
+
+    func testOctober112026CountdownsAllEndOnDecember31() {
+        let snapshot = QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 11))
+        let half = snapshot.countdown(to: .half)
+        XCTAssertEqual(half.label, "FY27-H2")
+        XCTAssertEqual(half.start, CalendarDate(year: 2026, month: 8, day: 1))
+        let year = snapshot.countdown(to: .year)
+        XCTAssertEqual(year.label, "FY27")
+        XCTAssertEqual(year.start, CalendarDate(year: 2026, month: 2, day: 1))
+        XCTAssertEqual(year.days, 82)
+        XCTAssertEqual(snapshot.countdownGroups.map(\.label), ["FY27-Q4 · H2 · FY27"])
+    }
+
+    func testMidYearCountdownsSplitIntoTwoGroups() {
+        let snapshot = QuarterSnapshot(on: CalendarDate(year: 2027, month: 5, day: 15))
+        XCTAssertEqual(snapshot.countdownGroups.map(\.label), ["FY28-Q2 · H1", "FY28"])
+        XCTAssertEqual(snapshot.countdownGroups.map(\.end.iso), ["2027-06-30", "2027-12-31"])
+    }
+
+    func testCountdownPhrases() {
+        // Sunday 11 October 2026 through Thursday 31 December 2026.
+        let countdown = QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 11)).countdown(to: .quarter)
+        XCTAssertEqual(countdown.phrase(in: .days), "82 days")
+        XCTAssertEqual(countdown.phrase(in: .weeks), "11 weeks 5 days")
+        XCTAssertEqual(countdown.phrase(in: .workdays), "59 workdays")
+        XCTAssertEqual(countdown.phrase(in: .weekends), "12 weekends")
+        XCTAssertEqual(countdown.short(in: .weeks), "11w 5d")
+        let last = QuarterSnapshot(on: CalendarDate(year: 2026, month: 12, day: 31)).countdown(to: .quarter)
+        XCTAssertEqual(last.phrase(in: .days), "1 day")
+        XCTAssertEqual(last.phrase(in: .weekends), "0 weekends")
+        XCTAssertEqual(last.fractionComplete, 1)
+    }
+
+    func testWorkdaysAndWeekendsMatchADayByDayCount() throws {
+        let calendar = utcCalendar()
+        var today = CalendarDate(year: 2026, month: 9, day: 1)
+        for _ in 0..<60 {
+            let countdown = QuarterSnapshot(on: today).countdown(to: .quarter)
+            var workdays = 0
+            var weekends = 0
+            var cursor = today
+            while cursor <= countdown.end {
+                let weekday = FiscalCalendar.weekday(cursor)
+                if weekday != 1 && weekday != 7 { workdays += 1 }
+                if weekday == 7 || (weekday == 1 && cursor == today) { weekends += 1 }
+                cursor = try dayAfter(cursor, calendar: calendar)
+            }
+            XCTAssertEqual(countdown.workdays, workdays, today.iso)
+            XCTAssertEqual(countdown.weekends, weekends, today.iso)
+            today = try dayAfter(today, calendar: calendar)
+        }
+    }
+
     private func calendarFile(_ name: String) -> URL {
         URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

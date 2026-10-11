@@ -35,6 +35,8 @@ struct FQCommand {
                 mode = .json
             case "--copy":
                 mode = .copy
+            case "--countdown":
+                mode = .countdown
             case "--date":
                 index += 1
                 guard index < arguments.count, let parsed = CalendarDate(iso: arguments[index]) else {
@@ -90,6 +92,12 @@ struct FQCommand {
         case .copy:
             try copyToPasteboard(snapshot.quarter.id)
             print(snapshot.quarter.id)
+        case .countdown:
+            for group in snapshot.countdownGroups {
+                let countdown = group.first
+                print("\(group.label) ends \(group.end.iso)")
+                print("  \(countdown.phrase(in: .days)) · \(countdown.phrase(in: .workdays)) · \(countdown.phrase(in: .weekends))")
+            }
         }
     }
 }
@@ -100,6 +108,7 @@ enum Mode {
     case status
     case json
     case copy
+    case countdown
 }
 
 /// Your calendar, then each saved calendar, one line each.
@@ -168,6 +177,7 @@ func printUsage() {
           fq --status         one line, for Slack or a doc
           fq --json           one JSON object
           fq --copy           copy the quarter id
+          fq --countdown      days, workdays, and weekends to the end of the quarter, half, and year
           fq --date YYYY-MM-DD
           fq --calendar NAME  use a saved calendar, or a calendar JSON file, instead of yours
           fq --all            your calendar and every saved one, one line each

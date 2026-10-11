@@ -1,0 +1,135 @@
+# Generates FiscalQuarter.xcodeproj. After changing this file, run `xcodegen` in this directory.
+# The generated project is committed, so opening FiscalQuarter.xcodeproj does not need xcodegen.
+name: FiscalQuarter
+options:
+  createIntermediateGroups: true
+  groupSortPosition: top
+  deploymentTarget:
+    macOS: "13.0"
+    iOS: "17.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    SWIFT_STRICT_CONCURRENCY: minimal
+    MARKETING_VERSION: "1.3"
+    CURRENT_PROJECT_VERSION: "4"
+    # Set this to your team to run the iOS app on a device. The Mac app and the simulator do not need it.
+    DEVELOPMENT_TEAM: ""
+
+targets:
+  FiscalQuarter:
+    type: application
+    platform: macOS
+    sources:
+      - path: FiscalQuarterApp
+        excludes: [Info.plist]
+      - FiscalQuarterCore
+    dependencies:
+      - target: FiscalQuarterWidgetMac
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.fiscalquarter
+        PRODUCT_NAME: FiscalQuarter
+        INFOPLIST_FILE: FiscalQuarterApp/Info.plist
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Fiscal Quarter
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        INFOPLIST_KEY_LSUIElement: YES
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGNING_REQUIRED: NO
+        ENABLE_HARDENED_RUNTIME: NO
+        COMBINE_HIDPI_IMAGES: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+
+  FiscalQuarterWidgetMac:
+    type: app-extension
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: FiscalQuarterWidget
+        excludes: [Info.plist, "*.entitlements"]
+      - FiscalQuarterCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.fiscalquarter.widget
+        PRODUCT_NAME: FiscalQuarterWidget
+        INFOPLIST_FILE: FiscalQuarterWidget/Info.plist
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Fiscal Quarter
+        CODE_SIGN_ENTITLEMENTS: FiscalQuarterWidget/FiscalQuarterWidgetMac.entitlements
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGNING_REQUIRED: NO
+        ENABLE_HARDENED_RUNTIME: NO
+        SKIP_INSTALL: YES
+
+  FiscalQuarterTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - FiscalQuarterTests
+      - FiscalQuarterCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.fiscalquarter.tests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+
+  FiscalQuarteriOS:
+    type: application
+    platform: iOS
+    sources:
+      - FiscalQuarteriOS
+      - FiscalQuarterCore
+      - FiscalQuarterApp/CalendarModel.swift
+      - FiscalQuarterApp/QuarterClock.swift
+      - FiscalQuarterApp/YearPicture.swift
+    dependencies:
+      - target: FiscalQuarterWidgetiOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.fiscalquarter.ios
+        PRODUCT_NAME: FiscalQuarter
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Fiscal Quarter
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic
+
+  FiscalQuarterWidgetiOS:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: FiscalQuarterWidget
+        excludes: [Info.plist, "*.entitlements"]
+      - FiscalQuarterCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.fiscalquarter.ios.widget
+        PRODUCT_NAME: FiscalQuarterWidget
+        INFOPLIST_FILE: FiscalQuarterWidget/Info.plist
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Fiscal Quarter
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
+
+schemes:
+  FiscalQuarter:
+    build:
+      targets:
+        FiscalQuarter: all
+        FiscalQuarterTests: [test]
+    test:
+      targets: [FiscalQuarterTests]
+  FiscalQuarteriOS:
+    build:
+      targets:
+        FiscalQuarteriOS: all

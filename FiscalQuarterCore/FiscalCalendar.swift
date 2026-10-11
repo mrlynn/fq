@@ -151,7 +151,11 @@ public struct QuarterSnapshot: Equatable, Encodable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case id, start, end, today, day, length, daysRemaining, week, percent, status, next, nextStart, pace
+        case id, start, end, today, day, length, daysRemaining, week, percent, status, next, nextStart, pace, countdowns
+    }
+
+    private enum CountdownKeys: String, CodingKey {
+        case target, label, end, days, workdays, weekends
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -169,6 +173,16 @@ public struct QuarterSnapshot: Equatable, Encodable {
         try container.encode(next.id, forKey: .next)
         try container.encode(next.start.iso, forKey: .nextStart)
         try container.encodeIfPresent(paceNote, forKey: .pace)
+        var list = container.nestedUnkeyedContainer(forKey: .countdowns)
+        for countdown in countdowns {
+            var item = list.nestedContainer(keyedBy: CountdownKeys.self)
+            try item.encode(countdown.target.rawValue, forKey: .target)
+            try item.encode(countdown.label, forKey: .label)
+            try item.encode(countdown.end.iso, forKey: .end)
+            try item.encode(countdown.days, forKey: .days)
+            try item.encode(countdown.workdays, forKey: .workdays)
+            try item.encode(countdown.weekends, forKey: .weekends)
+        }
     }
 }
 
