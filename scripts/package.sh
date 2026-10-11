@@ -8,6 +8,7 @@ DIST="dist"
 STAGE="$DIST/stage"
 APP="$STAGE/FiscalQuarter.app"
 SDK="$(xcrun --show-sdk-path)"
+SIGN_IDENTITY="${SIGN_IDENTITY:-Developer ID Application}"
 
 rm -rf "$STAGE"
 mkdir -p "$STAGE" "$DIST"
@@ -22,6 +23,7 @@ xcodebuild \
   -configuration Release \
   -destination 'platform=macOS' \
   -derivedDataPath build \
+  CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
   build
 
 echo "Building fq"
@@ -36,8 +38,12 @@ cp -R "build/Build/Products/Release/FiscalQuarter.app" "$APP"
 lipo -create -output "$APP/Contents/MacOS/fq" "$DIST/fq-arm64" "$DIST/fq-x86_64"
 chmod 755 "$APP/Contents/MacOS/fq"
 rm -f "$DIST/fq-arm64" "$DIST/fq-x86_64"
-codesign --force --sign - "$APP/Contents/MacOS/fq"
-codesign --force --sign - "$APP"
+# Sign inside out with one identity. The widget and the app keep the entitlements Xcode gave them,
+# which carry the App Group they share. Override with SIGN_IDENTITY to use another certificate.
+codesign --force --sign "$SIGN_IDENTITY" "$APP/Contents/MacOS/fq"
+codesign --force --sign "$SIGN_IDENTITY" --preserve-metadata=entitlements "$APP/Contents/PlugIns/FiscalQuarterWidget.appex"
+codesign --force --sign "$SIGN_IDENTITY" --preserve-metadata=entitlements "$APP"
+codesign --verify --deep --strict "$APP"
 
 ditto -c -k --keepParent "$APP" "$DIST/FiscalQuarter-$VERSION.zip"
 

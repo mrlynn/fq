@@ -17,7 +17,7 @@ struct FQCommand {
     static func run(_ arguments: [String]) throws {
         var mode = Mode.human
         var date = CalendarDate(Date(), calendar: .current)
-        var definition = FiscalYearConfig.load(from: FiscalYearConfig.store).definition
+        var definition = FiscalYearConfig.load(from: settings).definition
         var all = false
         var index = 0
 
@@ -113,8 +113,8 @@ enum Mode {
 
 /// Your calendar, then each saved calendar, one line each.
 func printAll(on date: CalendarDate, mode: Mode) {
-    let yours = FiscalYearConfig.load(from: FiscalYearConfig.store).definition
-    let rows = [("Yours", yours)] + SavedCalendars.load(from: FiscalYearConfig.store).map { ($0.name, $0.definition) }
+    let yours = FiscalYearConfig.load(from: settings).definition
+    let rows = [("Yours", yours)] + SavedCalendars.load(from: settings).map { ($0.name, $0.definition) }
     let width = rows.map(\.0.count).max() ?? 0
     for (name, definition) in rows {
         let snapshot = QuarterSnapshot(on: date, calendar: definition)
@@ -125,7 +125,7 @@ func printAll(on date: CalendarDate, mode: Mode) {
 
 /// A saved calendar's name, or else a path to a calendar JSON file.
 func loadCalendar(_ nameOrPath: String) throws -> FiscalCalendarDefinition {
-    if let saved = SavedCalendars.named(nameOrPath, in: SavedCalendars.load(from: FiscalYearConfig.store)) {
+    if let saved = SavedCalendars.named(nameOrPath, in: SavedCalendars.load(from: settings)) {
         return saved.definition
     }
     let path = nameOrPath
@@ -166,6 +166,9 @@ func copyToPasteboard(_ text: String) throws {
         throw CocoaError(.fileWriteUnknown)
     }
 }
+
+/// fq has no App Group entitlement, so it reads the group's preferences file instead of the suite.
+let settings = SharedSettings.readOnlySource()
 
 func printUsage() {
     print(
