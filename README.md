@@ -1,6 +1,6 @@
 # Fiscal Quarter
 
-A macOS menu bar app for a fiscal calendar. The built-in calendar starts in February. FY27 is an 11-month transition year. From January 2027 the quarters follow the calendar year.
+A macOS menu bar app for a fiscal calendar. FY27 began 1 February 2026 and ends 31 December. The current quarter, Q4, is 1 October through 31 December. From January 2027 the year starts on 1 January.
 
 On 2026-10-09 the quarter is **FY27-Q4**. The menu bar reads `FY27-Q4 · 84d`: day 9 of 92, week 2, 84 days left, counting today. Click it for the start and end, a progress bar, the next quarter, and copy. While the year is still FY27, the panel also says that FY28 starts on January 1 and follows the calendar year.
 
