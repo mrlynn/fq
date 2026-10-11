@@ -231,10 +231,47 @@ enum ShortDate {
     }
 }
 
+/// The medium widget above the small one, scaled down together to fit whatever width the
+/// row gives them, and never scaled up past real size.
+///
+/// The row's height follows its width through the aspect ratio, so the scale can be read from
+/// the measured width without the preview pushing the row wider.
+struct AppearancePreview: View {
+    let entry: CountdownEntry
+
+    static let spacing: CGFloat = 12
+    private static let size = CGSize(width: WidgetPreview.mediumWidth, height: WidgetPreview.height * 2 + spacing)
+
+    var body: some View {
+        GeometryReader { proxy in
+            let scale = min(1, proxy.size.width / Self.size.width)
+            VStack(spacing: Self.spacing * scale) {
+                scaled(WidgetPreview(entry: entry, medium: true), width: WidgetPreview.mediumWidth, scale: scale)
+                scaled(WidgetPreview(entry: entry, medium: false), width: WidgetPreview.smallWidth, scale: scale)
+            }
+            .frame(width: proxy.size.width)
+        }
+        .aspectRatio(Self.size.width / Self.size.height, contentMode: .fit)
+        .frame(maxWidth: Self.size.width)
+        .frame(maxWidth: .infinity)
+    }
+
+    /// Lays the widget out at its real size, then shrinks it into a frame of the scaled size.
+    private func scaled<V: View>(_ view: V, width: CGFloat, scale: CGFloat) -> some View {
+        view
+            .scaleEffect(scale, anchor: .topLeading)
+            .frame(width: width * scale, height: WidgetPreview.height * scale, alignment: .topLeading)
+    }
+}
+
 /// A widget drawn at its real size, with its background, for previews inside the apps.
 struct WidgetPreview: View {
     let entry: CountdownEntry
     let medium: Bool
+
+    static let mediumWidth: CGFloat = 338
+    static let smallWidth: CGFloat = 158
+    static let height: CGFloat = 158
 
     var body: some View {
         Group {
@@ -246,7 +283,7 @@ struct WidgetPreview: View {
         }
         .themed(entry.appearance)
         .padding(16)
-        .frame(width: medium ? 338 : 158, height: 158)
+        .frame(width: medium ? Self.mediumWidth : Self.smallWidth, height: Self.height)
         .background(CountdownBackground(entry: entry).themed(entry.appearance))
         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
