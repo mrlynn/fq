@@ -145,7 +145,7 @@ public struct QuarterSnapshot: Equatable, Encodable {
         }
     }
 
-    /// The note on today's era, such as the FY27 transition on the built-in calendar.
+    /// The note on today's era, such as one explaining a short transition year. The built-in calendar has none.
     public var transitionNote: String? {
         calendar.era(containing: today).note
     }
@@ -188,8 +188,7 @@ public struct QuarterSnapshot: Equatable, Encodable {
 
 /// Fiscal quarter for a civil date, read from a `FiscalCalendarDefinition`.
 ///
-/// The built-in calendar is `FiscalCalendarDefinition.builtIn`: February years, then FY27 as an
-/// 11-month transition from 2026-02-01 through 2026-12-31, then calendar years from 2027 as FY28.
+/// The built-in calendar is `FiscalCalendarDefinition.builtIn`: the calendar year, numbered by that year.
 public enum FiscalCalendar {
     public static func quarter(containing date: CalendarDate, config: FiscalYearConfig = .builtIn) -> FiscalQuarter {
         quarter(containing: date, in: config.definition)

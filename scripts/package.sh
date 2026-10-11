@@ -114,7 +114,7 @@ ln -s /Applications "$DMG_ROOT/Applications"
 cat > "$DMG_ROOT/How to install.txt" << 'EOF'
 Drag Fiscal Quarter to Applications, then open it.
 
-The menu bar shows the quarter and the days left, for example FY27-Q4 · 84d.
+The menu bar shows the quarter and the days left, for example FY26-Q4 · 82d.
 Click that for the dates, how far through the quarter you are, and copy.
 
 @FIRST_OPEN@

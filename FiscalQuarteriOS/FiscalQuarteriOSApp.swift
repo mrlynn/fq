@@ -240,7 +240,7 @@ struct YourCalendarScreen: View {
                 .labelsHidden()
             } footer: {
                 if calendar.config.kind == .builtIn {
-                    Text("FY27 began 1 February 2026 and ends 31 December. From 2027 the year starts in January.")
+                    Text("The calendar year, numbered by that year, so \(String(today.year)) is FY\(String(format: "%02d", today.year % 100)).")
                 } else {
                     Text("Four quarters of three months, numbered for the year the fiscal year ends.")
                 }

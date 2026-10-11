@@ -1,6 +1,6 @@
 import Foundation
 
-/// Which fiscal calendar to use. `.builtIn` is the February calendar with the FY27 transition.
+/// Which fiscal calendar to use. `.builtIn` is the calendar year, numbered by that year.
 /// `.custom` starts a new year on `startMonth`/`startDay` and names it for the calendar year it ends in.
 public struct FiscalYearConfig: Equatable, Codable {
     public enum Kind: String, Codable {
@@ -18,7 +18,7 @@ public struct FiscalYearConfig: Equatable, Codable {
         self.startDay = min(31, max(1, startDay))
     }
 
-    public static let builtIn = FiscalYearConfig(kind: .builtIn, startMonth: 2, startDay: 1)
+    public static let builtIn = FiscalYearConfig(kind: .builtIn, startMonth: 1, startDay: 1)
 
     /// The calendar this setting describes.
     public var definition: FiscalCalendarDefinition {
@@ -39,7 +39,7 @@ public struct FiscalYearConfig: Equatable, Codable {
 
     public static func load(from defaults: SettingsSource) -> FiscalYearConfig {
         let kind = Kind(rawValue: defaults.object(forKey: Keys.kind) as? String ?? "") ?? .builtIn
-        let month = defaults.object(forKey: Keys.month) as? Int ?? 2
+        let month = defaults.object(forKey: Keys.month) as? Int ?? 1
         let day = defaults.object(forKey: Keys.day) as? Int ?? 1
         return FiscalYearConfig(kind: kind, startMonth: month, startDay: day)
     }

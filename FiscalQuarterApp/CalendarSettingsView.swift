@@ -275,17 +275,10 @@ struct CalendarSettingsView: View {
     }
 
     /// Describes the built-in calendar in the same terms as the quarter on screen.
-    /// FY27 began 1 February, but the current quarter starts 1 October.
     private var builtInDetail: String {
         let quarter = FiscalCalendar.quarter(containing: today)
         let start = "\(quarter.start.day) \(monthName(quarter.start.month))"
-        if quarter.fiscalYear == 27 {
-            return "This quarter starts \(start). FY27 began 1 February 2026 and ends 31 December. From 2027 the year starts in January."
-        }
-        if quarter.fiscalYear >= 28 {
-            return "This quarter starts \(start). The year starts 1 January."
-        }
-        return "This quarter starts \(start). The year starts 1 February."
+        return "The calendar year, numbered by that year, so \(today.year) is FY\(String(format: "%02d", quarter.fiscalYear)). This quarter starts \(start)."
     }
 
     /// A year that contains 15 Jun 2025, so the sentence shows which calendar year the label comes from.

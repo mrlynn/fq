@@ -8,19 +8,30 @@ import FiscalQuarterCore
 #endif
 
 final class FiscalCalendarTests: XCTestCase {
-    func testOctober52026IsFY27Q4() {
+    /// The February calendar with the 11-month FY27 that used to be built in. It keeps the explicit-era
+    /// and transition behaviour covered now that the built-in calendar is the calendar year.
+    static let february: FiscalCalendarDefinition = {
+        let url = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("calendars/february-transition.json")
+        // The file is checked in beside the tests, so failing to read it is a broken checkout.
+        return try! FiscalCalendarDefinition(json: Data(contentsOf: url))
+    }()
+
+    func testOctober52026IsFY26Q4() {
         let today = CalendarDate(year: 2026, month: 10, day: 5)
         let quarter = FiscalCalendar.quarter(containing: today)
 
-        XCTAssertEqual(quarter.id, "FY27-Q4")
-        XCTAssertEqual(quarter.fiscalYear, 27)
+        XCTAssertEqual(quarter.id, "FY26-Q4")
+        XCTAssertEqual(quarter.fiscalYear, 26)
         XCTAssertEqual(quarter.quarter, 4)
         XCTAssertEqual(quarter.start, CalendarDate(year: 2026, month: 10, day: 1))
         XCTAssertEqual(quarter.end, CalendarDate(year: 2026, month: 12, day: 31))
         XCTAssertEqual(quarter.daysRemaining(on: today), 88)
     }
 
-    func testDocumentedAndInferredRanges() {
+    func testFebruaryCalendarRanges() {
         assertQuarter("FY25-Q4", 2024, 11, 1, 2025, 1, 31, on: 2025, 1, 31)
         assertQuarter("FY26-Q1", 2025, 2, 1, 2025, 4, 30, on: 2025, 2, 1)
         assertQuarter("FY26-Q1", 2025, 2, 1, 2025, 4, 30, on: 2025, 4, 30)
@@ -54,7 +65,7 @@ final class FiscalCalendarTests: XCTestCase {
     }
 
     func testOctober2025StaysInFY26Q3() {
-        let october = FiscalCalendar.quarter(containing: CalendarDate(year: 2025, month: 10, day: 5))
+        let october = FiscalCalendar.quarter(containing: CalendarDate(year: 2025, month: 10, day: 5), in: Self.february)
         XCTAssertEqual(october.id, "FY26-Q3")
         XCTAssertEqual(october.end, CalendarDate(year: 2025, month: 10, day: 31))
     }
@@ -85,7 +96,7 @@ final class FiscalCalendarTests: XCTestCase {
         ]
         let calendar = utcCalendar()
         for sample in samples {
-            let quarter = FiscalCalendar.quarter(containing: sample)
+            let quarter = FiscalCalendar.quarter(containing: sample, in: Self.february)
             let from = try XCTUnwrap(calendar.date(from: components(sample)))
             let to = try XCTUnwrap(calendar.date(from: components(quarter.end)))
             let span = try XCTUnwrap(calendar.dateComponents([.day], from: from, to: to).day)
@@ -94,14 +105,22 @@ final class FiscalCalendarTests: XCTestCase {
     }
 
     func testQuartersTileTheTimelineWithoutGaps() throws {
+        for definition in [FiscalCalendarDefinition.builtIn, Self.february] {
+            try assertQuartersTile(definition)
+        }
+    }
+
+    private func assertQuartersTile(_ definition: FiscalCalendarDefinition) throws {
         let calendar = utcCalendar()
-        var cursor = try XCTUnwrap(calendar.date(from: DateComponents(year: 2023, month: 2, day: 1)))
+        // Start on the first day of a quarter, so the walk can check every boundary it crosses.
+        let first = FiscalCalendar.quarter(containing: CalendarDate(year: 2023, month: 2, day: 1), in: definition).start
+        var cursor = try XCTUnwrap(calendar.date(from: components(first)))
         let end = try XCTUnwrap(calendar.date(from: DateComponents(year: 2028, month: 6, day: 30)))
         var previous: FiscalQuarter?
 
         while cursor <= end {
             let civil = CalendarDate(cursor, calendar: calendar)
-            let quarter = FiscalCalendar.quarter(containing: civil)
+            let quarter = FiscalCalendar.quarter(containing: civil, in: definition)
             XCTAssertGreaterThanOrEqual(civil, quarter.start, civil.iso)
             XCTAssertLessThanOrEqual(civil, quarter.end, civil.iso)
 
@@ -138,8 +157,8 @@ final class FiscalCalendarTests: XCTestCase {
         components.minute = 30
         let instant = try XCTUnwrap(components.date)
 
-        XCTAssertEqual(FiscalCalendar.quarter(on: instant, calendar: tokyo).id, "FY27-Q4")
-        XCTAssertEqual(FiscalCalendar.quarter(on: instant, calendar: losAngeles).id, "FY27-Q3")
+        XCTAssertEqual(FiscalCalendar.quarter(on: instant, calendar: tokyo).id, "FY26-Q4")
+        XCTAssertEqual(FiscalCalendar.quarter(on: instant, calendar: losAngeles).id, "FY26-Q3")
     }
 
     func testOctober52026Snapshot() throws {
@@ -151,25 +170,22 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(snapshot.week, 1)
         XCTAssertEqual(snapshot.percent, 5)
         XCTAssertEqual(snapshot.progressLine, "Day 5 of 92 · week 1")
-        XCTAssertEqual(snapshot.statusLine, "FY27-Q4 · Day 5 of 92 · week 1 · 88 days left")
-        XCTAssertEqual(snapshot.menuBarLabel, "FY27-Q4 · 88d")
-        XCTAssertEqual(snapshot.next.id, "FY28-Q1")
+        XCTAssertEqual(snapshot.statusLine, "FY26-Q4 · Day 5 of 92 · week 1 · 88 days left")
+        XCTAssertEqual(snapshot.menuBarLabel, "FY26-Q4 · 88d")
+        XCTAssertEqual(snapshot.next.id, "FY27-Q1")
         XCTAssertEqual(snapshot.next.start, CalendarDate(year: 2027, month: 1, day: 1))
-        XCTAssertEqual(
-            snapshot.transitionNote,
-            "FY27 ends December 31. FY28 follows the calendar year."
-        )
+        XCTAssertNil(snapshot.transitionNote)
         XCTAssertNil(snapshot.paceNote)
 
         let data = try JSONEncoder().encode(snapshot)
         let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
-        XCTAssertEqual(object["id"] as? String, "FY27-Q4")
+        XCTAssertEqual(object["id"] as? String, "FY26-Q4")
         XCTAssertEqual(object["day"] as? Int, 5)
         XCTAssertEqual(object["length"] as? Int, 92)
         XCTAssertEqual(object["daysRemaining"] as? Int, 88)
         XCTAssertEqual(object["week"] as? Int, 1)
         XCTAssertEqual(object["percent"] as? Int, 5)
-        XCTAssertEqual(object["next"] as? String, "FY28-Q1")
+        XCTAssertEqual(object["next"] as? String, "FY27-Q1")
         XCTAssertEqual(object["nextStart"] as? String, "2027-01-01")
         XCTAssertNil(object["pace"])
     }
@@ -180,7 +196,7 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(snapshot.daysRemaining, 84)
         XCTAssertEqual(snapshot.week, 2)
         XCTAssertEqual(snapshot.percent, 10)
-        XCTAssertEqual(snapshot.menuBarLabel, "FY27-Q4 · 84d")
+        XCTAssertEqual(snapshot.menuBarLabel, "FY26-Q4 · 84d")
     }
 
     func testWeeksBreakEverySevenDays() {
@@ -205,21 +221,21 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(last.daysRemaining, 1)
         XCTAssertEqual(last.percent, 100)
         XCTAssertEqual(last.paceNote, "Last day of the quarter.")
-        XCTAssertEqual(last.statusLine, "FY27-Q4 · Day 92 of 92 · week 14 · 1 day left")
+        XCTAssertEqual(last.statusLine, "FY26-Q4 · Day 92 of 92 · week 14 · 1 day left")
     }
 
-    func testNextQuarterCrossesTheTransition() {
-        let fy26q4 = FiscalCalendar.quarter(containing: CalendarDate(year: 2026, month: 1, day: 31))
-        let next = FiscalCalendar.quarter(after: fy26q4)
+    func testFebruaryCalendarNextQuarterCrossesTheTransition() {
+        let fy26q4 = FiscalCalendar.quarter(containing: CalendarDate(year: 2026, month: 1, day: 31), in: Self.february)
+        let next = FiscalCalendar.quarter(after: fy26q4, in: Self.february)
         XCTAssertEqual(next.id, "FY27-Q1")
         XCTAssertEqual(next.start, CalendarDate(year: 2026, month: 2, day: 1))
 
-        let fy27q3 = FiscalCalendar.quarter(containing: CalendarDate(year: 2026, month: 9, day: 30))
-        XCTAssertEqual(FiscalCalendar.quarter(after: fy27q3).id, "FY27-Q4")
+        let fy27q3 = FiscalCalendar.quarter(containing: CalendarDate(year: 2026, month: 9, day: 30), in: Self.february)
+        XCTAssertEqual(FiscalCalendar.quarter(after: fy27q3, in: Self.february).id, "FY27-Q4")
     }
 
-    func testCalendarYearHasNoTransitionNote() {
-        let snapshot = QuarterSnapshot(on: CalendarDate(year: 2027, month: 1, day: 1))
+    func testFebruaryCalendarHasNoNoteAfterTheTransition() {
+        let snapshot = QuarterSnapshot(on: CalendarDate(year: 2027, month: 1, day: 1), calendar: Self.february)
         XCTAssertEqual(snapshot.quarter.id, "FY28-Q1")
         XCTAssertNil(snapshot.transitionNote)
         XCTAssertEqual(snapshot.length, 90)
@@ -227,7 +243,7 @@ final class FiscalCalendarTests: XCTestCase {
     }
 
     func testFY27MapShowsTheShortThirdQuarter() {
-        let map = FiscalYearMap.containing(CalendarDate(year: 2026, month: 10, day: 9))
+        let map = FiscalYearMap.containing(CalendarDate(year: 2026, month: 10, day: 9), calendar: Self.february)
 
         XCTAssertEqual(map.fiscalYear, 27)
         XCTAssertEqual(map.quarters.map(\.id), ["FY27-Q1", "FY27-Q2", "FY27-Q3", "FY27-Q4"])
@@ -251,7 +267,7 @@ final class FiscalCalendarTests: XCTestCase {
     }
 
     func testOctober2026OpensOnAThursday() {
-        let october = FiscalYearMap.containing(CalendarDate(year: 2026, month: 10, day: 1)).months[8]
+        let october = FiscalYearMap.containing(CalendarDate(year: 2026, month: 10, day: 1), calendar: Self.february).months[8]
         let cells = october.cells()
         XCTAssertEqual(FiscalCalendar.weekday(october.start), 5)
         XCTAssertNil(cells[0].date)
@@ -262,13 +278,13 @@ final class FiscalCalendarTests: XCTestCase {
     }
 
     func testFebruary2026StartsOnSunday() {
-        let february = FiscalYearMap.containing(CalendarDate(year: 2026, month: 2, day: 1)).months[0]
+        let february = FiscalYearMap.containing(CalendarDate(year: 2026, month: 2, day: 1), calendar: Self.february).months[0]
         XCTAssertEqual(february.cells().first?.date, CalendarDate(year: 2026, month: 2, day: 1))
         XCTAssertEqual(february.length, 28)
     }
 
     func testLeapFebruaryStaysInTheMap() {
-        let map = FiscalYearMap.containing(CalendarDate(year: 2024, month: 2, day: 29))
+        let map = FiscalYearMap.containing(CalendarDate(year: 2024, month: 2, day: 29), calendar: Self.february)
         XCTAssertEqual(map.months[0].symbol, "Feb")
         XCTAssertEqual(map.months[0].length, 29)
         XCTAssertEqual(map.months.last?.symbol, "Jan")
@@ -276,7 +292,7 @@ final class FiscalCalendarTests: XCTestCase {
     }
 
     func testFY26ClosesInJanuary() {
-        let map = FiscalYearMap.containing(CalendarDate(year: 2026, month: 1, day: 15))
+        let map = FiscalYearMap.containing(CalendarDate(year: 2026, month: 1, day: 15), calendar: Self.february)
         XCTAssertEqual(map.fiscalYear, 26)
         XCTAssertEqual(map.months.first?.symbol, "Feb")
         XCTAssertEqual(map.months.first?.start, CalendarDate(year: 2025, month: 2, day: 1))
@@ -298,7 +314,7 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(october.end, CalendarDate(year: 2026, month: 10, day: 31))
 
         let builtIn = FiscalCalendar.quarter(containing: CalendarDate(year: 2026, month: 10, day: 9))
-        XCTAssertEqual(builtIn.id, "FY27-Q4")
+        XCTAssertEqual(builtIn.id, "FY26-Q4")
         XCTAssertNil(QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 9), config: config).transitionNote)
     }
 
@@ -356,15 +372,15 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(FiscalYearConfig.load(from: defaults), config)
     }
 
-    func testFY28FollowsTheCalendarYear() {
-        let map = FiscalYearMap.containing(CalendarDate(year: 2027, month: 4, day: 1))
+    func testFebruaryCalendarFY28FollowsTheCalendarYear() {
+        let map = FiscalYearMap.containing(CalendarDate(year: 2027, month: 4, day: 1), calendar: Self.february)
         XCTAssertEqual(map.fiscalYear, 28)
         XCTAssertEqual(map.months.first?.symbol, "Jan")
         XCTAssertEqual(map.months.map(\.quarter), [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4])
         XCTAssertEqual(map.end, CalendarDate(year: 2027, month: 12, day: 31))
     }
 
-    func testOctober52026LocalMorningIsFY27Q4() throws {
+    func testOctober52026LocalMorningIsFY26Q4() throws {
         var losAngeles = Calendar(identifier: .gregorian)
         losAngeles.timeZone = try XCTUnwrap(TimeZone(identifier: "America/Los_Angeles"))
         var components = DateComponents()
@@ -380,7 +396,7 @@ final class FiscalCalendarTests: XCTestCase {
         let civil = CalendarDate(instant, calendar: losAngeles)
 
         XCTAssertEqual(civil, CalendarDate(year: 2026, month: 10, day: 5))
-        XCTAssertEqual(quarter.id, "FY27-Q4")
+        XCTAssertEqual(quarter.id, "FY26-Q4")
         XCTAssertEqual(quarter.daysRemaining(on: civil), 88)
     }
 
@@ -403,7 +419,36 @@ final class FiscalCalendarTests: XCTestCase {
         XCTAssertEqual(quarter.id, "FY26-Q4")
         XCTAssertEqual(quarter.start, CalendarDate(year: 2026, month: 10, day: 1))
         XCTAssertEqual(quarter.end, CalendarDate(year: 2026, month: 12, day: 31))
-        XCTAssertEqual(FiscalCalendar.quarter(containing: today).id, "FY27-Q4")
+        XCTAssertEqual(FiscalCalendar.quarter(containing: today, in: Self.february).id, "FY27-Q4")
+    }
+
+    func testBuiltInIsTheCalendarYear() {
+        assertBuiltIn("FY26-Q1", 2026, 1, 1, 2026, 3, 31, on: 2026, 1, 1)
+        assertBuiltIn("FY26-Q1", 2026, 1, 1, 2026, 3, 31, on: 2026, 3, 31)
+        assertBuiltIn("FY26-Q2", 2026, 4, 1, 2026, 6, 30, on: 2026, 5, 15)
+        assertBuiltIn("FY26-Q3", 2026, 7, 1, 2026, 9, 30, on: 2026, 9, 30)
+        assertBuiltIn("FY26-Q4", 2026, 10, 1, 2026, 12, 31, on: 2026, 10, 11)
+        assertBuiltIn("FY27-Q1", 2027, 1, 1, 2027, 3, 31, on: 2027, 1, 1)
+        assertBuiltIn("FY25-Q4", 2025, 10, 1, 2025, 12, 31, on: 2025, 12, 31)
+        assertBuiltIn("FY24-Q1", 2024, 1, 1, 2024, 3, 31, on: 2024, 2, 29)
+        let map = FiscalYearMap.containing(CalendarDate(year: 2026, month: 10, day: 11))
+        XCTAssertEqual(map.fiscalYear, 26)
+        XCTAssertEqual(map.months.map(\.symbol), ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"])
+        XCTAssertEqual(map.summary(on: CalendarDate(year: 2026, month: 10, day: 11)), "FY26, Jan through Dec. Oct 11 is in Q4.")
+    }
+
+    private func assertBuiltIn(
+        _ id: String,
+        _ startYear: Int, _ startMonth: Int, _ startDay: Int,
+        _ endYear: Int, _ endMonth: Int, _ endDay: Int,
+        on year: Int, _ month: Int, _ day: Int,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        let quarter = FiscalCalendar.quarter(containing: CalendarDate(year: year, month: month, day: day))
+        XCTAssertEqual(quarter.id, id, file: file, line: line)
+        XCTAssertEqual(quarter.start, CalendarDate(year: startYear, month: startMonth, day: startDay), file: file, line: line)
+        XCTAssertEqual(quarter.end, CalendarDate(year: endYear, month: endMonth, day: endDay), file: file, line: line)
     }
 
     func testCustomConfigMatchesItsDefinition() throws {
@@ -420,10 +465,10 @@ final class FiscalCalendarTests: XCTestCase {
     }
 
     func testTransitionNoteComesFromTheEra() {
-        let fy27 = QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 11))
+        let fy27 = QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 11), calendar: Self.february)
         XCTAssertEqual(fy27.transitionNote, "FY27 ends December 31. FY28 follows the calendar year.")
-        XCTAssertNil(QuarterSnapshot(on: CalendarDate(year: 2026, month: 1, day: 31)).transitionNote)
-        XCTAssertNil(QuarterSnapshot(on: CalendarDate(year: 2027, month: 1, day: 1)).transitionNote)
+        XCTAssertNil(QuarterSnapshot(on: CalendarDate(year: 2026, month: 1, day: 31), calendar: Self.february).transitionNote)
+        XCTAssertNil(QuarterSnapshot(on: CalendarDate(year: 2027, month: 1, day: 1), calendar: Self.february).transitionNote)
     }
 
     func testMidYearEraClipsTheQuarterOnBothSides() throws {
@@ -499,7 +544,8 @@ final class FiscalCalendarTests: XCTestCase {
 
     func testDefinitionSummary() {
         XCTAssertEqual(FiscalCalendarDefinition.months(startMonth: 7, startDay: 1).summary, "Starts Jul 1 every year")
-        XCTAssertEqual(FiscalCalendarDefinition.builtIn.summary, "3 eras, from a file")
+        XCTAssertEqual(FiscalCalendarDefinition.builtIn.summary, "Starts Jan 1 every year")
+        XCTAssertEqual(Self.february.summary, "3 eras, from a file")
     }
 
     // MARK: Shared settings
@@ -558,19 +604,25 @@ final class FiscalCalendarTests: XCTestCase {
     func testOctober112026CountdownsAllEndOnDecember31() {
         let snapshot = QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 11))
         let half = snapshot.countdown(to: .half)
-        XCTAssertEqual(half.label, "FY27-H2")
-        XCTAssertEqual(half.start, CalendarDate(year: 2026, month: 8, day: 1))
+        XCTAssertEqual(half.label, "FY26-H2")
+        XCTAssertEqual(half.start, CalendarDate(year: 2026, month: 7, day: 1))
         let year = snapshot.countdown(to: .year)
-        XCTAssertEqual(year.label, "FY27")
-        XCTAssertEqual(year.start, CalendarDate(year: 2026, month: 2, day: 1))
+        XCTAssertEqual(year.label, "FY26")
+        XCTAssertEqual(year.start, CalendarDate(year: 2026, month: 1, day: 1))
         XCTAssertEqual(year.days, 82)
-        XCTAssertEqual(snapshot.countdownGroups.map(\.label), ["FY27-Q4 · H2 · FY27"])
+        XCTAssertEqual(snapshot.countdownGroups.map(\.label), ["FY26-Q4 · H2 · FY26"])
     }
 
     func testMidYearCountdownsSplitIntoTwoGroups() {
         let snapshot = QuarterSnapshot(on: CalendarDate(year: 2027, month: 5, day: 15))
-        XCTAssertEqual(snapshot.countdownGroups.map(\.label), ["FY28-Q2 · H1", "FY28"])
+        XCTAssertEqual(snapshot.countdownGroups.map(\.label), ["FY27-Q2 · H1", "FY27"])
         XCTAssertEqual(snapshot.countdownGroups.map(\.end.iso), ["2027-06-30", "2027-12-31"])
+    }
+
+    func testFebruaryCalendarHalvesFollowItsQuarters() {
+        let snapshot = QuarterSnapshot(on: CalendarDate(year: 2026, month: 10, day: 11), calendar: Self.february)
+        XCTAssertEqual(snapshot.countdown(to: .half).start, CalendarDate(year: 2026, month: 8, day: 1))
+        XCTAssertEqual(snapshot.countdownGroups.map(\.label), ["FY27-Q4 · H2 · FY27"])
     }
 
     func testCountdownPhrases() {
@@ -630,7 +682,7 @@ final class FiscalCalendarTests: XCTestCase {
         line: UInt = #line
     ) {
         let date = CalendarDate(year: year, month: month, day: day)
-        let quarter = FiscalCalendar.quarter(containing: date)
+        let quarter = FiscalCalendar.quarter(containing: date, in: Self.february)
         XCTAssertEqual(quarter.id, id, file: file, line: line)
         XCTAssertEqual(
             quarter.start,
@@ -655,7 +707,7 @@ final class FiscalCalendarTests: XCTestCase {
         line: UInt = #line
     ) {
         let date = CalendarDate(year: year, month: month, day: day)
-        let quarter = FiscalCalendar.quarter(containing: date)
+        let quarter = FiscalCalendar.quarter(containing: date, in: Self.february)
         XCTAssertEqual(quarter.daysRemaining(on: date), expected, date.iso, file: file, line: line)
     }
 

@@ -43,7 +43,7 @@ public enum CountdownUnit: String, CaseIterable, Codable, Identifiable, Sendable
 /// Time left from `today` through the last day of a quarter, half, or fiscal year.
 public struct Countdown: Equatable {
     public let target: CountdownTarget
-    /// `FY27-Q4`, `FY27-H2`, or `FY27`.
+    /// `FY26-Q4`, `FY26-H2`, or `FY26`.
     public let label: String
     public let start: CalendarDate
     public let end: CalendarDate
@@ -153,7 +153,7 @@ public struct CountdownGroup: Equatable, Identifiable {
     public var end: CalendarDate { countdowns[0].end }
     public var first: Countdown { countdowns[0] }
 
-    /// `FY27-Q4`, or `FY27-Q4 · H2 · FY27` when several end together.
+    /// `FY26-Q4`, or `FY26-Q4 · H2 · FY26` when several end together.
     public var label: String {
         countdowns.enumerated().map { index, countdown in
             index > 0 && countdown.target == .half

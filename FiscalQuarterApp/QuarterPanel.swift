@@ -273,7 +273,7 @@ private enum PanelPage: Equatable {
     case calendar
 }
 
-/// Which countdown the menu bar shows, and in what unit. The default reads `FY27-Q4 · 82d`.
+/// Which countdown the menu bar shows, and in what unit. The default reads `FY26-Q4 · 82d`.
 enum MenuBarCountdown {
     static let targetKey = "menuBarCountdown"
     static let unitKey = "countdownUnit"
