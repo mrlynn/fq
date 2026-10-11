@@ -50,6 +50,7 @@ targets:
   FiscalQuarterWidgetMac:
     type: app-extension
     platform: macOS
+    productName: FiscalQuarterWidget
     deploymentTarget: "14.0"
     sources:
       - path: FiscalQuarterWidget
@@ -85,6 +86,8 @@ targets:
   FiscalQuarteriOS:
     type: application
     platform: iOS
+    # Installed as FiscalQuarter.app, like the Mac app. Without this XcodeGen names it after the target.
+    productName: FiscalQuarter
     sources:
       - path: FiscalQuarteriOS
         excludes: ["*.entitlements"]
@@ -114,6 +117,7 @@ targets:
   FiscalQuarterWidgetiOS:
     type: app-extension
     platform: iOS
+    productName: FiscalQuarterWidget
     sources:
       - path: FiscalQuarterWidget
         excludes: [Info.plist, "*.entitlements"]
