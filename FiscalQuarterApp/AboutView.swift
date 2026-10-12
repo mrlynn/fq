@@ -2,6 +2,7 @@ import AppKit
 import SwiftUI
 
 struct AboutView: View {
+    @ObservedObject var commandLine: CommandLineToolController
     let dismiss: () -> Void
 
     private var version: String {
@@ -47,6 +48,14 @@ struct AboutView: View {
                 aboutLink("mlynn.org", "https://mlynn.org")
                 aboutLink("github.com/mrlynn/fq", "https://github.com/mrlynn/fq")
                 aboutLink("linkedin.com/in/mlynn", "https://www.linkedin.com/in/mlynn")
+            }
+
+            if let message = commandLine.message {
+                Text(message)
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .textSelection(.enabled)
             }
         }
     }

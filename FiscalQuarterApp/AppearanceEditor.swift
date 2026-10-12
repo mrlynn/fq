@@ -72,8 +72,8 @@ struct AppearanceEditor: View {
                     .pickerStyle(.segmented)
                     .labelsHidden()
                 }
-                HStack {
-                    ColorPicker("Accent", selection: accent, supportsOpacity: false)
+                HStack(alignment: .firstTextBaseline) {
+                    ColorChoice("Accent", selection: accent)
                     if look.accent != nil {
                         Button("Reset") { update { $0.accent = nil } }
                     }
@@ -153,7 +153,7 @@ struct AppearanceEditor: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         case .color:
-            ColorPicker("Color", selection: solidColor, supportsOpacity: false)
+            ColorChoice("Color", selection: solidColor)
         case .gradient:
             let gradient: GradientSpec = {
                 if case .gradient(let current) = look.background { return current }
@@ -177,8 +177,8 @@ struct AppearanceEditor: View {
                 }
                 .padding(.vertical, 2)
             }
-            ColorPicker("Start", selection: gradientColor(0), supportsOpacity: false)
-            ColorPicker("End", selection: gradientColor(1), supportsOpacity: false)
+            ColorChoice("Start", selection: gradientColor(0))
+            ColorChoice("End", selection: gradientColor(1))
             Picker("Direction", selection: gradientAngle) {
                 Text("Top to bottom").tag(0.0)
                 Text("Diagonal").tag(45.0)

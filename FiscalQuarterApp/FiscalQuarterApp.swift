@@ -5,6 +5,8 @@ import SwiftUI
 struct FiscalQuarterApp: App {
     @StateObject private var clock: QuarterClock
     @StateObject private var calendar: CalendarModel
+    /// Created at launch so `fq` is linked before the panel is ever opened.
+    @StateObject private var commandLine = CommandLineToolController()
     @AppStorage(MenuBarCountdown.targetKey) private var menuBarTarget = CountdownTarget.quarter.rawValue
     @AppStorage(MenuBarCountdown.unitKey) private var countdownUnit = CountdownUnit.days.rawValue
 
@@ -20,7 +22,7 @@ struct FiscalQuarterApp: App {
 
     var body: some Scene {
         MenuBarExtra {
-            QuarterPanel(clock: clock, calendar: calendar)
+            QuarterPanel(clock: clock, calendar: calendar, commandLine: commandLine)
         } label: {
             let countdown = snapshot.countdown(to: CountdownTarget(rawValue: menuBarTarget) ?? .quarter)
             let unit = CountdownUnit(rawValue: countdownUnit) ?? .days

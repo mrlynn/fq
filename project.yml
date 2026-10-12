@@ -94,6 +94,7 @@ targets:
       - FiscalQuarterCore
       - FiscalQuarterUI
       - FiscalQuarterApp/AppearanceEditor.swift
+      - FiscalQuarterApp/ColorChoice.swift
       - FiscalQuarterApp/CalendarModel.swift
       - FiscalQuarterApp/QuarterClock.swift
       - FiscalQuarterApp/YearPicture.swift

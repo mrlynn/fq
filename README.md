@@ -157,14 +157,12 @@ xcrun notarytool store-credentials fiscalquarter --apple-id YOU@EXAMPLE.COM --te
 
 It asks for an app-specific password, which you make at account.apple.com under Sign-In and Security. Without the profile the script warns and builds an unnotarized copy, and the first open needs a Control-click, then Open, then Open again. `NOTARIZE=1` stops instead of warning, `NOTARIZE=0` skips notarizing, and `NOTARY_PROFILE` names another profile.
 
-`fq` is inside the app. After it is in Applications:
+`fq` is inside the app. Each time the app opens from Applications, it links `~/.local/bin/fq` to that copy, so the command follows the app through updates. It leaves an `fq` that is not its own alone. About says where `fq` is, and asks you to add `~/.local/bin` to `PATH` if your shell does not have it. To make the link by hand:
 
 ```sh
 mkdir -p "$HOME/.local/bin"
 ln -sfn "/Applications/FiscalQuarter.app/Contents/MacOS/fq" "$HOME/.local/bin/fq"
 ```
-
-Add `~/.local/bin` to `PATH` if it is not already there.
 
 ```sh
 fq
@@ -240,6 +238,7 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `FiscalQuarteriOS/` is the iPhone and iPad app
 - `project.yml` generates `FiscalQuarter.xcodeproj`
 - `FiscalQuarterCLI/fq.swift` is the `fq` command
+- `FiscalQuarterApp/CommandLineTool.swift` links `~/.local/bin/fq` to the copy inside the app
 - `FiscalQuarterTests/` is the XCTest suite
 - `FiscalQuarter.xcodeproj` builds the apps and widgets
 - `scripts/package.sh` writes the zip and the disk image
