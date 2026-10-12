@@ -4,6 +4,7 @@ import SwiftUI
 struct QuarterPanel: View {
     @ObservedObject var clock: QuarterClock
     @ObservedObject var calendar: CalendarModel
+    @ObservedObject var commandLine: CommandLineToolController
     @StateObject private var login = LoginItemController()
     @AppStorage("yearPicture") private var pictureKind = PictureKind.line.rawValue
     @AppStorage(MenuBarCountdown.targetKey) private var menuBarTarget = CountdownTarget.quarter.rawValue
@@ -23,7 +24,7 @@ struct QuarterPanel: View {
                 quarterPage
                     .photoLegibility(calendar.appearance)
             case .about:
-                AboutView(dismiss: { page = .quarter })
+                AboutView(commandLine: commandLine, dismiss: { page = .quarter })
                     .photoLegibility(calendar.appearance)
             case .calendar:
                 CalendarSettingsView(
