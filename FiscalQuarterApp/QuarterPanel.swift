@@ -197,7 +197,7 @@ struct QuarterPanel: View {
                         Spacer(minLength: 12)
                         Text(group.first.phrase(in: unit))
                             .monospacedDigit()
-                            .foregroundStyle(group.first.days <= 14 ? MarkColor.warning : Color.primary)
+                            .foregroundStyle(group.first.isSoon ? MarkColor.warning : Color.primary)
                     }
                     .contentShape(Rectangle())
                 }
@@ -230,7 +230,7 @@ struct QuarterPanel: View {
                 Spacer(minLength: 12)
                 Text(countdown.phrase(in: unit))
                     .monospacedDigit()
-                    .foregroundStyle(countdown.days <= 7 ? MarkColor.warning : Color.primary)
+                    .foregroundStyle(countdown.isSoon ? MarkColor.warning : Color.primary)
             }
             .contentShape(Rectangle())
         }

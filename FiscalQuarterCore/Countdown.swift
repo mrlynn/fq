@@ -67,6 +67,11 @@ public struct Countdown: Equatable {
         FiscalCalendar.inclusiveDays(from: start, to: end)
     }
 
+    /// Close enough to show in amber: the last week before a milestone, the last two weeks of a period.
+    public var isSoon: Bool {
+        days <= (target == nil ? 7 : 14)
+    }
+
     /// Share of the period through today, counting today.
     public var fractionComplete: Double {
         guard length > 0 else { return 0 }

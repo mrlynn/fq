@@ -80,7 +80,7 @@ struct QuarterScreen: View {
                                 Spacer()
                                 Text(group.first.phrase(in: unit))
                                     .monospacedDigit()
-                                    .foregroundStyle(group.first.days <= 14 ? MarkColor.warning : Color.primary)
+                                    .foregroundStyle(group.first.isSoon ? MarkColor.warning : Color.primary)
                             }
                             Text("Ends \(group.end.iso)")
                                 .font(.caption)
