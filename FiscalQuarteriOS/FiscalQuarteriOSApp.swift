@@ -35,7 +35,7 @@ struct QuarterScreen: View {
     @State private var copied: String?
 
     private var snapshot: QuarterSnapshot {
-        QuarterSnapshot(on: CalendarDate(clock.today, calendar: .current), config: calendar.config)
+        calendar.snapshot(on: CalendarDate(clock.today, calendar: .current))
     }
 
     var body: some View {
@@ -117,7 +117,7 @@ struct QuarterScreen: View {
                     Text("Countdown")
                 } footer: {
                     if unit == .workdays {
-                        Text("Monday through Friday. Holidays are counted as workdays.")
+                        Text("\(calendar.workweek.summary).")
                     }
                 }
 
@@ -277,6 +277,7 @@ struct AddCalendarScreen: View {
 struct YourCalendarScreen: View {
     @ObservedObject var calendar: CalendarModel
     let today: CalendarDate
+    @State private var newDayOff = Date()
 
     var body: some View {
         Form {
@@ -303,8 +304,63 @@ struct YourCalendarScreen: View {
                 let quarter = FiscalCalendar.quarter(containing: today, config: calendar.config)
                 Text("Today is \(quarter.id), \(quarter.start.iso) through \(quarter.end.iso).")
             }
+
+            Section {
+                Picker("Holidays", selection: region) {
+                    Text("None").tag(HolidayRegion?.none)
+                    ForEach(HolidayRegion.allCases) { region in
+                        Text(region.title).tag(HolidayRegion?.some(region))
+                    }
+                }
+            } header: {
+                Text("Workdays")
+            } footer: {
+                if let next = calendar.workweek.nextDayOff(onOrAfter: today) {
+                    Text("Workday counts skip these. Next day off: \(DayWords.short(next.date, today: today)), \(next.name).")
+                } else {
+                    Text("Workdays are Monday through Friday. Choose a country to skip its public holidays, or add your own days off.")
+                }
+            }
+
+            Section {
+                ForEach(upcomingDaysOff, id: \.self) { day in
+                    Text(DayWords.short(day, today: today))
+                }
+                .onDelete { offsets in
+                    var next = calendar.workweek
+                    offsets.map { upcomingDaysOff[$0] }.forEach { next.daysOff.remove($0) }
+                    calendar.setWorkweek(next)
+                }
+                DatePicker("Day", selection: $newDayOff, displayedComponents: .date)
+                Button("Add day off") {
+                    // Days off that have passed no longer change any count, so adding one clears them.
+                    var next = calendar.workweek
+                    next.daysOff = next.daysOff.filter { $0 >= today }
+                    next.daysOff.insert(CalendarDate(newDayOff, calendar: .current))
+                    calendar.setWorkweek(next)
+                }
+            } header: {
+                Text("Days off")
+            } footer: {
+                Text("Your own, such as a company shutdown. Workday counts skip them too.")
+            }
         }
         .navigationTitle("Your calendar")
+    }
+
+    private var upcomingDaysOff: [CalendarDate] {
+        calendar.workweek.daysOff.filter { $0 >= today }.sorted()
+    }
+
+    private var region: Binding<HolidayRegion?> {
+        Binding(
+            get: { calendar.workweek.region },
+            set: { value in
+                var next = calendar.workweek
+                next.region = value
+                calendar.setWorkweek(next)
+            }
+        )
     }
 
     private var kind: Binding<FiscalYearConfig.Kind> {

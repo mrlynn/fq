@@ -16,7 +16,7 @@ Line, Year, and Ring are three pictures of that year, in one slot. Line is the p
 
 ## Countdowns
 
-The panel counts down to the end of the quarter, the half, and the fiscal year. When they end on the same day they share a line, so on 2026-10-11 the panel shows one line, `FY26-Q4 · H2 · FY26`, with 82 days. The menu next to Countdown switches between days, workdays, weeks, and weekends. Workdays are Monday through Friday. Holidays are not known, so they count as workdays. Weekends counts the one in progress.
+The panel counts down to the end of the quarter, the half, and the fiscal year. When they end on the same day they share a line, so on 2026-10-11 the panel shows one line, `FY26-Q4 · H2 · FY26`, with 82 days. The menu next to Countdown switches between days, workdays, weeks, and weekends. Workdays are Monday through Friday, less the public holidays and days off you choose under Workdays. Weekends counts the one in progress.
 
 Click a countdown line to put it in the menu bar. The menu bar keeps the unit you chose, so it can read `FY26 · 59wd` or `FY26-Q4 · 11w 5d`. The default is `FY26-Q4 · 82d`.
 
@@ -32,6 +32,19 @@ FY26-Q4 · H2 · FY26 ends 2026-12-31
 `fq --json` carries the same figures under `countdowns`, one object each for the quarter, the half, and the year.
 
 A half is the first two quarters or the last two. A calendar file with a year of other than four quarters puts the extra quarter in the first half.
+
+## Workdays and holidays
+
+Under Calendar, Workdays picks a country whose public holidays the workday counts skip: the United States (federal), Canada (federal), the United Kingdom (England and Wales), Ireland, Australia (national), Germany (national), or France. The holidays are worked out by rule for any year, with no network: Easter, the third Monday in January, and the rest. A holiday on a weekend is kept on the day each country keeps it, such as the Friday before in the United States, or the next free weekday in the United Kingdom. Only holidays kept across the whole country are included. Add a regional one, or a company shutdown, as a day off.
+
+Every workday count follows this: the countdowns, the widgets, milestones counted in workdays, and how far ahead a notification comes. A milestone that lands on a holiday moves to the workday before, like one that lands on a weekend.
+
+```sh
+fq --holidays
+fq --workweek unitedKingdom --countdown
+```
+
+`--holidays` lists the year's holidays and days off. `--workweek` counts with another country's holidays, or `none`, without changing the setting.
 
 ## Milestones
 
@@ -265,6 +278,7 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `FiscalQuarterCore/SharedSettings.swift` is the App Group the apps, widgets, and `fq` share
 - `calendars/` holds example calendar files
 - `FiscalQuarterCore/Countdown.swift` counts down to the end of the quarter, half, and year
+- `FiscalQuarterCore/Holidays.swift` has each country's holiday rules and the workweek that workday counts skip
 - `FiscalQuarterCore/Milestone.swift` works out when each milestone falls and stores the list
 - `FiscalQuarterApp/MilestonesView.swift` lists, adds, and changes milestones, and sets notifications
 - `FiscalQuarterCore/Reminders.swift` plans which notifications fall in the next 30 days

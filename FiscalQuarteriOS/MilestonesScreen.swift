@@ -74,7 +74,7 @@ struct MilestonesScreen: View {
 
     /// `Thu 24 Dec · 5 workdays before quarter end, every quarter`.
     private func line(for milestone: Milestone) -> String {
-        guard let next = milestone.next(onOrAfter: today, in: calendar.config.definition) else { return milestone.summary }
+        guard let next = milestone.next(onOrAfter: today, in: calendar.config.definition, workweek: calendar.workweek) else { return milestone.summary }
         return "\(DayWords.short(next.date, today: today)) · \(milestone.summary)"
     }
 
@@ -163,7 +163,7 @@ struct MilestoneEditor: View {
                 }
 
                 Section {
-                    Toggle("Move a weekend day to the Friday before", isOn: Binding(
+                    Toggle("Move a day off to the workday before", isOn: Binding(
                         get: { draft.weekend == .fridayBefore },
                         set: { draft.weekend = $0 ? .fridayBefore : .keep }
                     ))
@@ -221,7 +221,7 @@ struct MilestoneEditor: View {
     }
 
     private var preview: String {
-        guard let next = draft.next(onOrAfter: today, in: calendar.config.definition) else { return draft.summary }
+        guard let next = draft.next(onOrAfter: today, in: calendar.config.definition, workweek: calendar.workweek) else { return draft.summary }
         let away = next.countdown(from: today).days - 1
         let when = away == 0 ? "today" : away == 1 ? "tomorrow" : "\(away) days from today"
         return "Next \(DayWords.short(next.date, today: today)) (\(next.quarter.id)), \(when)."

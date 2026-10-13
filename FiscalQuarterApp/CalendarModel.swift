@@ -9,6 +9,8 @@ final class CalendarModel: ObservableObject {
     @Published private(set) var others: [SavedCalendar]
     /// Dates that come around every quarter on your calendar, in the order they were added.
     @Published private(set) var milestones: [Milestone]
+    /// Which days count as workdays: weekdays, less a country's holidays and your days off.
+    @Published private(set) var workweek: Workweek
     /// Which notifications to send. All start off.
     @Published private(set) var reminders: ReminderSettings
     @Published private(set) var appearance: Appearance
@@ -21,6 +23,7 @@ final class CalendarModel: ObservableObject {
         others = SavedCalendars.load(from: FiscalYearConfig.store)
         milestones = Milestones.load(from: FiscalYearConfig.store)
         reminders = ReminderSettings.load(from: FiscalYearConfig.store)
+        workweek = Workweek.load(from: FiscalYearConfig.store)
         appearance = Appearance.load(from: FiscalYearConfig.store)
         backgroundImage = appearance.imageFile.flatMap(BackgroundImageStore.load)
         // Widgets keep the timeline they built before an update. Rebuilding on launch means a new
@@ -70,6 +73,18 @@ final class CalendarModel: ObservableObject {
         WidgetCenter.shared.reloadAllTimelines()
     }
 
+    func setWorkweek(_ workweek: Workweek) {
+        guard workweek != self.workweek else { return }
+        self.workweek = workweek
+        workweek.save(to: FiscalYearConfig.store)
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    /// Today on your calendar, counted with your workweek.
+    func snapshot(on today: CalendarDate) -> QuarterSnapshot {
+        QuarterSnapshot(on: today, config: config, workweek: workweek)
+    }
+
     func setReminders(_ reminders: ReminderSettings) {
         guard reminders != self.reminders else { return }
         self.reminders = reminders
@@ -78,7 +93,7 @@ final class CalendarModel: ObservableObject {
 
     /// Each milestone's next date on or after `today`, soonest first.
     func upcoming(on today: CalendarDate) -> [MilestoneOccurrence] {
-        Milestones.upcoming(milestones, onOrAfter: today, in: config.definition)
+        Milestones.upcoming(milestones, onOrAfter: today, in: config.definition, workweek: workweek)
     }
 
     /// Saves the look for the app and the widgets. Pictures the new look no longer uses are deleted.

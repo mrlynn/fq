@@ -266,16 +266,18 @@ struct CountdownProvider: AppIntentTimelineProvider {
         let today = CalendarDate(date, calendar: .current)
         let typed = configuration.label?.trimmingCharacters(in: .whitespacesAndNewlines)
         let label = typed?.isEmpty == false ? typed : nil
+        // Your workdays, whichever calendar the widget counts with.
+        let workweek = Workweek.load(from: settings)
 
         // A milestone runs on your calendar, whatever calendar the widget was set to.
         // One that has since been removed falls back to the period.
         if let id = configuration.milestone?.id,
            let milestone = Milestones.load(from: settings).first(where: { $0.id.uuidString == id }) {
             let yours = FiscalYearConfig.load(from: settings).definition
-            if let occurrence = milestone.next(onOrAfter: today, in: yours) {
+            if let occurrence = milestone.next(onOrAfter: today, in: yours, workweek: workweek) {
                 return CountdownEntry(
                     date: date,
-                    snapshot: QuarterSnapshot(on: today, calendar: yours),
+                    snapshot: QuarterSnapshot(on: today, calendar: yours, workweek: workweek),
                     target: configuration.target,
                     unit: configuration.unit,
                     label: label,
@@ -289,7 +291,7 @@ struct CountdownProvider: AppIntentTimelineProvider {
         let resolved = configuration.resolve(from: settings)
         return CountdownEntry(
             date: date,
-            snapshot: QuarterSnapshot(on: today, calendar: resolved.definition),
+            snapshot: QuarterSnapshot(on: today, calendar: resolved.definition, workweek: workweek),
             target: configuration.target,
             unit: configuration.unit,
             label: label ?? resolved.name,

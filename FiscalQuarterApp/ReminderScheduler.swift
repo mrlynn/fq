@@ -24,7 +24,8 @@ final class ReminderScheduler: NSObject, ObservableObject {
         let today = clock.$today
             .map { CalendarDate($0, calendar: .current) }
             .removeDuplicates()
-        watching = Publishers.CombineLatest4(calendar.$reminders, calendar.$milestones, calendar.$config, today)
+        let rules = Publishers.CombineLatest(calendar.$config, calendar.$workweek)
+        watching = Publishers.CombineLatest4(calendar.$reminders, calendar.$milestones, rules, today)
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .sink { [weak self] _, _, _, _ in
                 self?.rescheduleSoon()
@@ -64,7 +65,8 @@ final class ReminderScheduler: NSObject, ObservableObject {
             settings: settings,
             milestones: calendar.milestones,
             calendar: calendar.config.definition,
-            today: CalendarDate(now, calendar: .current)
+            today: CalendarDate(now, calendar: .current),
+            workweek: calendar.workweek
         )
         for reminder in plan {
             var when = DateComponents()

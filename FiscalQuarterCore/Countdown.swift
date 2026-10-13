@@ -21,7 +21,7 @@ public enum CountdownTarget: String, CaseIterable, Codable, Identifiable, Sendab
 public enum CountdownUnit: String, CaseIterable, Codable, Identifiable, Sendable {
     /// Calendar days, counting today.
     case days
-    /// Monday through Friday, counting today. Holidays are not known, so they count as workdays.
+    /// Monday through Friday, counting today, less the holidays and days off in the workweek.
     case workdays
     /// Whole weeks and the days left over.
     case weeks
@@ -49,13 +49,16 @@ public struct Countdown: Equatable {
     public let start: CalendarDate
     public let end: CalendarDate
     public let today: CalendarDate
+    /// Which days count as workdays.
+    public let workweek: Workweek
 
-    public init(target: CountdownTarget?, label: String, start: CalendarDate, end: CalendarDate, today: CalendarDate) {
+    public init(target: CountdownTarget?, label: String, start: CalendarDate, end: CalendarDate, today: CalendarDate, workweek: Workweek = .weekdays) {
         self.target = target
         self.label = label
         self.start = start
         self.end = end
         self.today = today
+        self.workweek = workweek
     }
 
     /// Days from today through `end`, counting both. The last day is 1.
@@ -78,8 +81,13 @@ public struct Countdown: Equatable {
         return Double(length - days + 1) / Double(length)
     }
 
-    /// Weekdays from today through `end`, counting both.
+    /// Workdays from today through `end`, counting both: weekdays, less holidays and days off.
     public var workdays: Int {
+        weekdays - workweek.weekdaysOff(from: today, through: end)
+    }
+
+    /// Monday through Friday from today through `end`, counting both.
+    var weekdays: Int {
         let total = days
         guard total > 0 else { return 0 }
         let fullWeeks = total / 7
@@ -176,7 +184,7 @@ extension QuarterSnapshot {
         let year = "FY\(String(format: "%02d", map.fiscalYear))"
         switch target {
         case .quarter:
-            return Countdown(target: .quarter, label: quarter.id, start: quarter.start, end: quarter.end, today: today)
+            return Countdown(target: .quarter, label: quarter.id, start: quarter.start, end: quarter.end, today: today, workweek: workweek)
         case .half:
             // The first half is the first ceil(n/2) quarters, so a four-quarter year splits two and two.
             let quarters = map.quarters
@@ -186,9 +194,9 @@ extension QuarterSnapshot {
             let span = firstHalf ? quarters[0..<split] : quarters[split...]
             let start = span.first?.start ?? quarter.start
             let end = span.last?.end ?? quarter.end
-            return Countdown(target: .half, label: "\(year)-H\(firstHalf ? 1 : 2)", start: start, end: end, today: today)
+            return Countdown(target: .half, label: "\(year)-H\(firstHalf ? 1 : 2)", start: start, end: end, today: today, workweek: workweek)
         case .year:
-            return Countdown(target: .year, label: year, start: map.start, end: map.end, today: today)
+            return Countdown(target: .year, label: year, start: map.start, end: map.end, today: today, workweek: workweek)
         }
     }
 

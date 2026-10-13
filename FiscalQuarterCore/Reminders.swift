@@ -68,14 +68,15 @@ public enum ReminderPlan {
         settings: ReminderSettings,
         milestones: [Milestone],
         calendar: FiscalCalendarDefinition,
-        today: CalendarDate
+        today: CalendarDate,
+        workweek: Workweek = .weekdays
     ) -> [PlannedReminder] {
         guard settings.anyOn, let last = FiscalCalendar.shift(today, by: horizon) else { return [] }
         var plan: [PlannedReminder] = []
 
         if settings.milestones {
             for milestone in milestones {
-                plan += milestoneReminders(milestone, calendar: calendar, from: today, through: last)
+                plan += milestoneReminders(milestone, calendar: calendar, workweek: workweek, from: today, through: last)
             }
         }
 
@@ -92,7 +93,7 @@ public enum ReminderPlan {
                 ))
             }
             if settings.lastTwoWeeks, let day = FiscalCalendar.shift(quarter.end, by: -13), day >= today, day <= last {
-                let countdown = Countdown(target: .quarter, label: quarter.id, start: quarter.start, end: quarter.end, today: day)
+                let countdown = Countdown(target: .quarter, label: quarter.id, start: quarter.start, end: quarter.end, today: day, workweek: workweek)
                 plan.append(PlannedReminder(
                     id: "\(idPrefix)last-two-weeks.\(day.iso)",
                     date: day,
@@ -109,7 +110,7 @@ public enum ReminderPlan {
             for _ in 0..<2 {
                 if let day = FiscalCalendar.shift(map.end, by: -29), day >= today, day <= last {
                     let year = "FY\(String(format: "%02d", map.fiscalYear))"
-                    let countdown = Countdown(target: .year, label: year, start: map.start, end: map.end, today: day)
+                    let countdown = Countdown(target: .year, label: year, start: map.start, end: map.end, today: day, workweek: workweek)
                     plan.append(PlannedReminder(
                         id: "\(idPrefix)year-end.\(day.iso)",
                         date: day,
@@ -126,11 +127,11 @@ public enum ReminderPlan {
     }
 
     /// A milestone's reminders in the window: each date it falls on, moved earlier by its lead.
-    private static func milestoneReminders(_ milestone: Milestone, calendar: FiscalCalendarDefinition, from today: CalendarDate, through last: CalendarDate) -> [PlannedReminder] {
+    private static func milestoneReminders(_ milestone: Milestone, calendar: FiscalCalendarDefinition, workweek: Workweek, from today: CalendarDate, through last: CalendarDate) -> [PlannedReminder] {
         var reminders: [PlannedReminder] = []
         var cursor = today
-        while let occurrence = milestone.next(onOrAfter: cursor, in: calendar) {
-            let day = Milestone.workdays(milestone.reminderLead, before: occurrence.date)
+        while let occurrence = milestone.next(onOrAfter: cursor, in: calendar, workweek: workweek) {
+            let day = Milestone.workdays(milestone.reminderLead, before: occurrence.date, workweek: workweek)
             if day > last { break }
             if day >= today {
                 reminders.append(PlannedReminder(
