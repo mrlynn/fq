@@ -151,6 +151,14 @@ final class MilestoneTests: XCTestCase {
         XCTAssertEqual(countdown?.phrase(in: .days), "74 days")
     }
 
+    func testAMilestoneIsSoonInItsLastWeekAndAPeriodInItsLastTwo() {
+        let eightDays = Milestone(name: "F", offset: 0, unit: .days).next(onOrAfter: date(2026, 12, 24), in: builtIn)!
+        XCTAssertFalse(eightDays.countdown(from: date(2026, 12, 24)).isSoon)
+        XCTAssertTrue(eightDays.countdown(from: date(2026, 12, 25)).isSoon)
+        XCTAssertFalse(QuarterSnapshot(on: date(2026, 12, 17)).countdown(to: .quarter).isSoon)
+        XCTAssertTrue(QuarterSnapshot(on: date(2026, 12, 18)).countdown(to: .quarter).isSoon)
+    }
+
     // MARK: Storage
 
     func testMilestonesRoundTripThroughDefaults() throws {

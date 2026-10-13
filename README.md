@@ -67,7 +67,7 @@ They go out at 9:00, or the time set under Send at. The first one turned on asks
 
 ## Widgets
 
-The Mac app carries a Fiscal countdown widget for the desktop and Notification Center, in small and medium sizes. After the app has opened once, right-click the desktop, choose Edit Widgets, and find Fiscal Quarter. Small shows one countdown. Medium adds the quarter, the half, and the year side by side, each with its own bar, because they start on different days even when they end together.
+The Mac app carries a Fiscal countdown widget for the desktop and Notification Center, in small and medium sizes. After the app has opened once, right-click the desktop, choose Edit Widgets, and find Fiscal Quarter. Small shows one countdown. Medium adds the quarter, the half, and the year side by side, each with its own bar, because they start on different days even when they end together. To count down to a milestone instead, choose it under Milestone in Edit Widget. The widget then shows the milestone's name, its count, and "Due" with its date, in amber in its last week. A milestone always runs on your calendar, and a widget whose milestone has been removed goes back to its period.
 
 Each widget has its own settings under Edit Widget: what to count to, the unit, the calendar, and a label. The calendar starts as Yours, the one chosen in the app, and follows it when you change it. A saved calendar is picked from the list of other calendars, and its name becomes the label unless you type one. The built-in calendar and a start month and day are there too. So one widget can follow your calendar while another follows a customer whose year starts in July.
 

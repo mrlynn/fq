@@ -11,8 +11,10 @@ struct CountdownEntry: TimelineEntry {
     var appearance: Appearance = .standard
     /// The picture for an image background, loaded once per timeline.
     var backgroundImage: CGImage?
+    /// A milestone to count to instead of `target`. The periods still show beside it in the medium size.
+    var milestone: Countdown?
 
-    var countdown: Countdown { snapshot.countdown(to: target) }
+    var countdown: Countdown { milestone ?? snapshot.countdown(to: target) }
     var theme: Theme { Theme(appearance: appearance) }
 }
 
@@ -35,9 +37,9 @@ struct CountdownBackground: View {
 }
 
 extension Theme {
-    /// Amber in the last two weeks, the accent otherwise.
+    /// Amber when the countdown is close, the accent otherwise.
     func tint(for countdown: Countdown) -> Color {
-        countdown.days <= 14 ? Theme.warning : accent
+        countdown.isSoon ? Theme.warning : accent
     }
 }
 
@@ -94,7 +96,7 @@ struct SmallCountdown: View {
                 .monospacedDigit()
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
-                .foregroundStyle(countdown.days <= 14 ? Theme.warning : Color.primary)
+                .foregroundStyle(countdown.isSoon ? Theme.warning : Color.primary)
             Text(BigNumber.caption(countdown, entry.unit))
                 .font(theme.font(12))
                 .foregroundStyle(.secondary)
@@ -103,7 +105,7 @@ struct SmallCountdown: View {
                 ProgressBar(fraction: countdown.fractionComplete, tint: theme.tint(for: countdown))
             }
             if display.endDate {
-                Text("Ends \(ShortDate.text(countdown.end))")
+                Text("\(countdown.target == nil ? "Due" : "Ends") \(ShortDate.text(countdown.end))")
                     .font(theme.font(11))
                     .foregroundStyle(.secondary)
             }
@@ -127,7 +129,7 @@ struct MediumCountdown: View {
                         VStack(alignment: .leading, spacing: 3) {
                             HStack(alignment: .firstTextBaseline) {
                                 Text(countdown.label)
-                                    .font(theme.font(12, countdown.target == entry.target ? .semibold : .regular))
+                                    .font(theme.font(12, entry.milestone == nil && countdown.target == entry.target ? .semibold : .regular))
                                 Spacer(minLength: 4)
                                 Text(countdown.short(in: entry.unit))
                                     .font(theme.font(12))

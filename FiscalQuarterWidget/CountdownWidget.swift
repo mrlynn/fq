@@ -9,7 +9,8 @@ struct FiscalQuarterWidgets: WidgetBundle {
     }
 }
 
-/// Days left in the quarter, half, or fiscal year, for the desktop, the Home Screen, and the Lock Screen.
+/// Days left in the quarter, half, or fiscal year, or to one of your milestones, for the desktop,
+/// the Home Screen, and the Lock Screen.
 ///
 /// Each widget picks a calendar: yours from the app, one of your saved calendars, the built-in one,
 /// or a start date. The app and the widget share settings through the App Group in `SharedSettings`.
@@ -22,7 +23,7 @@ struct CountdownWidget: Widget {
                 }
         }
         .configurationDisplayName("Fiscal countdown")
-        .description("Time left in the quarter, half, or fiscal year.")
+        .description("Time left in the quarter, half, or fiscal year, or to a milestone.")
         .supportedFamilies(Self.families)
     }
 
@@ -62,27 +63,40 @@ struct CountdownIntent: WidgetConfigurationIntent {
     @Parameter(title: "Label")
     var label: String?
 
+    /// Counts to this milestone instead of the period. Milestones run on your calendar.
+    @Parameter(title: "Milestone")
+    var milestone: MilestoneEntity?
+
     static var parameterSummary: some ParameterSummary {
-        Switch(\.$calendar) {
-            Case(.startDate) {
-                Summary("Count \(\.$unit) to the end of the \(\.$target)") {
-                    \.$calendar
-                    \.$startMonth
-                    \.$startDay
-                    \.$label
-                }
+        When(\.$milestone, .hasAnyValue) {
+            Summary("Count \(\.$unit) to \(\.$milestone)") {
+                \.$label
             }
-            Case(.saved) {
-                Summary("Count \(\.$unit) to the end of the \(\.$target)") {
-                    \.$calendar
-                    \.$saved
-                    \.$label
+        } otherwise: {
+            Switch(\.$calendar) {
+                Case(.startDate) {
+                    Summary("Count \(\.$unit) to the end of the \(\.$target)") {
+                        \.$calendar
+                        \.$startMonth
+                        \.$startDay
+                        \.$label
+                        \.$milestone
+                    }
                 }
-            }
-            DefaultCase {
-                Summary("Count \(\.$unit) to the end of the \(\.$target)") {
-                    \.$calendar
-                    \.$label
+                Case(.saved) {
+                    Summary("Count \(\.$unit) to the end of the \(\.$target)") {
+                        \.$calendar
+                        \.$saved
+                        \.$label
+                        \.$milestone
+                    }
+                }
+                DefaultCase {
+                    Summary("Count \(\.$unit) to the end of the \(\.$target)") {
+                        \.$calendar
+                        \.$label
+                        \.$milestone
+                    }
                 }
             }
         }
@@ -156,6 +170,38 @@ struct SavedCalendarQuery: EntityQuery {
     }
 }
 
+/// One of your milestones, offered as a choice in Edit Widget.
+struct MilestoneEntity: AppEntity {
+    let id: String
+    let name: String
+
+    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Milestone"
+    static var defaultQuery = MilestoneQuery()
+
+    var displayRepresentation: DisplayRepresentation {
+        DisplayRepresentation(title: "\(name)")
+    }
+
+    init(_ milestone: Milestone) {
+        id = milestone.id.uuidString
+        name = milestone.name
+    }
+}
+
+struct MilestoneQuery: EntityQuery {
+    func entities(for identifiers: [String]) async throws -> [MilestoneEntity] {
+        all().filter { identifiers.contains($0.id) }
+    }
+
+    func suggestedEntities() async throws -> [MilestoneEntity] {
+        all()
+    }
+
+    private func all() -> [MilestoneEntity] {
+        Milestones.load(from: SharedSettings.store).map(MilestoneEntity.init)
+    }
+}
+
 enum StartMonth: String, AppEnum, CaseIterable {
     case january, february, march, april, may, june, july, august, september, october, november, december
 
@@ -216,14 +262,37 @@ struct CountdownProvider: AppIntentTimelineProvider {
     }
 
     private func entry(at date: Date, for configuration: CountdownIntent, look: Look = .current()) -> CountdownEntry {
-        let resolved = configuration.resolve(from: SharedSettings.store)
+        let settings = SharedSettings.store
+        let today = CalendarDate(date, calendar: .current)
         let typed = configuration.label?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let label = typed?.isEmpty == false ? typed : nil
+
+        // A milestone runs on your calendar, whatever calendar the widget was set to.
+        // One that has since been removed falls back to the period.
+        if let id = configuration.milestone?.id,
+           let milestone = Milestones.load(from: settings).first(where: { $0.id.uuidString == id }) {
+            let yours = FiscalYearConfig.load(from: settings).definition
+            if let occurrence = milestone.next(onOrAfter: today, in: yours) {
+                return CountdownEntry(
+                    date: date,
+                    snapshot: QuarterSnapshot(on: today, calendar: yours),
+                    target: configuration.target,
+                    unit: configuration.unit,
+                    label: label,
+                    appearance: look.appearance,
+                    backgroundImage: look.image,
+                    milestone: occurrence.countdown(from: today)
+                )
+            }
+        }
+
+        let resolved = configuration.resolve(from: settings)
         return CountdownEntry(
             date: date,
-            snapshot: QuarterSnapshot(on: CalendarDate(date, calendar: .current), calendar: resolved.definition),
+            snapshot: QuarterSnapshot(on: today, calendar: resolved.definition),
             target: configuration.target,
             unit: configuration.unit,
-            label: typed?.isEmpty == false ? typed : resolved.name,
+            label: label ?? resolved.name,
             appearance: look.appearance,
             backgroundImage: look.image
         )
