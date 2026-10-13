@@ -33,6 +33,17 @@ FY26-Q4 · H2 · FY26 ends 2026-12-31
 
 A half is the first two quarters or the last two. A calendar file with a year of other than four quarters puts the extra quarter in the first half.
 
+## Shortcuts and Siri
+
+The Mac and iPhone apps offer four actions in Shortcuts. Each answers with your calendar, workdays, and milestones as the app has them:
+
+- **Get Fiscal Quarter**: today's quarter, such as `FY26-Q4`, and says "It's FY26-Q4, day 13 of 92, with 80 days left." It can use one of your saved calendars instead.
+- **Get Time Left**: the days, workdays, weeks, or weekends left in the quarter, half, or year, as a number.
+- **Get Fiscal Quarter for Date**: the quarter a date falls in.
+- **Get Next Milestone**: when a milestone next falls, or whichever comes soonest, as a date.
+
+Three work with Siri and Spotlight with no setup: "What quarter is it in Fiscal Quarter", "How long is left in Fiscal Quarter", and "When is my next milestone in Fiscal Quarter".
+
 ## 52/53-week calendars
 
 Many retailers and companies keep a year that ends on the same weekday every year, so it is 52 weeks long, with a 53rd every five or six years. Under Calendar, Weeks (4-4-5) sets one up:
@@ -289,6 +300,7 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `FiscalQuarterCore/SharedSettings.swift` is the App Group the apps, widgets, and `fq` share
 - `calendars/` holds example calendar files
 - `FiscalQuarterCore/Countdown.swift` counts down to the end of the quarter, half, and year
+- `FiscalQuarterApp/Shortcuts.swift` has the Shortcuts actions and Siri phrases, and `FiscalQuarterCore/Answers.swift` their wording
 - `FiscalQuarterCore/WeekRule.swift` works out 52/53-week years, their quarters, and their periods
 - `FiscalQuarterCore/Holidays.swift` has each country's holiday rules and the workweek that workday counts skip
 - `FiscalQuarterCore/Milestone.swift` works out when each milestone falls and stores the list
