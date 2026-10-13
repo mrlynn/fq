@@ -213,8 +213,8 @@ scripts/package.sh
 
 That runs the tests, builds a universal app, and writes two files:
 
-- `dist/FiscalQuarter-1.9.zip`
-- `dist/FiscalQuarter-1.9.dmg`
+- `dist/FiscalQuarter-1.10.zip`
+- `dist/FiscalQuarter-1.10.dmg`
 
 The disk image has the app, a shortcut to Applications, and `How to install.txt`. Drag the app to Applications and open it. The script signs the app, the widget, `fq`, and the disk image with the Developer ID certificate in your keychain, with the hardened runtime and a secure timestamp. Set `SIGN_IDENTITY` to use another certificate.
 
