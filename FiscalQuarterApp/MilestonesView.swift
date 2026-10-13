@@ -140,7 +140,7 @@ struct MilestonesView: View {
             } label: {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(milestone.name)
-                    Text(next.map { "\(MilestoneWords.day($0.date)) · \(milestone.summary)" } ?? milestone.summary)
+                    Text(next.map { "\(DayWords.short($0.date, today: today)) · \(milestone.summary)" } ?? milestone.summary)
                         .font(.system(size: 12))
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -296,7 +296,7 @@ struct MilestonesView: View {
         // Countdowns count today, so the day itself is 1. Here it reads as days from today.
         let away = next.countdown(from: today).days - 1
         let when = away == 0 ? "today" : away == 1 ? "tomorrow" : "\(away) days from today"
-        return "Next \(MilestoneWords.day(next.date)) (\(next.quarter.id)), \(when)."
+        return "Next \(DayWords.short(next.date, today: today)) (\(next.quarter.id)), \(when)."
     }
 
     private func save() {
@@ -315,17 +315,5 @@ struct MilestonesView: View {
                 problem = nil
             }
         )
-    }
-}
-
-/// How milestone dates read in the panel: `Thu 24 Dec`, with the year when it is not this one.
-enum MilestoneWords {
-    private static let weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-
-    static func day(_ date: CalendarDate, today: CalendarDate = CalendarDate(Date(), calendar: .current)) -> String {
-        let weekday = weekdays[FiscalCalendar.weekday(date) - 1]
-        let month = FiscalMonth.symbol(for: date.month)
-        let year = date.year == today.year ? "" : " \(date.year)"
-        return "\(weekday) \(date.day) \(month)\(year)"
     }
 }

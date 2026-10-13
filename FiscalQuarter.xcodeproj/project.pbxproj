@@ -75,6 +75,7 @@
 		B4DBD09F0E9DADD760D9D698 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16711FAF784C47D4E62BFFBA /* Appearance.swift */; };
 		BE4708A018676D5AAD445429 /* MilestonesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94B5CC027D4076B02DA9FDB /* MilestonesView.swift */; };
 		BEFFE17BB6251141BBC047D3 /* Milestone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2590E061218B2529A27C7FBF /* Milestone.swift */; };
+		BFF726E191C7ADFFAE4DD361 /* ReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787B19A54991E265318D4CEC /* ReminderScheduler.swift */; };
 		C5E64D0794608974A037AAEA /* FiscalCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */; };
 		C785985C6DB889D4C68F8213 /* YearPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313D2D8DC5D7D544335610F4 /* YearPicture.swift */; };
 		CB97E4E19A7202EBF464E825 /* MilestoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C92ECE333B72C1153D3D2DF9 /* MilestoneTests.swift */; };
@@ -88,6 +89,7 @@
 		DDD1B671A9C0255E7FD90F4C /* ColorChoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08BD60280E67E0D41A2983B3 /* ColorChoice.swift */; };
 		DE68BD5D3F49D353F81B9551 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
 		E0D6D2DF9F421524FCD264F4 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16711FAF784C47D4E62BFFBA /* Appearance.swift */; };
+		E81C8F038D5FF58506FD916C /* MilestonesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66629027E8E9AB7C6A763387 /* MilestonesScreen.swift */; };
 		EBBD95FC45121A3F7EA10D92 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
 		EFEF9D3BF4318F366C926D92 /* CommandLineTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692613ACD80F5EEEE068A1D1 /* CommandLineTool.swift */; };
 		F65F3D11CCD3B8D701F6F07A /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
@@ -163,6 +165,7 @@
 		3E719833196DAD26D15ED15E /* QuarterClock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterClock.swift; sourceTree = "<group>"; };
 		452BF0001491B9D275213A73 /* ReminderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderTests.swift; sourceTree = "<group>"; };
 		54FEEEE78A96AF4BFD31523E /* Countdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Countdown.swift; sourceTree = "<group>"; };
+		66629027E8E9AB7C6A763387 /* MilestonesScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilestonesScreen.swift; sourceTree = "<group>"; };
 		692613ACD80F5EEEE068A1D1 /* CommandLineTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandLineTool.swift; sourceTree = "<group>"; };
 		787B19A54991E265318D4CEC /* ReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderScheduler.swift; sourceTree = "<group>"; };
 		7BFD87F30AE3313E355BC76B /* SharedSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedSettings.swift; sourceTree = "<group>"; };
@@ -267,6 +270,7 @@
 			children = (
 				139F56F3BAF1D647E378E75F /* Assets.xcassets */,
 				2FD7134DF3C3FF965F74F5FC /* FiscalQuarteriOSApp.swift */,
+				66629027E8E9AB7C6A763387 /* MilestonesScreen.swift */,
 			);
 			path = FiscalQuarteriOS;
 			sourceTree = "<group>";
@@ -562,7 +566,9 @@
 				8FAE651CD44C6F8941B2486B /* FiscalYearConfig.swift in Sources */,
 				DCD133604F9FBB375714D5EF /* FiscalYearMap.swift in Sources */,
 				CE7B1D4B57FAB3874CC74700 /* Milestone.swift in Sources */,
+				E81C8F038D5FF58506FD916C /* MilestonesScreen.swift in Sources */,
 				4276444391FA556794B6CB9C /* QuarterClock.swift in Sources */,
+				BFF726E191C7ADFFAE4DD361 /* ReminderScheduler.swift in Sources */,
 				29182EA18C1D7979B6F1FEB8 /* Reminders.swift in Sources */,
 				DE68BD5D3F49D353F81B9551 /* SavedCalendars.swift in Sources */,
 				FE13DC1DF0B8B8E5313E3807 /* SharedSettings.swift in Sources */,
