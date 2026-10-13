@@ -33,6 +33,9 @@ struct QuarterPanel: View {
                     dismiss: { page = .quarter }
                 )
                 .photoLegibility(calendar.appearance)
+            case .milestones:
+                MilestonesView(calendar: calendar, today: snapshot.today, dismiss: { page = .quarter })
+                    .photoLegibility(calendar.appearance)
             // No shadow here: the form draws its own cards, and shadowed text on them looks wrong.
             case .appearance:
                 VStack(alignment: .leading, spacing: 12) {
@@ -148,6 +151,8 @@ struct QuarterPanel: View {
 
             actionButton("Calendar") { page = .calendar }
 
+            actionButton("Milestones") { page = .milestones }
+
             actionButton("Appearance") { page = .appearance }
 
             actionButton("About") { page = .about }
@@ -201,7 +206,39 @@ struct QuarterPanel: View {
                 .accessibilityLabel("\(group.label) ends \(group.end.iso), \(group.first.phrase(in: unit))")
                 .accessibilityAddTraits(inMenuBar ? .isSelected : [])
             }
+            ForEach(calendar.upcoming(on: snapshot.today), id: \.milestone.id) { occurrence in
+                milestoneRow(occurrence, today: snapshot.today, unit: unit)
+            }
         }
+    }
+
+    /// A milestone's next date, counted like the periods above it. Amber in its last week.
+    private func milestoneRow(_ occurrence: MilestoneOccurrence, today: CalendarDate, unit: CountdownUnit) -> some View {
+        let countdown = occurrence.countdown(from: today)
+        let key = MenuBarCountdown.key(for: occurrence.milestone)
+        let inMenuBar = menuBarTarget == key
+        return Button(action: { menuBarTarget = key }) {
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                Text(occurrence.milestone.name)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                Image(systemName: "menubar.rectangle")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
+                    .opacity(inMenuBar ? 1 : 0)
+                Spacer(minLength: 12)
+                Text(countdown.phrase(in: unit))
+                    .monospacedDigit()
+                    .foregroundStyle(countdown.days <= 7 ? MarkColor.warning : Color.primary)
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .font(.system(size: 13))
+        .help("\(MilestoneWords.day(occurrence.date)) · \(occurrence.milestone.summary)")
+        .accessibilityLabel("\(occurrence.milestone.name) on \(MilestoneWords.day(occurrence.date)), \(countdown.phrase(in: unit))")
+        .accessibilityHint(inMenuBar ? "Shown in the menu bar" : "Shows it in the menu bar")
+        .accessibilityAddTraits(inMenuBar ? .isSelected : [])
     }
 
     /// One line per saved calendar. Clicking a line copies that calendar's status line, prefixed with its name.
@@ -305,11 +342,26 @@ private enum PanelPage: Equatable {
     case quarter
     case about
     case calendar
+    case milestones
     case appearance
 }
 
 /// Which countdown the menu bar shows, and in what unit. The default reads `FY26-Q4 · 82d`.
+///
+/// The stored choice is a period's raw value, such as `quarter`, or `milestone:` and a milestone's id.
 enum MenuBarCountdown {
     static let targetKey = "menuBarCountdown"
     static let unitKey = "countdownUnit"
+
+    static func key(for milestone: Milestone) -> String {
+        "milestone:\(milestone.id.uuidString)"
+    }
+
+    /// The countdown for a stored choice. A milestone that has since been removed falls back to the quarter.
+    static func countdown(for key: String, snapshot: QuarterSnapshot, upcoming: [MilestoneOccurrence]) -> Countdown {
+        if let occurrence = upcoming.first(where: { Self.key(for: $0.milestone) == key }) {
+            return occurrence.countdown(from: snapshot.today)
+        }
+        return snapshot.countdown(to: CountdownTarget(rawValue: key) ?? .quarter)
+    }
 }

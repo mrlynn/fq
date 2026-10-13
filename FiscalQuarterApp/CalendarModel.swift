@@ -7,6 +7,8 @@ import WidgetKit
 final class CalendarModel: ObservableObject {
     @Published private(set) var config: FiscalYearConfig
     @Published private(set) var others: [SavedCalendar]
+    /// Dates that come around every quarter on your calendar, in the order they were added.
+    @Published private(set) var milestones: [Milestone]
     @Published private(set) var appearance: Appearance
     /// The picture for an image background, loaded once when the appearance changes.
     @Published private(set) var backgroundImage: CGImage?
@@ -15,6 +17,7 @@ final class CalendarModel: ObservableObject {
         SharedSettings.migrateIfNeeded()
         config = FiscalYearConfig.load(from: FiscalYearConfig.store)
         others = SavedCalendars.load(from: FiscalYearConfig.store)
+        milestones = Milestones.load(from: FiscalYearConfig.store)
         appearance = Appearance.load(from: FiscalYearConfig.store)
         backgroundImage = appearance.imageFile.flatMap(BackgroundImageStore.load)
         // Widgets keep the timeline they built before an update. Rebuilding on launch means a new
@@ -38,6 +41,35 @@ final class CalendarModel: ObservableObject {
         SavedCalendars.save(others, to: FiscalYearConfig.store)
         WidgetCenter.shared.reloadAllTimelines()
         return nil
+    }
+
+    /// Adds `milestone`, or replaces the one with its id. Returns why it could not be saved, or nil.
+    @discardableResult
+    func save(_ milestone: Milestone) -> String? {
+        var milestone = milestone
+        milestone.name = milestone.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let problem = milestone.problem {
+            return problem
+        }
+        if let index = milestones.firstIndex(where: { $0.id == milestone.id }) {
+            milestones[index] = milestone
+        } else {
+            milestones.append(milestone)
+        }
+        Milestones.save(milestones, to: FiscalYearConfig.store)
+        WidgetCenter.shared.reloadAllTimelines()
+        return nil
+    }
+
+    func remove(_ milestone: Milestone) {
+        milestones.removeAll { $0.id == milestone.id }
+        Milestones.save(milestones, to: FiscalYearConfig.store)
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    /// Each milestone's next date on or after `today`, soonest first.
+    func upcoming(on today: CalendarDate) -> [MilestoneOccurrence] {
+        Milestones.upcoming(milestones, onOrAfter: today, in: config.definition)
     }
 
     /// Saves the look for the app and the widgets. Pictures the new look no longer uses are deleted.
