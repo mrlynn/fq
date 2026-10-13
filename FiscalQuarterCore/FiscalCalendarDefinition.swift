@@ -73,10 +73,10 @@ public struct FiscalCalendarDefinition: Equatable, Codable {
             throw DefinitionError("The first era must not have a \"from\" date. It covers everything before the next era.")
         }
         if case .explicit = first.rule {
-            throw DefinitionError("The first era must use the months rule, because it has no start.")
+            throw DefinitionError("The first era must use the months or weeks rule, because it has no start.")
         }
         if case .explicit = last.rule {
-            throw DefinitionError("The last era must use the months rule, because it has no end.")
+            throw DefinitionError("The last era must use the months or weeks rule, because it has no end.")
         }
         for (index, era) in eras.enumerated().dropFirst() {
             guard let start = era.start else {
@@ -94,6 +94,8 @@ public struct FiscalCalendarDefinition: Equatable, Codable {
                 }
             case .explicit(let year):
                 try validate(year, era: era, index: index)
+            case .weeks:
+                break
             }
         }
     }
@@ -125,6 +127,12 @@ extension FiscalCalendarDefinition {
     /// the year itself, so 2026 is FY26.
     public static let builtIn = FiscalCalendarDefinition.months(startMonth: 1, startDay: 1, name: "Built-in")
 
+    /// A 52/53-week year every year, by `rule`, with no exceptions.
+    public static func weeks(_ rule: WeekRule, name: String? = nil) -> FiscalCalendarDefinition {
+        // One open-ended weeks era always passes validation.
+        try! FiscalCalendarDefinition(name: name ?? rule.summary, eras: [Era(start: nil, rule: .weeks(rule))])
+    }
+
     /// Four three-month quarters every year from `startMonth`/`startDay`, with no exceptions.
     public static func months(startMonth: Int, startDay: Int, name: String? = nil) -> FiscalCalendarDefinition {
         let rule = MonthRule(startMonth: min(12, max(1, startMonth)), startDay: min(31, max(1, startDay)))
@@ -150,11 +158,16 @@ public struct Era: Equatable, Codable {
     public enum Rule: Equatable {
         case months(MonthRule)
         case explicit(ExplicitYear)
+        /// A 52/53-week year, such as a 4-4-5 retail calendar.
+        case weeks(WeekRule)
     }
 
     private enum CodingKeys: String, CodingKey {
         case from, rule, note, startMonth, startDay, yearOffset, fiscalYear, quarters
+        case endMonth, endWeekday, method, pattern, extraWeek
     }
+
+    private static let weekdayNames = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -172,11 +185,40 @@ public struct Era: Equatable, Codable {
                 fiscalYear: try container.decode(Int.self, forKey: .fiscalYear),
                 quarters: try container.decode([QuarterSpan].self, forKey: .quarters)
             ))
+        case "weeks":
+            let weekdayName = try container.decodeIfPresent(String.self, forKey: .endWeekday) ?? "saturday"
+            guard let weekday = Self.weekdayNames.firstIndex(of: weekdayName.lowercased()) else {
+                throw DecodingError.dataCorruptedError(forKey: .endWeekday, in: container, debugDescription: "Unknown weekday \"\(weekdayName)\".")
+            }
+            let methodName = try container.decodeIfPresent(String.self, forKey: .method) ?? "last"
+            let patternName = try container.decodeIfPresent(String.self, forKey: .pattern) ?? "4-4-5"
+            let extraName = try container.decodeIfPresent(String.self, forKey: .extraWeek) ?? "q4"
+            guard let method = WeekRule.Method(rawValue: methodName) else {
+                throw DecodingError.dataCorruptedError(forKey: .method, in: container, debugDescription: "Use \"last\" or \"nearest\", not \"\(methodName)\".")
+            }
+            guard let pattern = WeekRule.Pattern(rawValue: patternName) else {
+                throw DecodingError.dataCorruptedError(forKey: .pattern, in: container, debugDescription: "Use \"4-4-5\", \"4-5-4\", or \"5-4-4\", not \"\(patternName)\".")
+            }
+            guard let extraWeek = WeekRule.ExtraWeek(rawValue: extraName) else {
+                throw DecodingError.dataCorruptedError(forKey: .extraWeek, in: container, debugDescription: "Use \"q1\" or \"q4\", not \"\(extraName)\".")
+            }
+            let endMonth = try container.decode(Int.self, forKey: .endMonth)
+            guard (1...12).contains(endMonth) else {
+                throw DecodingError.dataCorruptedError(forKey: .endMonth, in: container, debugDescription: "endMonth must be 1 to 12.")
+            }
+            rule = .weeks(WeekRule(
+                endMonth: endMonth,
+                endWeekday: weekday + 1,
+                method: method,
+                pattern: pattern,
+                extraWeek: extraWeek,
+                yearOffset: try container.decodeIfPresent(Int.self, forKey: .yearOffset) ?? 0
+            ))
         case let other:
             throw DecodingError.dataCorruptedError(
                 forKey: .rule,
                 in: container,
-                debugDescription: "Unknown rule \"\(other)\". Use \"months\" or \"explicit\"."
+                debugDescription: "Unknown rule \"\(other)\". Use \"months\", \"weeks\", or \"explicit\"."
             )
         }
     }
@@ -196,6 +238,16 @@ public struct Era: Equatable, Codable {
             try container.encode("explicit", forKey: .rule)
             try container.encode(year.fiscalYear, forKey: .fiscalYear)
             try container.encode(year.quarters, forKey: .quarters)
+        case .weeks(let weeks):
+            try container.encode("weeks", forKey: .rule)
+            try container.encode(weeks.endMonth, forKey: .endMonth)
+            try container.encode(Self.weekdayNames[weeks.endWeekday - 1], forKey: .endWeekday)
+            try container.encode(weeks.method.rawValue, forKey: .method)
+            try container.encode(weeks.pattern.rawValue, forKey: .pattern)
+            try container.encode(weeks.extraWeek.rawValue, forKey: .extraWeek)
+            if weeks.yearOffset != 0 {
+                try container.encode(weeks.yearOffset, forKey: .yearOffset)
+            }
         }
         try container.encodeIfPresent(note, forKey: .note)
     }

@@ -33,6 +33,17 @@ FY26-Q4 · H2 · FY26 ends 2026-12-31
 
 A half is the first two quarters or the last two. A calendar file with a year of other than four quarters puts the extra quarter in the first half.
 
+## 52/53-week calendars
+
+Many retailers and companies keep a year that ends on the same weekday every year, so it is 52 weeks long, with a 53rd every five or six years. Under Calendar, Weeks (4-4-5) sets one up:
+
+- **Ends the last or nearest weekday of a month.** The National Retail Federation calendar ends on the Saturday nearest 31 January. Others end on the last Saturday of September or July.
+- **Quarters are 13 weeks.** The 53rd week goes to Q4, or to Q1.
+- **The pattern, 4-4-5, 4-5-4, or 5-4-4,** splits each quarter into three periods. The line and year pictures draw those periods, each named for the month it mostly covers, and a 14-week quarter adds its week to the last one.
+- **The FY number** is the year the fiscal year ends, or the year it starts, as retail calendars name it.
+
+A link fills in the NRF 4-5-4 calendar. `calendars/retail-454.json` is the same calendar as a file, which `fq --calendar` reads and Calendar, Others can import. The `weeks` rule takes `endMonth`, `endWeekday`, `method` (`last` or `nearest`), `pattern`, `extraWeek` (`q1` or `q4`), and `yearOffset`.
+
 ## Workdays and holidays
 
 Under Calendar, Workdays picks a country whose public holidays the workday counts skip: the United States (federal), Canada (federal), the United Kingdom (England and Wales), Ireland, Australia (national), Germany (national), or France. The holidays are worked out by rule for any year, with no network: Easter, the third Monday in January, and the rest. A holiday on a weekend is kept on the day each country keeps it, such as the Friday before in the United States, or the next free weekday in the United Kingdom. Only holidays kept across the whole country are included. Add a regional one, or a company shutdown, as a day off.
@@ -278,6 +289,7 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `FiscalQuarterCore/SharedSettings.swift` is the App Group the apps, widgets, and `fq` share
 - `calendars/` holds example calendar files
 - `FiscalQuarterCore/Countdown.swift` counts down to the end of the quarter, half, and year
+- `FiscalQuarterCore/WeekRule.swift` works out 52/53-week years, their quarters, and their periods
 - `FiscalQuarterCore/Holidays.swift` has each country's holiday rules and the workweek that workday counts skip
 - `FiscalQuarterCore/Milestone.swift` works out when each milestone falls and stores the list
 - `FiscalQuarterApp/MilestonesView.swift` lists, adds, and changes milestones, and sets notifications

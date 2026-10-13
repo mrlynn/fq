@@ -224,6 +224,8 @@ public enum FiscalCalendar {
             let number = year.quarters.firstIndex { date >= $0.start && date <= $0.end } ?? 0
             let span = year.quarters[number]
             quarter = FiscalQuarter(fiscalYear: year.fiscalYear, quarter: number + 1, start: span.start, end: span.end)
+        case .weeks(let rule):
+            quarter = rule.quarter(containing: date)
         }
         return clip(quarter, from: era.start, before: definition.start(afterEra: index))
     }

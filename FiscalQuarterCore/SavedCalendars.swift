@@ -60,6 +60,9 @@ extension FiscalCalendarDefinition {
         if eras.count == 1, case .months(let rule) = eras[0].rule {
             return "Starts \(FiscalMonth.symbol(for: rule.startMonth)) \(rule.startDay) every year"
         }
+        if eras.count == 1, case .weeks(let rule) = eras[0].rule {
+            return rule.summary
+        }
         return "\(eras.count) eras, from a file"
     }
 

@@ -84,6 +84,20 @@ struct CalendarSettingsView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
+            option(
+                "Weeks (4-4-5)",
+                "52 or 53 weeks, ending on the same weekday every year, as retailers keep.",
+                selected: calendar.config.kind == .weeks
+            ) {
+                var next = calendar.config
+                next.kind = .weeks
+                calendar.set(next)
+            }
+
+            if calendar.config.kind == .weeks {
+                weeksControls
+            }
+
             Text("Today is \(preview.quarter.id), \(preview.quarter.start.iso) through \(preview.quarter.end.iso).")
                 .font(.system(size: 13))
                 .fixedSize(horizontal: false, vertical: true)
@@ -96,6 +110,96 @@ struct CalendarSettingsView: View {
 
             otherSection
         }
+    }
+
+    /// The rule of a 52/53-week year: the weekday and month it ends on, its pattern, where a 53rd
+    /// week goes, and whether the FY number is the year it ends or starts.
+    private var weeksControls: some View {
+        let rule = calendar.config.weekRule
+        return VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
+                Text("Ends the")
+                    .fixedSize()
+                Picker("Method", selection: weekField(\.method)) {
+                    Text("last").tag(WeekRule.Method.last)
+                    Text("nearest").tag(WeekRule.Method.nearest)
+                }
+                .labelsHidden()
+                .fixedSize()
+                Picker("Weekday", selection: weekField(\.endWeekday)) {
+                    ForEach(1...7, id: \.self) { weekday in
+                        Text(WeekRule.weekdayName(weekday)).tag(weekday)
+                    }
+                }
+                .labelsHidden()
+                .fixedSize()
+            }
+            HStack(spacing: 6) {
+                Text(rule.method == .last ? "of" : "to the end of")
+                    .fixedSize()
+                Picker("Month", selection: weekField(\.endMonth)) {
+                    ForEach(1...12, id: \.self) { month in
+                        Text(monthName(month)).tag(month)
+                    }
+                }
+                .labelsHidden()
+                .fixedSize()
+            }
+            HStack(spacing: 6) {
+                Picker("Pattern", selection: weekField(\.pattern)) {
+                    ForEach(WeekRule.Pattern.allCases) { pattern in
+                        Text(pattern.rawValue).tag(pattern)
+                    }
+                }
+                .fixedSize()
+                Picker("53rd week", selection: weekField(\.extraWeek)) {
+                    Text("in Q4").tag(WeekRule.ExtraWeek.q4)
+                    Text("in Q1").tag(WeekRule.ExtraWeek.q1)
+                }
+                .fixedSize()
+            }
+            Picker("FY number is", selection: weekField(\.yearOffset)) {
+                Text("the year it ends").tag(0)
+                Text("the year it starts").tag(-1)
+            }
+            .fixedSize()
+            HStack(spacing: 4) {
+                Text(weeksNamingLine)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .font(.system(size: 12))
+            if rule != .retail {
+                Button("Use the retail calendar (NRF 4-5-4)") {
+                    var next = calendar.config
+                    next.weekRule = .retail
+                    calendar.set(next)
+                }
+                .buttonStyle(.link)
+                .font(.system(size: 12))
+            }
+        }
+        .pickerStyle(.menu)
+        .font(.system(size: 13))
+    }
+
+    /// `FY26 runs 2026-02-01 through 2027-01-30, 52 weeks.`
+    private var weeksNamingLine: String {
+        let map = FiscalYearMap.containing(today, config: calendar.config)
+        let weeks = map.length / 7
+        return "FY\(map.fiscalYear) runs \(map.start.iso) through \(map.end.iso), \(weeks) weeks."
+    }
+
+    private func weekField<Value>(_ path: WritableKeyPath<WeekRule, Value>) -> Binding<Value> {
+        Binding(
+            get: { calendar.config.weekRule[keyPath: path] },
+            set: { value in
+                var next = calendar.config
+                next.kind = .weeks
+                next.weekRule[keyPath: path] = value
+                calendar.set(next)
+            }
+        )
     }
 
     /// Which weekdays the workday counts skip: a country's public holidays, and days off of your own.
