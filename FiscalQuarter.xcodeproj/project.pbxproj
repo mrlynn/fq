@@ -10,6 +10,7 @@
 		020EF113ED016C99DBD79FD5 /* CountdownViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA5E9085F82A900D7D4538 /* CountdownViews.swift */; };
 		059F9875BC6D8DD1EE09922A /* YearPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 313D2D8DC5D7D544335610F4 /* YearPicture.swift */; };
 		05BB2FDFD09C271ED033B864 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 139F56F3BAF1D647E378E75F /* Assets.xcassets */; };
+		06611EA989D7A5BEEA95AB6A /* WeekRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09B199D38D56AE7CE3463AA /* WeekRule.swift */; };
 		066CDA7ACC09884590A2C0BD /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
 		07205DA4203911C9DA92AF31 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
 		09328D58B4396286F9B3D284 /* BackgroundImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9EDF92FE6AE37B86135479 /* BackgroundImageStore.swift */; };
@@ -36,6 +37,7 @@
 		29182EA18C1D7979B6F1FEB8 /* Reminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E3E345414E531316FDFFF8 /* Reminders.swift */; };
 		2F7446E19C4004559CA82BA1 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F957F175961CB4E27232827 /* Theme.swift */; };
 		3105261555B3A994241D1C1B /* CountdownViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DA5E9085F82A900D7D4538 /* CountdownViews.swift */; };
+		31A309DC0BE474E1DA9FA8F3 /* WeekRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09B199D38D56AE7CE3463AA /* WeekRule.swift */; };
 		3576E8F8E0227F3E213433C3 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87DEFD191D4CF10448DE35B1 /* CalendarModel.swift */; };
 		388584B1D464A9672C5EE35E /* HolidayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E77F70328D8A186F7A6A59F /* HolidayTests.swift */; };
 		38CFC565B8402F0DB7E560B3 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
@@ -48,6 +50,8 @@
 		4B010DB29DA6B557117C201B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F957F175961CB4E27232827 /* Theme.swift */; };
 		4E6CCD33B74333B8153C9387 /* Reminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E3E345414E531316FDFFF8 /* Reminders.swift */; };
 		511BC65CFF3EFFE407B44979 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
+		516A7A7A0B2AAFFF65AF6B70 /* WeekRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09B199D38D56AE7CE3463AA /* WeekRule.swift */; };
+		531958F6F112DD67E4F1DCF1 /* WeekRuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9CCD320A39BF4475C65EB78 /* WeekRuleTests.swift */; };
 		589898691F615E769BE73FA9 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062EA10466FBD75CAAC906C2 /* AboutView.swift */; };
 		5909A460B030634A16A5682B /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F957F175961CB4E27232827 /* Theme.swift */; };
 		5AB68A67CA8B9089925F633A /* Countdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FEEEE78A96AF4BFD31523E /* Countdown.swift */; };
@@ -59,6 +63,7 @@
 		79852E20385A5B70D8AAA4D5 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
 		8205CEE647361B441A11C480 /* Holidays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F5E06692479AC082B3FA9E /* Holidays.swift */; };
 		84A4E3AA3B4A5CE9FFC2E6C0 /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
+		8C8A92085BDCB4477686FC21 /* WeekRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09B199D38D56AE7CE3463AA /* WeekRule.swift */; };
 		8FAE651CD44C6F8941B2486B /* FiscalYearConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194C76319EE7AEB5618CF8E2 /* FiscalYearConfig.swift */; };
 		92A7BE9A0556D4FBDBB18B8B /* Reminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E3E345414E531316FDFFF8 /* Reminders.swift */; };
 		92CF8AB65439CFBD71DA044C /* BackgroundImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9EDF92FE6AE37B86135479 /* BackgroundImageStore.swift */; };
@@ -95,6 +100,7 @@
 		DE68BD5D3F49D353F81B9551 /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
 		E0D6D2DF9F421524FCD264F4 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16711FAF784C47D4E62BFFBA /* Appearance.swift */; };
 		E81C8F038D5FF58506FD916C /* MilestonesScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66629027E8E9AB7C6A763387 /* MilestonesScreen.swift */; };
+		E86D2840DD155B2CB198BA05 /* WeekRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09B199D38D56AE7CE3463AA /* WeekRule.swift */; };
 		EBBD95FC45121A3F7EA10D92 /* FiscalCalendarDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */; };
 		EFEF9D3BF4318F366C926D92 /* CommandLineTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 692613ACD80F5EEEE068A1D1 /* CommandLineTool.swift */; };
 		F65F3D11CCD3B8D701F6F07A /* SavedCalendars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C83AC51F4B171233B027CFD /* SavedCalendars.swift */; };
@@ -185,9 +191,11 @@
 		9C28017B8A197D7C9E233572 /* FiscalCalendarDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendarDefinition.swift; sourceTree = "<group>"; };
 		A96B3534895B5A3F30C4B149 /* FiscalCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalCalendar.swift; sourceTree = "<group>"; };
 		B48A9C8A817102CF7D2A6A60 /* QuarterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuarterPanel.swift; sourceTree = "<group>"; };
+		C09B199D38D56AE7CE3463AA /* WeekRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekRule.swift; sourceTree = "<group>"; };
 		C45CA8AE25398280945D159B /* FiscalQuarterWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FiscalQuarterWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C92ECE333B72C1153D3D2DF9 /* MilestoneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilestoneTests.swift; sourceTree = "<group>"; };
 		C94B5CC027D4076B02DA9FDB /* MilestonesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MilestonesView.swift; sourceTree = "<group>"; };
+		C9CCD320A39BF4475C65EB78 /* WeekRuleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekRuleTests.swift; sourceTree = "<group>"; };
 		CB1ACF06F560EF02FE29270C /* FiscalYearMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalYearMap.swift; sourceTree = "<group>"; };
 		D7661360B9527EE6EDE4DF3C /* FiscalQuarterWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FiscalQuarterWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED5F94180FB0D966E273E744 /* FiscalQuarterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiscalQuarterApp.swift; sourceTree = "<group>"; };
@@ -209,6 +217,7 @@
 				2E77F70328D8A186F7A6A59F /* HolidayTests.swift */,
 				C92ECE333B72C1153D3D2DF9 /* MilestoneTests.swift */,
 				452BF0001491B9D275213A73 /* ReminderTests.swift */,
+				C9CCD320A39BF4475C65EB78 /* WeekRuleTests.swift */,
 			);
 			path = FiscalQuarterTests;
 			sourceTree = "<group>";
@@ -227,6 +236,7 @@
 				05E3E345414E531316FDFFF8 /* Reminders.swift */,
 				2C83AC51F4B171233B027CFD /* SavedCalendars.swift */,
 				7BFD87F30AE3313E355BC76B /* SharedSettings.swift */,
+				C09B199D38D56AE7CE3463AA /* WeekRule.swift */,
 			);
 			path = FiscalQuarterCore;
 			sourceTree = "<group>";
@@ -483,6 +493,7 @@
 				F65F3D11CCD3B8D701F6F07A /* SavedCalendars.swift in Sources */,
 				45BF96C1468B04AB349C822D /* SharedSettings.swift in Sources */,
 				2F7446E19C4004559CA82BA1 /* Theme.swift in Sources */,
+				516A7A7A0B2AAFFF65AF6B70 /* WeekRule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,6 +527,7 @@
 				43B3960804084483DAC14569 /* SavedCalendars.swift in Sources */,
 				258403D532DA0A4F370BCF24 /* SharedSettings.swift in Sources */,
 				5909A460B030634A16A5682B /* Theme.swift in Sources */,
+				E86D2840DD155B2CB198BA05 /* WeekRule.swift in Sources */,
 				C785985C6DB889D4C68F8213 /* YearPicture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,6 +551,8 @@
 				448D227095121F4B209E435E /* Reminders.swift in Sources */,
 				79852E20385A5B70D8AAA4D5 /* SavedCalendars.swift in Sources */,
 				97DA0550F25DB5027DBE9715 /* SharedSettings.swift in Sources */,
+				06611EA989D7A5BEEA95AB6A /* WeekRule.swift in Sources */,
+				531958F6F112DD67E4F1DCF1 /* WeekRuleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,6 +575,7 @@
 				FF6AD6FF65822775A230BBEF /* SavedCalendars.swift in Sources */,
 				7310588A4A8B60A26268D5DF /* SharedSettings.swift in Sources */,
 				4B010DB29DA6B557117C201B /* Theme.swift in Sources */,
+				31A309DC0BE474E1DA9FA8F3 /* WeekRule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -589,6 +604,7 @@
 				DE68BD5D3F49D353F81B9551 /* SavedCalendars.swift in Sources */,
 				FE13DC1DF0B8B8E5313E3807 /* SharedSettings.swift in Sources */,
 				DB2C5DCCF6130A54D2921186 /* Theme.swift in Sources */,
+				8C8A92085BDCB4477686FC21 /* WeekRule.swift in Sources */,
 				059F9875BC6D8DD1EE09922A /* YearPicture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

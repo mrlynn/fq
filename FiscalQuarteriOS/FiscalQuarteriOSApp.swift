@@ -285,19 +285,66 @@ struct YourCalendarScreen: View {
                 Picker("Calendar", selection: kind) {
                     Text("Default").tag(FiscalYearConfig.Kind.builtIn)
                     Text("Custom start").tag(FiscalYearConfig.Kind.custom)
+                    Text("Weeks (4-4-5)").tag(FiscalYearConfig.Kind.weeks)
                 }
                 .pickerStyle(.inline)
                 .labelsHidden()
             } footer: {
-                if calendar.config.kind == .builtIn {
+                switch calendar.config.kind {
+                case .builtIn:
                     Text("The calendar year, numbered by that year, so \(String(today.year)) is FY\(String(format: "%02d", today.year % 100)).")
-                } else {
+                case .custom:
                     Text("Four quarters of three months, numbered for the year the fiscal year ends.")
+                case .weeks:
+                    Text("52 or 53 weeks, ending on the same weekday every year, as retailers keep.")
                 }
             }
             if calendar.config.kind == .custom {
                 Section("The year starts") {
                     MonthDayPicker(month: month, day: day)
+                }
+            }
+            if calendar.config.kind == .weeks {
+                Section {
+                    Picker("Ends on the", selection: weekField(\.method)) {
+                        Text("Last").tag(WeekRule.Method.last)
+                        Text("Nearest").tag(WeekRule.Method.nearest)
+                    }
+                    Picker("Weekday", selection: weekField(\.endWeekday)) {
+                        ForEach(1...7, id: \.self) { weekday in
+                            Text(WeekRule.weekdayName(weekday)).tag(weekday)
+                        }
+                    }
+                    Picker(calendar.config.weekRule.method == .last ? "Of" : "To the end of", selection: weekField(\.endMonth)) {
+                        ForEach(1...12, id: \.self) { month in
+                            Text(WeekRule.monthName(month)).tag(month)
+                        }
+                    }
+                    Picker("Pattern", selection: weekField(\.pattern)) {
+                        ForEach(WeekRule.Pattern.allCases) { pattern in
+                            Text(pattern.rawValue).tag(pattern)
+                        }
+                    }
+                    Picker("53rd week", selection: weekField(\.extraWeek)) {
+                        Text("In Q4").tag(WeekRule.ExtraWeek.q4)
+                        Text("In Q1").tag(WeekRule.ExtraWeek.q1)
+                    }
+                    Picker("FY number is", selection: weekField(\.yearOffset)) {
+                        Text("The year it ends").tag(0)
+                        Text("The year it starts").tag(-1)
+                    }
+                    if calendar.config.weekRule != .retail {
+                        Button("Use the retail calendar (NRF 4-5-4)") {
+                            var next = calendar.config
+                            next.weekRule = .retail
+                            calendar.set(next)
+                        }
+                    }
+                } header: {
+                    Text("The year")
+                } footer: {
+                    let map = FiscalYearMap.containing(today, config: calendar.config)
+                    Text("FY\(map.fiscalYear) runs \(map.start.iso) through \(map.end.iso), \(map.length / 7) weeks.")
                 }
             }
             Section {
@@ -369,6 +416,18 @@ struct YourCalendarScreen: View {
             set: { value in
                 var next = calendar.config
                 next.kind = value
+                calendar.set(next)
+            }
+        )
+    }
+
+    private func weekField<Value>(_ path: WritableKeyPath<WeekRule, Value>) -> Binding<Value> {
+        Binding(
+            get: { calendar.config.weekRule[keyPath: path] },
+            set: { value in
+                var next = calendar.config
+                next.kind = .weeks
+                next.weekRule[keyPath: path] = value
                 calendar.set(next)
             }
         )

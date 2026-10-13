@@ -1,0 +1,14 @@
+{
+  "name": "Retail 4-5-4",
+  "eras": [
+    {
+      "rule": "weeks",
+      "endMonth": 1,
+      "endWeekday": "saturday",
+      "method": "nearest",
+      "pattern": "4-5-4",
+      "extraWeek": "q4",
+      "yearOffset": -1
+    }
+  ]
+}

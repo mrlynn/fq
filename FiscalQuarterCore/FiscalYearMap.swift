@@ -5,6 +5,15 @@ public struct FiscalMonth: Equatable, Identifiable {
     public let start: CalendarDate
     public let end: CalendarDate
     public let quarter: Int
+    /// The civil month it is named for. A 4-4-5 period is named for the month it mostly covers.
+    public let labelMonth: Int
+
+    public init(start: CalendarDate, end: CalendarDate, quarter: Int, labelMonth: Int? = nil) {
+        self.start = start
+        self.end = end
+        self.quarter = quarter
+        self.labelMonth = labelMonth ?? start.month
+    }
 
     public var id: String { start.iso }
 
@@ -13,7 +22,7 @@ public struct FiscalMonth: Equatable, Identifiable {
     }
 
     public var symbol: String {
-        Self.symbol(for: start.month)
+        Self.symbol(for: labelMonth)
     }
 
     static func symbol(for month: Int) -> String {
@@ -106,7 +115,8 @@ public struct FiscalYearMap: Equatable {
             fiscalYear: anchor.fiscalYear,
             calendar: calendar,
             quarters: quarters,
-            months: months(from: quarters[0].start, through: quarters[quarters.count - 1].end, calendar: calendar)
+            months: periods(of: quarters, calendar: calendar)
+                ?? months(from: quarters[0].start, through: quarters[quarters.count - 1].end, calendar: calendar)
         )
     }
 
@@ -123,6 +133,18 @@ public struct FiscalYearMap: Equatable {
         let opening = months.first?.symbol ?? start.iso
         let closing = months.last?.symbol ?? end.iso
         return "FY\(fiscalYear), \(opening) through \(closing). \(FiscalMonth.symbol(for: date.month)) \(date.day) is in Q\(quarter.quarter)."
+    }
+
+    /// A 52/53-week year's periods, three a quarter by its pattern. Nil for a calendar of months.
+    private static func periods(of quarters: [FiscalQuarter], calendar: FiscalCalendarDefinition) -> [FiscalMonth]? {
+        guard case .weeks(let rule) = calendar.era(containing: quarters[0].start).rule else { return nil }
+        return quarters.flatMap { quarter in
+            rule.periods(of: quarter).map { period in
+                // Named for the month of its middle day, which is the month it mostly covers.
+                let middle = FiscalCalendar.shift(period.start, by: FiscalCalendar.inclusiveDays(from: period.start, to: period.end) / 2) ?? period.start
+                return FiscalMonth(start: period.start, end: period.end, quarter: quarter.quarter, labelMonth: middle.month)
+            }
+        }
     }
 
     private static func months(
