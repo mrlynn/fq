@@ -19,6 +19,8 @@ struct FQCommand {
         var date = CalendarDate(Date(), calendar: .current)
         var definition = FiscalYearConfig.load(from: settings).definition
         var all = false
+        // Milestones belong to your calendar, so another calendar leaves them out.
+        var yours = true
         var index = 0
 
         while index < arguments.count {
@@ -37,6 +39,8 @@ struct FQCommand {
                 mode = .copy
             case "--countdown":
                 mode = .countdown
+            case "--milestones":
+                mode = .milestones
             case "--date":
                 index += 1
                 guard index < arguments.count, let parsed = CalendarDate(iso: arguments[index]) else {
@@ -51,6 +55,7 @@ struct FQCommand {
                     exit(2)
                 }
                 definition = try loadCalendar(arguments[index])
+                yours = false
             case "--all":
                 all = true
             default:
@@ -67,6 +72,7 @@ struct FQCommand {
         }
 
         let snapshot = QuarterSnapshot(on: date, calendar: definition)
+        let upcoming = yours ? Milestones.upcoming(Milestones.load(from: settings), onOrAfter: date, in: definition) : []
         switch mode {
         case .human:
             print(snapshot.quarter.id)
@@ -87,8 +93,7 @@ struct FQCommand {
         case .json:
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.sortedKeys]
-            let data = try encoder.encode(snapshot)
-            print(String(decoding: data, as: UTF8.self))
+            print(try json(snapshot, milestones: yours ? upcoming : nil, encoder: encoder))
         case .copy:
             try copyToPasteboard(snapshot.quarter.id)
             print(snapshot.quarter.id)
@@ -98,6 +103,17 @@ struct FQCommand {
                 print("\(group.label) ends \(group.end.iso)")
                 print("  \(countdown.phrase(in: .days)) · \(countdown.phrase(in: .workdays)) · \(countdown.phrase(in: .weekends))")
             }
+            for occurrence in upcoming {
+                let countdown = occurrence.countdown(from: date)
+                print("\(occurrence.milestone.name) on \(occurrence.date.iso)")
+                print("  \(countdown.phrase(in: .days)) · \(countdown.phrase(in: .workdays)) · \(countdown.phrase(in: .weekends))")
+            }
+        case .milestones:
+            guard yours else {
+                fputs("fq: milestones belong to your calendar, so --milestones does not take --calendar\n", stderr)
+                exit(2)
+            }
+            printMilestones(upcoming, on: date)
         }
     }
 }
@@ -109,6 +125,46 @@ enum Mode {
     case json
     case copy
     case countdown
+    case milestones
+}
+
+/// Each milestone's next date, soonest first, with its rule underneath.
+func printMilestones(_ upcoming: [MilestoneOccurrence], on date: CalendarDate) {
+    guard !upcoming.isEmpty else {
+        print("No milestones yet.")
+        return
+    }
+    let width = upcoming.map(\.milestone.name.count).max() ?? 0
+    let weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    for occurrence in upcoming {
+        let countdown = occurrence.countdown(from: date)
+        let weekday = weekdays[FiscalCalendar.weekday(occurrence.date) - 1]
+        let name = occurrence.milestone.name.padding(toLength: width, withPad: " ", startingAt: 0)
+        print("\(name)  \(weekday) \(occurrence.date.iso)  \(countdown.phrase(in: .days)) · \(countdown.phrase(in: .workdays))")
+        print("\(String(repeating: " ", count: width))  \(occurrence.milestone.summary)")
+    }
+}
+
+/// The snapshot as JSON, with a `milestones` list when `milestones` is not nil.
+func json(_ snapshot: QuarterSnapshot, milestones: [MilestoneOccurrence]?, encoder: JSONEncoder) throws -> String {
+    let data = try encoder.encode(snapshot)
+    guard let milestones, var object = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+        return String(decoding: data, as: UTF8.self)
+    }
+    object["milestones"] = milestones.map { occurrence -> [String: Any] in
+        let countdown = occurrence.countdown(from: snapshot.today)
+        return [
+            "name": occurrence.milestone.name,
+            "rule": occurrence.milestone.summary,
+            "date": occurrence.date.iso,
+            "quarter": occurrence.quarter.id,
+            "days": countdown.days,
+            "workdays": countdown.workdays,
+            "weekends": countdown.weekends,
+        ]
+    }
+    let merged = try JSONSerialization.data(withJSONObject: object, options: [.sortedKeys, .withoutEscapingSlashes])
+    return String(decoding: merged, as: UTF8.self)
 }
 
 /// Your calendar, then each saved calendar, one line each.
@@ -180,7 +236,8 @@ func printUsage() {
           fq --status         one line, for Slack or a doc
           fq --json           one JSON object
           fq --copy           copy the quarter id
-          fq --countdown      days, workdays, and weekends to the end of the quarter, half, and year
+          fq --countdown      days, workdays, and weekends to the end of the quarter, half, and year, and to each milestone
+          fq --milestones     your milestones' next dates, soonest first
           fq --date YYYY-MM-DD
           fq --calendar NAME  use a saved calendar, or a calendar JSON file, instead of yours
           fq --all            your calendar and every saved one, one line each
