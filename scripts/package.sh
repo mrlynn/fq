@@ -14,7 +14,7 @@
 set -eu
 cd "$(dirname "$0")/.."
 
-VERSION=1.5
+VERSION=1.6
 DIST="dist"
 STAGE="$DIST/stage"
 APP="$STAGE/FiscalQuarter.app"
