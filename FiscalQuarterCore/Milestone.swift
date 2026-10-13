@@ -16,6 +16,8 @@ public struct Milestone: Equatable, Codable, Identifiable {
     /// Quarter numbers it applies to, by position in the fiscal year. Empty means every quarter.
     public var quarters: Set<Int>
     public var weekend: WeekendRule
+    /// Workdays ahead to send its notification, when milestone notifications are on. Zero is on the day.
+    public var reminderLead: Int
 
     public init(
         id: UUID = UUID(),
@@ -25,7 +27,8 @@ public struct Milestone: Equatable, Codable, Identifiable {
         direction: Direction = .before,
         anchor: Anchor = .quarterEnd,
         quarters: Set<Int> = [],
-        weekend: WeekendRule = .fridayBefore
+        weekend: WeekendRule = .fridayBefore,
+        reminderLead: Int = 0
     ) {
         self.id = id
         self.name = name
@@ -35,7 +38,29 @@ public struct Milestone: Equatable, Codable, Identifiable {
         self.anchor = anchor
         self.quarters = quarters
         self.weekend = weekend
+        self.reminderLead = reminderLead
     }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, name, offset, unit, direction, anchor, quarters, weekend, reminderLead
+    }
+
+    /// Milestones saved before reminders existed have no lead, and get "on the day".
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        offset = try container.decode(Int.self, forKey: .offset)
+        unit = try container.decode(Unit.self, forKey: .unit)
+        direction = try container.decode(Direction.self, forKey: .direction)
+        anchor = try container.decode(Anchor.self, forKey: .anchor)
+        quarters = try container.decode(Set<Int>.self, forKey: .quarters)
+        weekend = try container.decode(WeekendRule.self, forKey: .weekend)
+        reminderLead = try container.decodeIfPresent(Int.self, forKey: .reminderLead) ?? 0
+    }
+
+    /// The leads the editor offers, in workdays.
+    public static let reminderLeads = [0, 1, 2, 5]
 
     public enum Unit: String, CaseIterable, Codable, Identifiable {
         case days, workdays, weeks
@@ -78,6 +103,9 @@ public struct Milestone: Equatable, Codable, Identifiable {
         }
         if quarters.contains(where: { !(1...4).contains($0) }) {
             return "Quarters are numbered 1 to 4."
+        }
+        if !(0...20).contains(reminderLead) {
+            return "Remind from 0 to 20 workdays ahead."
         }
         return nil
     }
@@ -159,6 +187,17 @@ public struct Milestone: Equatable, Codable, Identifiable {
         case 1: return "\(names[0]) only"
         default: return names.dropLast().joined(separator: ", ") + " and " + names.last!
         }
+    }
+
+    /// `count` weekdays before `date`, not counting `date`. Zero is `date` itself.
+    public static func workdays(_ count: Int, before date: CalendarDate) -> CalendarDate {
+        var day = date
+        var counted = 0
+        while counted < count, let previous = FiscalCalendar.day(before: day) {
+            day = previous
+            if !isWeekend(day) { counted += 1 }
+        }
+        return day
     }
 
     static func isWeekend(_ date: CalendarDate) -> Bool {

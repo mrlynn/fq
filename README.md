@@ -54,6 +54,17 @@ Once a milestone's day has passed, it shows the next quarter's. `fq --countdown`
 
 In the app, Milestones lists them with their next dates. Add one with a name and a rule, and the form shows when it next falls before you save it. Click one to change it. The panel counts each one down under Countdown, in amber in its last week, and clicking one puts it in the menu bar, such as `Forecast due · 3wd`.
 
+### Notifications
+
+Under Notifications on the Milestones page, the app can send four kinds. All start off.
+
+- **Milestones**, on the day, or 1, 2, or 5 workdays before. Each milestone picks its own, under Remind.
+- **Last two weeks of the quarter**, the day 14 days are left, when the countdown turns amber.
+- **First day of a quarter.**
+- **30 days before the year ends.**
+
+They go out at 9:00, or the time set under Send at. The first one turned on asks macOS for permission. The app plans 30 days ahead and plans again when a milestone, the calendar, a setting, or the date changes. It runs at login, so the plan stays current. macOS only allows notifications from a signed copy in Applications, which the disk image provides.
+
 ## Widgets
 
 The Mac app carries a Fiscal countdown widget for the desktop and Notification Center, in small and medium sizes. After the app has opened once, right-click the desktop, choose Edit Widgets, and find Fiscal Quarter. Small shows one countdown. Medium adds the quarter, the half, and the year side by side, each with its own bar, because they start on different days even when they end together.
@@ -253,7 +264,9 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `calendars/` holds example calendar files
 - `FiscalQuarterCore/Countdown.swift` counts down to the end of the quarter, half, and year
 - `FiscalQuarterCore/Milestone.swift` works out when each milestone falls and stores the list
-- `FiscalQuarterApp/MilestonesView.swift` lists, adds, and changes milestones
+- `FiscalQuarterApp/MilestonesView.swift` lists, adds, and changes milestones, and sets notifications
+- `FiscalQuarterCore/Reminders.swift` plans which notifications fall in the next 30 days
+- `FiscalQuarterApp/ReminderScheduler.swift` schedules that plan with macOS
 - `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures. The iOS app shares `CalendarModel.swift`, `QuarterClock.swift`, and `YearPicture.swift`
 - `FiscalQuarterCore/Appearance.swift` is the shared look: background, type, colors, and what is shown
 - `FiscalQuarterUI/` is SwiftUI shared by both apps and both widgets: the theme, the background pictures, and the countdown views

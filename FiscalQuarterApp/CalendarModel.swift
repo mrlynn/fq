@@ -9,6 +9,8 @@ final class CalendarModel: ObservableObject {
     @Published private(set) var others: [SavedCalendar]
     /// Dates that come around every quarter on your calendar, in the order they were added.
     @Published private(set) var milestones: [Milestone]
+    /// Which notifications to send. All start off.
+    @Published private(set) var reminders: ReminderSettings
     @Published private(set) var appearance: Appearance
     /// The picture for an image background, loaded once when the appearance changes.
     @Published private(set) var backgroundImage: CGImage?
@@ -18,6 +20,7 @@ final class CalendarModel: ObservableObject {
         config = FiscalYearConfig.load(from: FiscalYearConfig.store)
         others = SavedCalendars.load(from: FiscalYearConfig.store)
         milestones = Milestones.load(from: FiscalYearConfig.store)
+        reminders = ReminderSettings.load(from: FiscalYearConfig.store)
         appearance = Appearance.load(from: FiscalYearConfig.store)
         backgroundImage = appearance.imageFile.flatMap(BackgroundImageStore.load)
         // Widgets keep the timeline they built before an update. Rebuilding on launch means a new
@@ -65,6 +68,12 @@ final class CalendarModel: ObservableObject {
         milestones.removeAll { $0.id == milestone.id }
         Milestones.save(milestones, to: FiscalYearConfig.store)
         WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    func setReminders(_ reminders: ReminderSettings) {
+        guard reminders != self.reminders else { return }
+        self.reminders = reminders
+        reminders.save(to: FiscalYearConfig.store)
     }
 
     /// Each milestone's next date on or after `today`, soonest first.

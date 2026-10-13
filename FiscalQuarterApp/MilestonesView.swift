@@ -1,8 +1,11 @@
+import AppKit
 import SwiftUI
+import UserNotifications
 
 /// Your milestones: the list, and a form to add one or change one.
 struct MilestonesView: View {
     @ObservedObject var calendar: CalendarModel
+    @ObservedObject var reminders: ReminderScheduler
     let today: CalendarDate
     let dismiss: () -> Void
 
@@ -54,7 +57,76 @@ struct MilestonesView: View {
                 .buttonStyle(.link)
                 .font(.system(size: 13))
             }
+
+            if draft == nil {
+                Divider()
+                notifications
+            }
         }
+        .task { await reminders.refreshAuthorization() }
+    }
+
+    // MARK: Notifications
+
+    private var notifications: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("NOTIFICATIONS")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(.secondary)
+
+            reminderToggle("Milestones", \.milestones)
+            reminderToggle("Last two weeks of the quarter", \.lastTwoWeeks)
+            reminderToggle("First day of a quarter", \.newQuarter)
+            reminderToggle("30 days before the year ends", \.yearEnd)
+
+            if calendar.reminders.anyOn {
+                DatePicker("Send at", selection: sendTime, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(.field)
+                    .fixedSize()
+            }
+
+            if calendar.reminders.anyOn && reminders.authorization == .denied {
+                Text("Notifications are off for Fiscal Quarter in System Settings, so none will be sent.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(MarkColor.warning)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button("Open Notifications settings") {
+                    if let url = URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension") {
+                        NSWorkspace.shared.open(url)
+                    }
+                }
+                .buttonStyle(.link)
+            }
+        }
+        .font(.system(size: 13))
+    }
+
+    /// Turning the first one on makes the scheduler ask macOS for permission.
+    private func reminderToggle(_ title: String, _ path: WritableKeyPath<ReminderSettings, Bool>) -> some View {
+        Toggle(title, isOn: Binding(
+            get: { calendar.reminders[keyPath: path] },
+            set: { on in
+                var next = calendar.reminders
+                next[keyPath: path] = on
+                calendar.setReminders(next)
+            }
+        ))
+        .toggleStyle(.checkbox)
+    }
+
+    private var sendTime: Binding<Date> {
+        Binding(
+            get: {
+                Calendar.current.date(bySettingHour: calendar.reminders.hour, minute: calendar.reminders.minute, second: 0, of: Date()) ?? Date()
+            },
+            set: { date in
+                let parts = Calendar.current.dateComponents([.hour, .minute], from: date)
+                var next = calendar.reminders
+                next.hour = parts.hour ?? 9
+                next.minute = parts.minute ?? 0
+                calendar.setReminders(next)
+            }
+        )
     }
 
     // MARK: List
@@ -161,6 +233,15 @@ struct MilestonesView: View {
                     set: { draft?.weekend = $0 ? .fridayBefore : .keep }
                 ))
                 .toggleStyle(.checkbox)
+
+                Picker("Remind", selection: field(\.reminderLead)) {
+                    ForEach(Milestone.reminderLeads, id: \.self) { lead in
+                        Text(lead == 0 ? "On the day" : lead == 1 ? "1 workday before" : "\(lead) workdays before").tag(lead)
+                    }
+                }
+                .pickerStyle(.menu)
+                .fixedSize()
+                .help(calendar.reminders.milestones ? "When this milestone's notification is sent" : "Turn on Milestones under Notifications to be reminded")
 
                 Text(preview(current))
                     .font(.system(size: 12))
