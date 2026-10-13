@@ -50,7 +50,9 @@ Forecast due     Thu 2026-12-24  73 days · 53 workdays
                  5 workdays before quarter end, every quarter
 ```
 
-Once a milestone's day has passed, it shows the next quarter's. `fq --countdown` adds them after the quarter, half, and year, and `fq --json` lists them under `milestones`. The app's screen for adding them is still to come.
+Once a milestone's day has passed, it shows the next quarter's. `fq --countdown` adds them after the quarter, half, and year, and `fq --json` lists them under `milestones`.
+
+In the app, Milestones lists them with their next dates. Add one with a name and a rule, and the form shows when it next falls before you save it. Click one to change it. The panel counts each one down under Countdown, in amber in its last week, and clicking one puts it in the menu bar, such as `Forecast due · 3wd`.
 
 ## Widgets
 
@@ -251,6 +253,7 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `calendars/` holds example calendar files
 - `FiscalQuarterCore/Countdown.swift` counts down to the end of the quarter, half, and year
 - `FiscalQuarterCore/Milestone.swift` works out when each milestone falls and stores the list
+- `FiscalQuarterApp/MilestonesView.swift` lists, adds, and changes milestones
 - `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures. The iOS app shares `CalendarModel.swift`, `QuarterClock.swift`, and `YearPicture.swift`
 - `FiscalQuarterCore/Appearance.swift` is the shared look: background, type, colors, and what is shown
 - `FiscalQuarterUI/` is SwiftUI shared by both apps and both widgets: the theme, the background pictures, and the countdown views

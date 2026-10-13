@@ -24,7 +24,11 @@ struct FiscalQuarterApp: App {
         MenuBarExtra {
             QuarterPanel(clock: clock, calendar: calendar, commandLine: commandLine)
         } label: {
-            let countdown = snapshot.countdown(to: CountdownTarget(rawValue: menuBarTarget) ?? .quarter)
+            let countdown = MenuBarCountdown.countdown(
+                for: menuBarTarget,
+                snapshot: snapshot,
+                upcoming: calendar.upcoming(on: snapshot.today)
+            )
             let unit = CountdownUnit(rawValue: countdownUnit) ?? .days
             Text("\(countdown.label) · \(countdown.short(in: unit))")
                 .accessibilityLabel("\(countdown.label), \(countdown.phrase(in: unit)) remaining")
