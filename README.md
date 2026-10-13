@@ -65,6 +65,8 @@ Under Notifications on the Milestones page, the app can send four kinds. All sta
 
 They go out at 9:00, or the time set under Send at. The first one turned on asks macOS for permission. The app plans 30 days ahead and plans again when a milestone, the calendar, a setting, or the date changes. It runs at login, so the plan stays current. macOS only allows notifications from a signed copy in Applications, which the disk image provides.
 
+The iPhone and iPad app has the same Milestones screen, under the list's last section, and shows each milestone under Countdown. It plans notifications a month ahead each time it opens, since iOS gives it no other chance to run, so it needs opening now and then to keep them coming.
+
 ## Widgets
 
 The Mac app carries a Fiscal countdown widget for the desktop and Notification Center, in small and medium sizes. After the app has opened once, right-click the desktop, choose Edit Widgets, and find Fiscal Quarter. Small shows one countdown. Medium adds the quarter, the half, and the year side by side, each with its own bar, because they start on different days even when they end together. To count down to a milestone instead, choose it under Milestone in Edit Widget. The widget then shows the milestone's name, its count, and "Due" with its date, in amber in its last week. A milestone always runs on your calendar, and a widget whose milestone has been removed goes back to its period.
@@ -266,7 +268,8 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `FiscalQuarterCore/Milestone.swift` works out when each milestone falls and stores the list
 - `FiscalQuarterApp/MilestonesView.swift` lists, adds, and changes milestones, and sets notifications
 - `FiscalQuarterCore/Reminders.swift` plans which notifications fall in the next 30 days
-- `FiscalQuarterApp/ReminderScheduler.swift` schedules that plan with macOS
+- `FiscalQuarterApp/ReminderScheduler.swift` schedules that plan with macOS or iOS
+- `FiscalQuarteriOS/MilestonesScreen.swift` lists, adds, and changes milestones on iPhone and iPad, and sets notifications
 - `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures. The iOS app shares `CalendarModel.swift`, `QuarterClock.swift`, and `YearPicture.swift`
 - `FiscalQuarterCore/Appearance.swift` is the shared look: background, type, colors, and what is shown
 - `FiscalQuarterUI/` is SwiftUI shared by both apps and both widgets: the theme, the background pictures, and the countdown views

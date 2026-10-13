@@ -3,12 +3,22 @@ import UIKit
 
 @main
 struct FiscalQuarteriOSApp: App {
-    @StateObject private var clock = QuarterClock()
-    @StateObject private var calendar = CalendarModel()
+    @StateObject private var clock: QuarterClock
+    @StateObject private var calendar: CalendarModel
+    @StateObject private var reminders: ReminderScheduler
+
+    init() {
+        let clock = QuarterClock()
+        let calendar = CalendarModel()
+        _clock = StateObject(wrappedValue: clock)
+        _calendar = StateObject(wrappedValue: calendar)
+        // Built here, not on first use, so reminders are planned each time the app starts.
+        _reminders = StateObject(wrappedValue: ReminderScheduler(calendar: calendar, clock: clock))
+    }
 
     var body: some Scene {
         WindowGroup {
-            QuarterScreen(clock: clock, calendar: calendar)
+            QuarterScreen(clock: clock, calendar: calendar, reminders: reminders)
         }
     }
 }
@@ -17,6 +27,7 @@ struct FiscalQuarteriOSApp: App {
 struct QuarterScreen: View {
     @ObservedObject var clock: QuarterClock
     @ObservedObject var calendar: CalendarModel
+    @ObservedObject var reminders: ReminderScheduler
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage("yearPicture") private var pictureKind = PictureKind.line.rawValue
     @AppStorage("countdownUnit") private var countdownUnit = CountdownUnit.days.rawValue
@@ -87,6 +98,21 @@ struct QuarterScreen: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    ForEach(calendar.upcoming(on: snapshot.today), id: \.milestone.id) { occurrence in
+                        let countdown = occurrence.countdown(from: snapshot.today)
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack(alignment: .firstTextBaseline) {
+                                Text(occurrence.milestone.name)
+                                Spacer()
+                                Text(countdown.phrase(in: unit))
+                                    .monospacedDigit()
+                                    .foregroundStyle(countdown.isSoon ? MarkColor.warning : Color.primary)
+                            }
+                            Text("Due \(DayWords.short(occurrence.date, today: snapshot.today)) · \(occurrence.milestone.summary)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 } header: {
                     Text("Countdown")
                 } footer: {
@@ -142,6 +168,9 @@ struct QuarterScreen: View {
                 Section {
                     NavigationLink("Your calendar") {
                         YourCalendarScreen(calendar: calendar, today: snapshot.today)
+                    }
+                    NavigationLink("Milestones") {
+                        MilestonesScreen(calendar: calendar, reminders: reminders, today: snapshot.today)
                     }
                     NavigationLink("Appearance") {
                         AppearanceEditor(calendar: calendar, today: snapshot.today)

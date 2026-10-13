@@ -236,8 +236,8 @@ struct QuarterPanel: View {
         }
         .buttonStyle(.plain)
         .font(.system(size: 13))
-        .help("\(MilestoneWords.day(occurrence.date)) · \(occurrence.milestone.summary)")
-        .accessibilityLabel("\(occurrence.milestone.name) on \(MilestoneWords.day(occurrence.date)), \(countdown.phrase(in: unit))")
+        .help("\(DayWords.short(occurrence.date, today: today)) · \(occurrence.milestone.summary)")
+        .accessibilityLabel("\(occurrence.milestone.name) on \(DayWords.short(occurrence.date, today: today)), \(countdown.phrase(in: unit))")
         .accessibilityHint(inMenuBar ? "Shown in the menu bar" : "Shows it in the menu bar")
         .accessibilityAddTraits(inMenuBar ? .isSelected : [])
     }

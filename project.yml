@@ -97,6 +97,7 @@ targets:
       - FiscalQuarterApp/ColorChoice.swift
       - FiscalQuarterApp/CalendarModel.swift
       - FiscalQuarterApp/QuarterClock.swift
+      - FiscalQuarterApp/ReminderScheduler.swift
       - FiscalQuarterApp/YearPicture.swift
     dependencies:
       - target: FiscalQuarterWidgetiOS
