@@ -21,6 +21,7 @@ struct FQCommand {
         var all = false
         // Milestones belong to your calendar, so another calendar leaves them out.
         var yours = true
+        var workweek = Workweek.load(from: settings)
         var index = 0
 
         while index < arguments.count {
@@ -41,6 +42,22 @@ struct FQCommand {
                 mode = .countdown
             case "--milestones":
                 mode = .milestones
+            case "--holidays":
+                mode = .holidays
+            case "--workweek":
+                index += 1
+                guard index < arguments.count else {
+                    fputs("fq: --workweek needs a country (\(HolidayRegion.allCases.map(\.rawValue).joined(separator: ", "))) or none\n", stderr)
+                    exit(2)
+                }
+                if arguments[index] == "none" {
+                    workweek.region = nil
+                } else if let region = HolidayRegion(rawValue: arguments[index]) {
+                    workweek.region = region
+                } else {
+                    fputs("fq: --workweek takes \(HolidayRegion.allCases.map(\.rawValue).joined(separator: ", ")), or none\n", stderr)
+                    exit(2)
+                }
             case "--date":
                 index += 1
                 guard index < arguments.count, let parsed = CalendarDate(iso: arguments[index]) else {
@@ -71,8 +88,8 @@ struct FQCommand {
             return
         }
 
-        let snapshot = QuarterSnapshot(on: date, calendar: definition)
-        let upcoming = yours ? Milestones.upcoming(Milestones.load(from: settings), onOrAfter: date, in: definition) : []
+        let snapshot = QuarterSnapshot(on: date, calendar: definition, workweek: workweek)
+        let upcoming = yours ? Milestones.upcoming(Milestones.load(from: settings), onOrAfter: date, in: definition, workweek: workweek) : []
         switch mode {
         case .human:
             print(snapshot.quarter.id)
@@ -114,6 +131,8 @@ struct FQCommand {
                 exit(2)
             }
             printMilestones(upcoming, on: date)
+        case .holidays:
+            printHolidays(workweek, year: date.year)
         }
     }
 }
@@ -126,6 +145,26 @@ enum Mode {
     case copy
     case countdown
     case milestones
+    case holidays
+}
+
+/// The year's public holidays and your days off, in date order.
+func printHolidays(_ workweek: Workweek, year: Int) {
+    var rows: [(CalendarDate, String)] = []
+    if let region = workweek.region {
+        rows += region.holidays(in: year).filter { $0.date.year == year }.map { ($0.date, $0.name) }
+    }
+    rows += workweek.daysOff.filter { $0.year == year }.map { ($0, "Day off") }
+    guard !rows.isEmpty else {
+        print(workweek.region == nil ? "No holidays. Workdays are Monday through Friday." : "No holidays in \(year).")
+        return
+    }
+    if let region = workweek.region {
+        print(region.title)
+    }
+    for (date, name) in rows.sorted(by: { $0.0 < $1.0 }) {
+        print("\(DayWords.short(date).padding(toLength: 10, withPad: " ", startingAt: 0))  \(name)")
+    }
 }
 
 /// Each milestone's next date, soonest first, with its rule underneath.
@@ -238,6 +277,8 @@ func printUsage() {
           fq --copy           copy the quarter id
           fq --countdown      days, workdays, and weekends to the end of the quarter, half, and year, and to each milestone
           fq --milestones     your milestones' next dates, soonest first
+          fq --holidays       the year's holidays and days off that workdays skip
+          fq --workweek CODE  count workdays with a country's holidays instead of yours, or none
           fq --date YYYY-MM-DD
           fq --calendar NAME  use a saved calendar, or a calendar JSON file, instead of yours
           fq --all            your calendar and every saved one, one line each

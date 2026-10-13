@@ -23,7 +23,7 @@ struct FiscalQuarterApp: App {
     }
 
     private var snapshot: QuarterSnapshot {
-        QuarterSnapshot(on: CalendarDate(clock.today, calendar: .current), config: calendar.config)
+        calendar.snapshot(on: CalendarDate(clock.today, calendar: .current))
     }
 
     var body: some Scene {

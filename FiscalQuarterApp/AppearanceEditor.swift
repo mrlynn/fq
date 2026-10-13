@@ -126,7 +126,7 @@ struct AppearanceEditor: View {
     private var preview: some View {
         let entry = CountdownEntry(
             date: Date(),
-            snapshot: QuarterSnapshot(on: today, config: calendar.config),
+            snapshot: calendar.snapshot(on: today),
             target: .quarter,
             unit: .days,
             label: nil,

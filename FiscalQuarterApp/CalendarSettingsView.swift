@@ -12,9 +12,10 @@ struct CalendarSettingsView: View {
     @State private var newMonth = 1
     @State private var newDay = 1
     @State private var problem: String?
+    @State private var newDayOff = Date()
 
     private var preview: QuarterSnapshot {
-        QuarterSnapshot(on: today, config: calendar.config)
+        calendar.snapshot(on: today)
     }
 
     var body: some View {
@@ -89,8 +90,87 @@ struct CalendarSettingsView: View {
 
             Divider()
 
+            workdaysSection
+
+            Divider()
+
             otherSection
         }
+    }
+
+    /// Which weekdays the workday counts skip: a country's public holidays, and days off of your own.
+    private var workdaysSection: some View {
+        let workweek = calendar.workweek
+        let upcoming = workweek.daysOff.filter { $0 >= today }.sorted()
+        return VStack(alignment: .leading, spacing: 8) {
+            sectionTitle("Workdays")
+
+            Picker("Holidays", selection: region) {
+                Text("None").tag(HolidayRegion?.none)
+                ForEach(HolidayRegion.allCases) { region in
+                    Text(region.title).tag(HolidayRegion?.some(region))
+                }
+            }
+            .pickerStyle(.menu)
+
+            Text(nextDayOffLine)
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            ForEach(upcoming, id: \.self) { day in
+                HStack {
+                    Text(DayWords.short(day, today: today))
+                    Spacer(minLength: 8)
+                    Button {
+                        var next = workweek
+                        next.daysOff.remove(day)
+                        calendar.setWorkweek(next)
+                    } label: {
+                        Image(systemName: "minus.circle")
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Remove this day off")
+                    .accessibilityLabel("Remove the day off on \(DayWords.short(day, today: today))")
+                }
+            }
+
+            HStack(spacing: 8) {
+                DatePicker("Day off", selection: $newDayOff, displayedComponents: .date)
+                    .datePickerStyle(.field)
+                    .labelsHidden()
+                Button("Add day off") {
+                    // Days off that have passed no longer change any count, so adding one clears them.
+                    var next = workweek
+                    next.daysOff = next.daysOff.filter { $0 >= today }
+                    next.daysOff.insert(CalendarDate(newDayOff, calendar: .current))
+                    calendar.setWorkweek(next)
+                }
+                .buttonStyle(.link)
+            }
+        }
+        .font(.system(size: 13))
+    }
+
+    /// `Next day off: Wed 11 Nov, Veterans Day.` or what workdays are without any.
+    private var nextDayOffLine: String {
+        let workweek = calendar.workweek
+        guard let next = workweek.nextDayOff(onOrAfter: today) else {
+            return "Workdays are Monday through Friday. Choose a country to skip its public holidays, or add your own days off."
+        }
+        return "Next day off: \(DayWords.short(next.date, today: today)), \(next.name)."
+    }
+
+    private var region: Binding<HolidayRegion?> {
+        Binding(
+            get: { calendar.workweek.region },
+            set: { value in
+                var next = calendar.workweek
+                next.region = value
+                calendar.setWorkweek(next)
+            }
+        )
     }
 
     /// Calendars kept alongside yours, such as a customer's. They show in the panel but never in the menu bar.

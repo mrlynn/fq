@@ -90,12 +90,15 @@ public struct QuarterSnapshot: Equatable, Encodable {
     public let week: Int
     public let next: FiscalQuarter
     public let calendar: FiscalCalendarDefinition
+    /// Which days the countdowns count as workdays.
+    public let workweek: Workweek
 
-    public init(on date: CalendarDate, config: FiscalYearConfig = .builtIn) {
-        self.init(on: date, calendar: config.definition)
+    public init(on date: CalendarDate, config: FiscalYearConfig = .builtIn, workweek: Workweek = .weekdays) {
+        self.init(on: date, calendar: config.definition, workweek: workweek)
     }
 
-    public init(on date: CalendarDate, calendar: FiscalCalendarDefinition) {
+    public init(on date: CalendarDate, calendar: FiscalCalendarDefinition, workweek: Workweek = .weekdays) {
+        self.workweek = workweek
         let quarter = FiscalCalendar.quarter(containing: date, in: calendar)
         let length = FiscalCalendar.inclusiveDays(from: quarter.start, to: quarter.end)
         self.quarter = quarter

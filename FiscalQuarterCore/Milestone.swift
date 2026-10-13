@@ -84,7 +84,8 @@ public struct Milestone: Equatable, Codable, Identifiable {
         }
     }
 
-    /// What to do when a date lands on a Saturday or Sunday.
+    /// What to do when a date lands on a day off: a weekend, a holiday, or one of your own.
+    /// `fridayBefore` moves it to the workday before, which is the Friday for a plain weekend.
     public enum WeekendRule: String, CaseIterable, Codable, Identifiable {
         case keep, fridayBefore
         public var id: String { rawValue }
@@ -118,7 +119,7 @@ public struct Milestone: Equatable, Codable, Identifiable {
     }
 
     /// The day the rule lands on for `quarter`, whether or not it applies there.
-    public func date(in quarter: FiscalQuarter) -> CalendarDate {
+    public func date(in quarter: FiscalQuarter, workweek: Workweek = .weekdays) -> CalendarDate {
         let base = anchor == .quarterStart ? quarter.start : quarter.end
         let step = direction == .before ? -1 : 1
         var date = base
@@ -128,15 +129,15 @@ public struct Milestone: Equatable, Codable, Identifiable {
         case .weeks:
             date = FiscalCalendar.shift(base, by: step * offset * 7) ?? base
         case .workdays:
-            // Counts weekdays away from the anchor, not counting the anchor itself.
+            // Counts workdays away from the anchor, not counting the anchor itself.
             var counted = 0
             while counted < offset, let next = FiscalCalendar.shift(date, by: step) {
                 date = next
-                if !Self.isWeekend(date) { counted += 1 }
+                if workweek.isWorkday(date) { counted += 1 }
             }
         }
         if weekend == .fridayBefore {
-            while Self.isWeekend(date), let previous = FiscalCalendar.day(before: date) {
+            while !workweek.isWorkday(date), let previous = FiscalCalendar.day(before: date) {
                 date = previous
             }
         }
@@ -148,16 +149,16 @@ public struct Milestone: Equatable, Codable, Identifiable {
     /// A rule's dates only move forward from one quarter to the next, so the first one on or after
     /// today is the answer. An offset can reach up to a year away from its own quarter, so the
     /// search starts five quarters back and looks about two years ahead.
-    public func next(onOrAfter today: CalendarDate, in calendar: FiscalCalendarDefinition) -> MilestoneOccurrence? {
+    public func next(onOrAfter today: CalendarDate, in calendar: FiscalCalendarDefinition, workweek: Workweek = .weekdays) -> MilestoneOccurrence? {
         var quarter = FiscalCalendar.quarter(containing: today, in: calendar)
         for _ in 0..<5 {
             quarter = FiscalCalendar.quarter(before: quarter, in: calendar)
         }
         for _ in 0..<14 {
             if applies(to: quarter) {
-                let date = date(in: quarter)
+                let date = date(in: quarter, workweek: workweek)
                 if date >= today {
-                    return MilestoneOccurrence(milestone: self, quarter: quarter, date: date)
+                    return MilestoneOccurrence(milestone: self, quarter: quarter, date: date, workweek: workweek)
                 }
             }
             quarter = FiscalCalendar.quarter(after: quarter, in: calendar)
@@ -189,20 +190,15 @@ public struct Milestone: Equatable, Codable, Identifiable {
         }
     }
 
-    /// `count` weekdays before `date`, not counting `date`. Zero is `date` itself.
-    public static func workdays(_ count: Int, before date: CalendarDate) -> CalendarDate {
+    /// `count` workdays before `date`, not counting `date`. Zero is `date` itself.
+    public static func workdays(_ count: Int, before date: CalendarDate, workweek: Workweek = .weekdays) -> CalendarDate {
         var day = date
         var counted = 0
         while counted < count, let previous = FiscalCalendar.day(before: day) {
             day = previous
-            if !isWeekend(day) { counted += 1 }
+            if workweek.isWorkday(day) { counted += 1 }
         }
         return day
-    }
-
-    static func isWeekend(_ date: CalendarDate) -> Bool {
-        let weekday = FiscalCalendar.weekday(date)
-        return weekday == 1 || weekday == 7
     }
 }
 
@@ -211,10 +207,12 @@ public struct MilestoneOccurrence: Equatable {
     public let milestone: Milestone
     public let quarter: FiscalQuarter
     public let date: CalendarDate
+    /// The workweek the date was worked out with, which its countdown counts with too.
+    public var workweek: Workweek = .weekdays
 
     /// Time left from `today` through the milestone's day, counted like the period countdowns.
     public func countdown(from today: CalendarDate) -> Countdown {
-        Countdown(target: nil, label: milestone.name, start: min(quarter.start, date), end: date, today: today)
+        Countdown(target: nil, label: milestone.name, start: min(quarter.start, date), end: date, today: today, workweek: workweek)
     }
 }
 
@@ -236,9 +234,9 @@ public enum Milestones {
     }
 
     /// The next date of each milestone on or after `today`, soonest first. Ties keep list order.
-    public static func upcoming(_ milestones: [Milestone], onOrAfter today: CalendarDate, in calendar: FiscalCalendarDefinition) -> [MilestoneOccurrence] {
+    public static func upcoming(_ milestones: [Milestone], onOrAfter today: CalendarDate, in calendar: FiscalCalendarDefinition, workweek: Workweek = .weekdays) -> [MilestoneOccurrence] {
         milestones
-            .compactMap { $0.next(onOrAfter: today, in: calendar) }
+            .compactMap { $0.next(onOrAfter: today, in: calendar, workweek: workweek) }
             .enumerated()
             .sorted { ($0.element.date, $0.offset) < ($1.element.date, $1.offset) }
             .map(\.element)

@@ -132,7 +132,7 @@ struct MilestonesView: View {
     // MARK: List
 
     private func row(_ milestone: Milestone) -> some View {
-        let next = milestone.next(onOrAfter: today, in: calendar.config.definition)
+        let next = milestone.next(onOrAfter: today, in: calendar.config.definition, workweek: calendar.workweek)
         return HStack(alignment: .top, spacing: 8) {
             Button {
                 problem = nil
@@ -228,7 +228,7 @@ struct MilestonesView: View {
                         .padding(.leading, 4)
                 }
 
-                Toggle("Move a weekend day to the Friday before", isOn: Binding(
+                Toggle("Move a day off to the workday before", isOn: Binding(
                     get: { current.weekend == .fridayBefore },
                     set: { draft?.weekend = $0 ? .fridayBefore : .keep }
                 ))
@@ -290,7 +290,7 @@ struct MilestonesView: View {
         if milestone.offset < 0 || milestone.offset > Milestone.maximumOffset {
             return "Use a distance from 0 to \(Milestone.maximumOffset)."
         }
-        guard let next = milestone.next(onOrAfter: today, in: calendar.config.definition) else {
+        guard let next = milestone.next(onOrAfter: today, in: calendar.config.definition, workweek: calendar.workweek) else {
             return milestone.summary
         }
         // Countdowns count today, so the day itself is 1. Here it reads as days from today.
