@@ -33,6 +33,25 @@ FY26-Q4 · H2 · FY26 ends 2026-12-31
 
 A half is the first two quarters or the last two. A calendar file with a year of other than four quarters puts the extra quarter in the first half.
 
+## Milestones
+
+A milestone is a date that comes around every quarter, such as "Forecast due, 5 workdays before quarter end." It is a rule, not a date: a distance in days, workdays, or weeks, before or after the quarter's start or end, in every quarter or only some. Each quarter it lands on that quarter's own dates, so a short quarter gets its own day. One that lands on a weekend moves to the Friday before, unless it is set to stay. Milestones belong to your calendar.
+
+`fq` lists them, soonest first:
+
+```sh
+fq --milestones
+```
+
+```
+Pipeline review  Thu 2026-10-15  3 days · 3 workdays
+                 2 weeks after quarter start, every quarter
+Forecast due     Thu 2026-12-24  73 days · 53 workdays
+                 5 workdays before quarter end, every quarter
+```
+
+Once a milestone's day has passed, it shows the next quarter's. `fq --countdown` adds them after the quarter, half, and year, and `fq --json` lists them under `milestones`. The app's screen for adding them is still to come.
+
 ## Widgets
 
 The Mac app carries a Fiscal countdown widget for the desktop and Notification Center, in small and medium sizes. After the app has opened once, right-click the desktop, choose Edit Widgets, and find Fiscal Quarter. Small shows one countdown. Medium adds the quarter, the half, and the year side by side, each with its own bar, because they start on different days even when they end together.
@@ -231,6 +250,7 @@ xcodebuild -project FiscalQuarter.xcodeproj -scheme FiscalQuarter -destination '
 - `FiscalQuarterCore/SharedSettings.swift` is the App Group the apps, widgets, and `fq` share
 - `calendars/` holds example calendar files
 - `FiscalQuarterCore/Countdown.swift` counts down to the end of the quarter, half, and year
+- `FiscalQuarterCore/Milestone.swift` works out when each milestone falls and stores the list
 - `FiscalQuarterApp/` is the menu bar UI, including the line, year, and ring pictures. The iOS app shares `CalendarModel.swift`, `QuarterClock.swift`, and `YearPicture.swift`
 - `FiscalQuarterCore/Appearance.swift` is the shared look: background, type, colors, and what is shown
 - `FiscalQuarterUI/` is SwiftUI shared by both apps and both widgets: the theme, the background pictures, and the countdown views

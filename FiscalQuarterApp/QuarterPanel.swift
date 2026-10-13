@@ -180,7 +180,7 @@ struct QuarterPanel: View {
             }
             ForEach(snapshot.countdownGroups) { group in
                 let inMenuBar = group.countdowns.contains { $0.target == selected }
-                Button(action: { menuBarTarget = group.first.target.rawValue }) {
+                Button(action: { menuBarTarget = group.first.target?.rawValue ?? menuBarTarget }) {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text(group.label)
                             .lineLimit(1)

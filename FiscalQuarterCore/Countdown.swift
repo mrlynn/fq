@@ -40,16 +40,17 @@ public enum CountdownUnit: String, CaseIterable, Codable, Identifiable, Sendable
     }
 }
 
-/// Time left from `today` through the last day of a quarter, half, or fiscal year.
+/// Time left from `today` through the last day of a quarter, half, or fiscal year, or through a milestone.
 public struct Countdown: Equatable {
-    public let target: CountdownTarget
+    /// The period counted down to. Nil for a milestone.
+    public let target: CountdownTarget?
     /// `FY26-Q4`, `FY26-H2`, or `FY26`.
     public let label: String
     public let start: CalendarDate
     public let end: CalendarDate
     public let today: CalendarDate
 
-    public init(target: CountdownTarget, label: String, start: CalendarDate, end: CalendarDate, today: CalendarDate) {
+    public init(target: CountdownTarget?, label: String, start: CalendarDate, end: CalendarDate, today: CalendarDate) {
         self.target = target
         self.label = label
         self.start = start

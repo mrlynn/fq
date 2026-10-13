@@ -176,7 +176,7 @@ public struct QuarterSnapshot: Equatable, Encodable {
         var list = container.nestedUnkeyedContainer(forKey: .countdowns)
         for countdown in countdowns {
             var item = list.nestedContainer(keyedBy: CountdownKeys.self)
-            try item.encode(countdown.target.rawValue, forKey: .target)
+            try item.encodeIfPresent(countdown.target?.rawValue, forKey: .target)
             try item.encode(countdown.label, forKey: .label)
             try item.encode(countdown.end.iso, forKey: .end)
             try item.encode(countdown.days, forKey: .days)
@@ -327,7 +327,7 @@ public enum FiscalCalendar {
         return CalendarDate(year: date.year, month: date.month, day: range.upperBound - 1)
     }
 
-    private static func shift(_ date: CalendarDate, by days: Int) -> CalendarDate? {
+    static func shift(_ date: CalendarDate, by days: Int) -> CalendarDate? {
         guard
             let day = gregorianDate(date),
             let shifted = dayCountCalendar.date(byAdding: .day, value: days, to: day)
