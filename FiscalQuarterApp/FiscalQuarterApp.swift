@@ -7,12 +7,18 @@ struct FiscalQuarterApp: App {
     @StateObject private var calendar: CalendarModel
     /// Created at launch so `fq` is linked before the panel is ever opened.
     @StateObject private var commandLine = CommandLineToolController()
+    @StateObject private var reminders: ReminderScheduler
     @AppStorage(MenuBarCountdown.targetKey) private var menuBarTarget = CountdownTarget.quarter.rawValue
     @AppStorage(MenuBarCountdown.unitKey) private var countdownUnit = CountdownUnit.days.rawValue
 
     init() {
-        _clock = StateObject(wrappedValue: QuarterClock())
-        _calendar = StateObject(wrappedValue: CalendarModel())
+        let clock = QuarterClock()
+        let calendar = CalendarModel()
+        _clock = StateObject(wrappedValue: clock)
+        _calendar = StateObject(wrappedValue: calendar)
+        // Built here, not on first use, so reminders are planned at launch.
+        let reminders = ReminderScheduler(calendar: calendar, clock: clock)
+        _reminders = StateObject(wrappedValue: reminders)
         NSApplication.shared.setActivationPolicy(.accessory)
     }
 
@@ -22,7 +28,7 @@ struct FiscalQuarterApp: App {
 
     var body: some Scene {
         MenuBarExtra {
-            QuarterPanel(clock: clock, calendar: calendar, commandLine: commandLine)
+            QuarterPanel(clock: clock, calendar: calendar, commandLine: commandLine, reminders: reminders)
         } label: {
             let countdown = MenuBarCountdown.countdown(
                 for: menuBarTarget,

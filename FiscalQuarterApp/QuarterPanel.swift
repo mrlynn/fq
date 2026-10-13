@@ -5,6 +5,7 @@ struct QuarterPanel: View {
     @ObservedObject var clock: QuarterClock
     @ObservedObject var calendar: CalendarModel
     @ObservedObject var commandLine: CommandLineToolController
+    @ObservedObject var reminders: ReminderScheduler
     @StateObject private var login = LoginItemController()
     @AppStorage("yearPicture") private var pictureKind = PictureKind.line.rawValue
     @AppStorage(MenuBarCountdown.targetKey) private var menuBarTarget = CountdownTarget.quarter.rawValue
@@ -34,7 +35,7 @@ struct QuarterPanel: View {
                 )
                 .photoLegibility(calendar.appearance)
             case .milestones:
-                MilestonesView(calendar: calendar, today: snapshot.today, dismiss: { page = .quarter })
+                MilestonesView(calendar: calendar, reminders: reminders, today: snapshot.today, dismiss: { page = .quarter })
                     .photoLegibility(calendar.appearance)
             // No shadow here: the form draws its own cards, and shadowed text on them looks wrong.
             case .appearance:
